@@ -1,0 +1,5 @@
+#Ignore binaries 
+bin/
+
+#Ignore Android R 
+gen/
