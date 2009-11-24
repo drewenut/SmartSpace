@@ -1,0 +1,10 @@
+var clover = new Object();
+
+// JSON: {classes : [{name, id, sl, el,  methods : [{sl, el}, ...]}, ...]}
+clover.pageData = {"classes":[{"el":86,"id":4081,"methods":[{"el":34,"sc":5,"sl":30},{"el":46,"sc":5,"sl":36},{"el":60,"sc":5,"sl":48},{"el":74,"sc":5,"sl":62},{"el":85,"sc":5,"sl":76}],"name":"RecordStateInvalidMatcherTest","sl":25}]}
+
+// JSON: {test_ID : {"methods": [ID1, ID2, ID3...], "name" : "testXXX() void"}, ...};
+clover.testTargets = {"test_140":{"methods":[{"sl":48}],"name":"setMatcherTwice","pass":true,"statements":[{"sl":50},{"sl":51},{"sl":52},{"sl":53},{"sl":56}]},"test_202":{"methods":[{"sl":76}],"name":"setSameMatcherTwice","pass":true,"statements":[{"sl":78},{"sl":79},{"sl":80},{"sl":81}]},"test_312":{"methods":[{"sl":36}],"name":"setMatcherBeforeCallingMethods","pass":true,"statements":[{"sl":38},{"sl":39},{"sl":42}]},"test_585":{"methods":[{"sl":62}],"name":"setMatcherTwice2","pass":true,"statements":[{"sl":64},{"sl":65},{"sl":66},{"sl":67},{"sl":70}]},"test_618":{"methods":[{"sl":62}],"name":"setMatcherTwice2","pass":true,"statements":[{"sl":64},{"sl":65},{"sl":66},{"sl":67},{"sl":70}]},"test_706":{"methods":[{"sl":36}],"name":"setMatcherBeforeCallingMethods","pass":true,"statements":[{"sl":38},{"sl":39},{"sl":42}]},"test_707":{"methods":[{"sl":48}],"name":"setMatcherTwice","pass":true,"statements":[{"sl":50},{"sl":51},{"sl":52},{"sl":53},{"sl":56}]},"test_958":{"methods":[{"sl":76}],"name":"setSameMatcherTwice","pass":true,"statements":[{"sl":78},{"sl":79},{"sl":80},{"sl":81}]}}
+
+// JSON: { lines : [{tests : [testid1, testid2, testid3, ...]}, ...]};
+clover.srcFileLines = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [706, 312], [], [706, 312], [706, 312], [], [], [706, 312], [], [], [], [], [], [140, 707], [], [140, 707], [140, 707], [140, 707], [140, 707], [], [], [140, 707], [], [], [], [], [], [618, 585], [], [618, 585], [618, 585], [618, 585], [618, 585], [], [], [618, 585], [], [], [], [], [], [958, 202], [], [958, 202], [958, 202], [958, 202], [958, 202], [], [], [], [], []]

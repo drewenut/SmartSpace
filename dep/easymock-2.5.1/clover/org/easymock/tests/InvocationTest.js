@@ -1,0 +1,10 @@
+var clover = new Object();
+
+// JSON: {classes : [{name, id, sl, el,  methods : [{sl, el}, ...]}, ...]}
+clover.pageData = {"classes":[{"el":98,"id":3881,"methods":[{"el":46,"sc":5,"sl":35},{"el":54,"sc":5,"sl":48},{"el":64,"sc":5,"sl":56},{"el":97,"sc":5,"sl":66}],"name":"InvocationTest","sl":27},{"el":83,"id":3901,"methods":[{"el":74,"sc":13,"sl":72},{"el":79,"sc":13,"sl":76},{"el":82,"sc":13,"sl":81}],"name":"InvocationTest.ToString","sl":69}]}
+
+// JSON: {test_ID : {"methods": [ID1, ID2, ID3...], "name" : "testXXX() void"}, ...};
+clover.testTargets = {"test_462":{"methods":[{"sl":56}],"name":"testHashCode","pass":true,"statements":[{"sl":58},{"sl":59},{"sl":62}]},"test_498":{"methods":[{"sl":66},{"sl":72},{"sl":76}],"name":"testShouldDisplayMocksToStringIfValidJavaIdentifier","pass":true,"statements":[{"sl":73},{"sl":78},{"sl":85},{"sl":86},{"sl":89},{"sl":92},{"sl":95}]},"test_52":{"methods":[{"sl":48}],"name":"testEquals","pass":true,"statements":[{"sl":50},{"sl":51},{"sl":52},{"sl":53}]},"test_826":{"methods":[{"sl":66},{"sl":72},{"sl":76}],"name":"testShouldDisplayMocksToStringIfValidJavaIdentifier","pass":true,"statements":[{"sl":73},{"sl":78},{"sl":85},{"sl":86},{"sl":89},{"sl":92},{"sl":95}]},"test_918":{"methods":[{"sl":56}],"name":"testHashCode","pass":true,"statements":[{"sl":58},{"sl":59},{"sl":62}]},"test_948":{"methods":[{"sl":48}],"name":"testEquals","pass":true,"statements":[{"sl":50},{"sl":51},{"sl":52},{"sl":53}]}}
+
+// JSON: { lines : [{tests : [testid1, testid2, testid3, ...]}, ...]};
+clover.srcFileLines = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [52, 948], [], [52, 948], [52, 948], [52, 948], [52, 948], [], [], [918, 462], [], [918, 462], [918, 462], [], [], [918, 462], [], [], [], [826, 498], [], [], [], [], [], [826, 498], [826, 498], [], [], [826, 498], [], [826, 498], [], [], [], [], [], [], [826, 498], [826, 498], [], [], [826, 498], [], [], [826, 498], [], [], [826, 498], [], [], []]

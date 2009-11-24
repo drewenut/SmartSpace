@@ -1,0 +1,5 @@
+QR-Code format:
+name:<name>|igeo:pos_x,pos_y,floor
+
+JSON format:
+{"title": "$title","description": "$description","price": "$price","imageUrl": "$imageURL"}

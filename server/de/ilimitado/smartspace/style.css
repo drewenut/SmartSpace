@@ -1,0 +1,38 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font: 62.5% Arial, sans-serif;
+	line-height: 1.6em;
+	color: #444;
+	text-align: left;
+	background: #AAAAAA url(images/hwrs_body_gradient.png) repeat-x scroll center top;
+
+}
+
+#mainPanel {
+	margin: 0 auto 0 auto;
+	width: 1006px;
+	height: 940px;
+	background: transparent url("SandKarteCutResized.jpg") no-repeat;
+}
+
+.testCase {
+	width: auto;
+	height: 20px;
+	padding: 10px;
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+
+.fail {
+	background-color: red;
+}
+
+.pass {
+	background-color: green;
+}

@@ -1,0 +1,10 @@
+var clover = new Object();
+
+// JSON: {classes : [{name, id, sl, el,  methods : [{sl, el}, ...]}, ...]}
+clover.pageData = {"classes":[{"el":40,"id":2045,"methods":[{"el":30,"sc":5,"sl":28},{"el":35,"sc":5,"sl":32},{"el":39,"sc":5,"sl":37}],"name":"Contains","sl":22}]}
+
+// JSON: {test_ID : {"methods": [ID1, ID2, ID3...], "name" : "testXXX() void"}, ...};
+clover.testTargets = {"test_180":{"methods":[{"sl":28},{"sl":32}],"name":"testContains","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_229":{"methods":[{"sl":28},{"sl":32}],"name":"andOverloaded","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_273":{"methods":[{"sl":28},{"sl":32},{"sl":37}],"name":"constraints","pass":true,"statements":[{"sl":29},{"sl":33},{"sl":38}]},"test_321":{"methods":[{"sl":28},{"sl":32}],"name":"notOverloaded","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_322":{"methods":[{"sl":28},{"sl":32}],"name":"notOverloaded","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_38":{"methods":[{"sl":28},{"sl":32},{"sl":37}],"name":"constraints","pass":true,"statements":[{"sl":29},{"sl":33},{"sl":38}]},"test_546":{"methods":[{"sl":28},{"sl":37}],"name":"containsToString","pass":true,"statements":[{"sl":29},{"sl":38}]},"test_674":{"methods":[{"sl":28},{"sl":32}],"name":"testContains","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_82":{"methods":[{"sl":28},{"sl":32}],"name":"andOverloaded","pass":true,"statements":[{"sl":29},{"sl":33}]},"test_941":{"methods":[{"sl":28},{"sl":37}],"name":"containsToString","pass":true,"statements":[{"sl":29},{"sl":38}]}}
+
+// JSON: { lines : [{tests : [testid1, testid2, testid3, ...]}, ...]};
+clover.srcFileLines = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [180, 273, 941, 674, 321, 82, 38, 546, 322, 229], [180, 273, 941, 674, 321, 82, 38, 546, 322, 229], [], [], [180, 273, 674, 321, 82, 38, 322, 229], [180, 273, 674, 321, 82, 38, 322, 229], [], [], [], [273, 941, 38, 546], [273, 941, 38, 546], [], []]
