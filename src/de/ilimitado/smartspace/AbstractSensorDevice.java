@@ -49,6 +49,8 @@ public abstract class AbstractSensorDevice {
 
 	public abstract void registerEvents(Dependencies dep);
 	
+	public abstract void registerScanSamples(ScanSampleProvider reg);
+	
 	public abstract void registerProcessorCommands(DataCommandProvider dCR);
 
 	public abstract void registerDBPersistance(ScanSampleDBPersistanceProvider splDBPers);
@@ -56,7 +58,5 @@ public abstract class AbstractSensorDevice {
 	public abstract void initSensorName();
 	
 	public abstract void initSensorID();
-
-	public abstract void registerScanSamples(ScanSampleProvider reg);
 
 }

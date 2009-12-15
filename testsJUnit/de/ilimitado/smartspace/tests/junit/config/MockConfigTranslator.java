@@ -5,11 +5,11 @@ import java.util.HashMap;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.config.DataProcessorCommands;
-import de.ilimitado.smartspace.config.Sensing;
-import de.ilimitado.smartspace.config.Persistance;
-import de.ilimitado.smartspace.config.Localization;
+import de.ilimitado.smartspace.config.ConfigSensing;
+import de.ilimitado.smartspace.config.ConfigPersistence;
+import de.ilimitado.smartspace.config.ConfigLocalization;
 import de.ilimitado.smartspace.config.Scanner80211PassiveConfig;
-import de.ilimitado.smartspace.config.Sensor80211;
+import de.ilimitado.smartspace.config.ConfigSensor80211;
 
 public class MockConfigTranslator implements ConfigTranslator{
 	
@@ -24,40 +24,40 @@ public class MockConfigTranslator implements ConfigTranslator{
 	}
 	
 	public void translate() {
-		Localization algos = getPositionAlgorithms();
-		Persistance persConf = getPersistanceConfig();
-		Sensing fptColl = getFPTCollection();
-		Sensor80211 snsCfg80211 = getSensorConfig80211();
+		ConfigLocalization algos = getPositionAlgorithms();
+		ConfigPersistence persConf = getPersistanceConfig();
+		ConfigSensing fptColl = getFPTCollection();
+		ConfigSensor80211 snsCfg80211 = getSensorConfig80211();
 
 		Configuration.createConfiguration(algos, persConf, fptColl, snsCfg80211);
 	}
 
-	private Localization getPositionAlgorithms() {
+	private ConfigLocalization getPositionAlgorithms() {
 		boolean useEuklid = true;
-		Localization algos = new Localization(useEuklid);
+		ConfigLocalization algos = new ConfigLocalization(useEuklid);
 		return algos;
 	}
 
-	private Persistance getPersistanceConfig() {
+	private ConfigPersistence getPersistanceConfig() {
 		int lfptPM = 0;
 		long refreshIntervall = 0;
 		String dbName = "TestDB";
 		int bufferSize = 10;
-		Persistance persConf = new Persistance(lfptPM, refreshIntervall, dbName, bufferSize);
+		ConfigPersistence persConf = new ConfigPersistence(dbName, lfptPM, bufferSize, refreshIntervall);
 		return persConf;
 	}
 
-	private Sensing getFPTCollection() {
+	private ConfigSensing getFPTCollection() {
 		int oriQuantCount = 4;
-		Sensing fptColl = new Sensing(oriQuantCount);
+		ConfigSensing fptColl = new ConfigSensing(oriQuantCount);
 		return fptColl;
 	}
 
-	private Sensor80211 getSensorConfig80211() {
+	private ConfigSensor80211 getSensorConfig80211() {
 		String sensor80211name = "sensor80211";
 		boolean sensor80211isActive = true;
 		Scanner80211PassiveConfig scn80211passive = getScanner80211PassiveConfig();
-		Sensor80211 snsCfg80211 = new Sensor80211(sensor80211name, sensor80211isActive, scn80211passive);
+		ConfigSensor80211 snsCfg80211 = new ConfigSensor80211(sensor80211name, sensor80211isActive, scn80211passive);
 		return snsCfg80211;
 	}
 

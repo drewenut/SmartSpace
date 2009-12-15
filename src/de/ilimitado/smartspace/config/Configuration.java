@@ -9,28 +9,28 @@ import de.ilimitado.smartspace.dataprocessors.DataProcessorsMap;
 
 public final class Configuration {
 	
-	public final Localization posAlgos;
-	public final Persistance persitenceConf;
-	public final Sensing fptCollection;
-	public final Sensor80211 sensorConfig80211;
+	public final ConfigLocalization localization;
+	public final ConfigPersistence persistence;
+	public final ConfigSensing sensing;
+	public final ConfigSensor80211 sensor80211;
 	private static Configuration instance = null;
 	protected static List<AbstractSensorConfig> sensorConfigs = new ArrayList<AbstractSensorConfig>(); 
 	
-	private Configuration(	Localization algos,
-			   			  	Persistance persConf,
-			   			  	Sensing fptColl,
-			   			  	Sensor80211 snsCfg80211
+	private Configuration(	ConfigLocalization algos,
+			   			  	ConfigPersistence configPersistence,
+			   			  	ConfigSensing configSensing,
+			   			  	ConfigSensor80211 config80211
 			   			  	) {
-		this.posAlgos = algos;
-		this.persitenceConf = persConf;
-		this.fptCollection = fptColl;
-		this.sensorConfig80211 = snsCfg80211;
+		this.localization = algos;
+		this.persistence = configPersistence;
+		this.sensing = configSensing;
+		this.sensor80211 = config80211;
 	}
 	
-	public static void createConfiguration(	Localization algos,
-										   	Persistance persConf,
-										   	Sensing fptColl,
-										   	Sensor80211 snsCfg80211
+	public static void createConfiguration(	ConfigLocalization algos,
+										   	ConfigPersistence persConf,
+										   	ConfigSensing fptColl,
+										   	ConfigSensor80211 snsCfg80211
 											) {
 		instance = new Configuration(algos, persConf, fptColl , snsCfg80211);
 	}

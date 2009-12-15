@@ -27,8 +27,8 @@ public class LFPTGateway implements Gateway{
 	private Thread thread;
 	
 	public LFPTGateway() {
-		REFRESH_INTERVAL = Configuration.getInstance().persitenceConf.refreshInterval;
-		BUFFER_THRESHOLD = Configuration.getInstance().persitenceConf.lfptPersistanceBufferSize;
+		REFRESH_INTERVAL = Configuration.getInstance().persistence.refreshInterval;
+		BUFFER_THRESHOLD = Configuration.getInstance().persistence.bufferSize;
 	}
 	
 	public RadioMap getRadioMap() {

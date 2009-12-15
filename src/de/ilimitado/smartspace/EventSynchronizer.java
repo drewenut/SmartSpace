@@ -43,7 +43,7 @@ public class EventSynchronizer implements Runnable{
 		    	 HashMap<String, ScanSampleList> resultSamples = processSampleData(sensorDataToProcess);
 		    	 result = fusionateSampleData(resultSamples);
 		    	 deploySampleDataSample(result);
-		    	 Log.d(LOG_TAG, "Queue item processed");
+		    	 L.d(LOG_TAG, "Queue item processed");
 		    	 restoreInvariants();
 		     } catch (InterruptedException e) {
 		    	 restoreInvariants();

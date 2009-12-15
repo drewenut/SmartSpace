@@ -59,9 +59,9 @@ public class SensorTests extends AndroidTestCase{
 	public void testManualSensorLoadWithSensorDevice80211(){
 		assertTrue(sD.deviceAvailable());
 		sD.initSensorID();
-		assertEquals(config.sensorConfig80211.ID, sD.getID());
+		assertEquals(config.sensor80211.ID, sD.getID());
 		sD.initSensorName();
-		assertEquals(config.sensorConfig80211.NAME, sD.getName());
+		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
@@ -79,9 +79,9 @@ public class SensorTests extends AndroidTestCase{
 	public void testManualSensorManagerStartStopWithSensorDevice80211(){
 		assertTrue(sD.deviceAvailable());
 		sD.initSensorID();
-		assertEquals(config.sensorConfig80211.ID, sD.getID());
+		assertEquals(config.sensor80211.ID, sD.getID());
 		sD.initSensorName();
-		assertEquals(config.sensorConfig80211.NAME, sD.getName());
+		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
@@ -101,7 +101,7 @@ public class SensorTests extends AndroidTestCase{
 		assertEquals(1, sensorRunnables.size());
 		Runnable sensorRunnable = sensorRunnables.get(0);
 		//SensorManager.startSensors()
-		ThreadGroup sensorDeviceRunnables = new ThreadGroup(config.sensorConfig80211.ID);
+		ThreadGroup sensorDeviceRunnables = new ThreadGroup(config.sensor80211.ID);
 			new Thread(sensorDeviceRunnables, sensorRunnable).start();
 		List<ThreadGroup> runningSensorsList = new ArrayList<ThreadGroup>(1);
 		runningSensorsList.add(sensorDeviceRunnables);
@@ -122,9 +122,9 @@ public class SensorTests extends AndroidTestCase{
 	public void testManualSensorManagerStartWithRawDataEnqueuing(){
 		assertTrue(sD.deviceAvailable());
 		sD.initSensorID();
-		assertEquals(config.sensorConfig80211.ID, sD.getID());
+		assertEquals(config.sensor80211.ID, sD.getID());
 		sD.initSensorName();
-		assertEquals(config.sensorConfig80211.NAME, sD.getName());
+		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
@@ -144,7 +144,7 @@ public class SensorTests extends AndroidTestCase{
 		assertEquals(1, sensorRunnables.size());
 		Runnable sensorRunnable = sensorRunnables.get(0);
 		//SensorManager.startSensors()
-		ThreadGroup sensorDeviceRunnables = new ThreadGroup(config.sensorConfig80211.ID);
+		ThreadGroup sensorDeviceRunnables = new ThreadGroup(config.sensor80211.ID);
 			new Thread(sensorDeviceRunnables, sensorRunnable).start();
 		List<ThreadGroup> runningSensorsList = new ArrayList<ThreadGroup>(1);
 		runningSensorsList.add(sensorDeviceRunnables);

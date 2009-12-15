@@ -29,8 +29,8 @@ public class SensorDevice extends AbstractSensorDevice {
 
 	public SensorDevice(Dependencies appDeps) {
 		super(appDeps);
-		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID;
-		SENSOR_80211_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.NAME;
+		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID;
+		SENSOR_80211_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensor80211.scanner80211PassiveConf.NAME;
 	}
 
 	@Override
@@ -51,24 +51,24 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	@Override
 	public void createRunnables() {
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			sensorRunnables.add(new Scanner80211Passive());
 		}
 	}
 	
 	@Override
 	public void initSensorID() {
-		SENSOR_ID = config.sensorConfig80211.ID;
+		SENSOR_ID = config.sensor80211.ID;
 	}
 
 	@Override
 	public void initSensorName() {
-		SENSOR_NAME = config.sensorConfig80211.NAME;
+		SENSOR_NAME = config.sensor80211.NAME;
 	}
 	
 	@Override
 	public void registerEvents(Dependencies dep) {
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
@@ -76,20 +76,20 @@ public class SensorDevice extends AbstractSensorDevice {
 	@Override
 	public void registerProcessorCommands(DataCommandProvider dCProv) {
 		
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			dCProv.putItem("MeanCommand80211", MeanCommand80211.class);
 		}
 	}
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			sSReg.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211.class);
 		}
 	}
 	
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			sSplDBPers.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
 		}
 	}

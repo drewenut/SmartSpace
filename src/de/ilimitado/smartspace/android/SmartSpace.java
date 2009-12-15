@@ -188,7 +188,7 @@ public class SmartSpace extends Activity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                         	AndroidConfigTranslator.getInstance(getSharedPreferences("smartSpace", 1)).translate();
-            				boolean flushed = deleteDatabase(Configuration.getInstance().persitenceConf.lfptPersistanceDBName);
+            				boolean flushed = deleteDatabase(Configuration.getInstance().persistence.dbName);
             				if(flushed)
             					showMessage("Database flushed successfully.");
             				else

@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.ilimitado.smartspace.config.Configuration;
-import de.ilimitado.smartspace.config.Sensing;
-import de.ilimitado.smartspace.config.Localization;
+import de.ilimitado.smartspace.config.ConfigSensing;
+import de.ilimitado.smartspace.config.ConfigLocalization;
 
 public class ConfigurationTest {
 
@@ -32,14 +32,14 @@ public class ConfigurationTest {
 	
 	@Test()
 	public void testPositionAlgorithms() {
-		Localization posAlgos = Configuration.getInstance().posAlgos;
+		ConfigLocalization posAlgos = Configuration.getInstance().localization;
 		assertNotNull("PositionAlgorithms should have been initialized", posAlgos);
-		assertTrue("Euklidean should be TRUE", posAlgos.euklideanDistance);
+		assertTrue("Euklidean should be TRUE", posAlgos.euklideanDist);
 	}
 	
 	@Test()
 	public void testFPTCollection() {
-		Sensing posAlgos = Configuration.getInstance().fptCollection;
+		ConfigSensing posAlgos = Configuration.getInstance().sensing;
 		assertNotNull("FPTCollection should have been initialized", posAlgos);
 		assertEquals(4, posAlgos.orientationQuantizationCount);
 	}

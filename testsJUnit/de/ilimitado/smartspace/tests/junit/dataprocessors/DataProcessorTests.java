@@ -259,14 +259,14 @@ public class DataProcessorTests extends TestCase{
 		
 		Registry reg = new Registry();
 		DataCommandProvider dCP = (DataCommandProvider) reg.get(Registry.SENSOR_DATA_CMD_PROVIDER);
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			dCP.putItem("MeanCommand80211", MeanCommand80211.class);
 		}
 		assertNotNull(dCP);
 		HashMap<String, DataProcessor<ScanSampleList>> dataProcessors = DataProcessorResolver.getInstance(dCP).getDataProcessors();
 		assertNotNull(dataProcessors);
 	    assertTrue(!dataProcessors.isEmpty());
-	    String scannerID = Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID;
+	    String scannerID = Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID;
 	    assertTrue(dataProcessors.containsKey(scannerID));
 	    
 	    DataProcessor<ScanSampleList> sDP = dataProcessors.get(scannerID);
@@ -314,14 +314,14 @@ public class DataProcessorTests extends TestCase{
 		
 		Registry reg = new Registry();
 		DataCommandProvider dCP = (DataCommandProvider) reg.get(Registry.SENSOR_DATA_CMD_PROVIDER);
-		if(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.isActive) {
+		if(Configuration.getInstance().sensor80211.scanner80211PassiveConf.isActive) {
 			dCP.putItem("MeanCommand80211", MeanCommand80211.class);
 		}
 		assertNotNull(dCP);
 		HashMap<String, DataProcessor<ScanSampleList>> dataProcessors = DataProcessorResolver.getInstance(dCP).getDataProcessors();
 		assertNotNull(dataProcessors);
 	    assertTrue(!dataProcessors.isEmpty());
-	    String scannerID = Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID;
+	    String scannerID = Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID;
 	    assertTrue(dataProcessors.containsKey(scannerID));
 	    	    
 		ArrayList<ScanSampleList> resultSamples = new ArrayList<ScanSampleList>();

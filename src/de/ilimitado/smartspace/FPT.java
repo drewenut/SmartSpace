@@ -9,7 +9,7 @@ public class FPT extends SensorDataSample{
 
 	public static final String VALUE_ORIENTATION = "Orientation";
 
-	protected static final int ORIENTATION_COUNT = Configuration.getInstance().fptCollection.orientationQuantizationCount;
+	protected static final int ORIENTATION_COUNT = Configuration.getInstance().sensing.orientationQuantizationCount;
 	private int quantizedOrientation;
 
 	public FPT(long creationTime, double orientation) {

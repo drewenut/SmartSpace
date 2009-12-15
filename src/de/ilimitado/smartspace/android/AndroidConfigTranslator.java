@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.config.DataProcessorCommands;
-import de.ilimitado.smartspace.config.Sensing;
-import de.ilimitado.smartspace.config.Persistance;
-import de.ilimitado.smartspace.config.Localization;
+import de.ilimitado.smartspace.config.ConfigSensing;
+import de.ilimitado.smartspace.config.ConfigPersistence;
+import de.ilimitado.smartspace.config.ConfigLocalization;
 import de.ilimitado.smartspace.config.Scanner80211PassiveConfig;
-import de.ilimitado.smartspace.config.Sensor80211;
+import de.ilimitado.smartspace.config.ConfigSensor80211;
 
 public class AndroidConfigTranslator implements ConfigTranslator{
 	
@@ -28,40 +28,40 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 	
 	public void translate() {
-		Localization algos = getPositionAlgorithms();
-		Persistance persConf = getPersistanceConfig();
-		Sensing fptColl = getFPTCollection();
-		Sensor80211 snsCfg80211 = getSensorConfig80211();
+		ConfigLocalization algos = getPositionAlgorithms();
+		ConfigPersistence persConf = getPersistanceConfig();
+		ConfigSensing fptColl = getFPTCollection();
+		ConfigSensor80211 snsCfg80211 = getSensorConfig80211();
 
 		Configuration.createConfiguration(algos, persConf, fptColl, snsCfg80211);
 	}
 
-	private Localization getPositionAlgorithms() {
+	private ConfigLocalization getPositionAlgorithms() {
 		boolean useEuklid = androidPreferences.getBoolean("position_algorithm_euklidean", true);
-		Localization algos = new Localization(useEuklid);
+		ConfigLocalization algos = new ConfigLocalization(useEuklid);
 		return algos;
 	}
 
-	private Persistance getPersistanceConfig() {
+	private ConfigPersistence getPersistanceConfig() {
 		int lfptPM = androidPreferences.getInt("persistance_config_mode", 0);
 		int refreshInterval = androidPreferences.getInt("persistance_config_refreshInterval", 60000);
 		String lfptPersistanceDBName = androidPreferences.getString("persistance_config_lfptPersistanceDBName", "RadioMap");
 		int lfptPersistanceBufferSize = androidPreferences.getInt("persistance_config_lfptPersistanceBufferSize", 10);
-		Persistance persConf = new Persistance(lfptPM, refreshInterval, lfptPersistanceDBName, lfptPersistanceBufferSize);
+		ConfigPersistence persConf = new ConfigPersistence(lfptPersistanceDBName, lfptPM, lfptPersistanceBufferSize, refreshInterval);
 		return persConf;
 	}
 
-	private Sensing getFPTCollection() {
+	private ConfigSensing getFPTCollection() {
 		int oriQuantCount = androidPreferences.getInt("fpt_collection_orientation_quant_count", 4);
-		Sensing fptColl = new Sensing(oriQuantCount);
+		ConfigSensing fptColl = new ConfigSensing(oriQuantCount);
 		return fptColl;
 	}
 
-	private Sensor80211 getSensorConfig80211() {
+	private ConfigSensor80211 getSensorConfig80211() {
 		String sensor80211name = androidPreferences.getString("sensor_config_80211_sensor_name", "Sensor80211");
 		boolean sensor80211isActive = androidPreferences.getBoolean("sensor_config_80211_sensor_is_active", true);
 		Scanner80211PassiveConfig scn80211passive = getScanner80211PassiveConfig();
-		Sensor80211 snsCfg80211 = new Sensor80211(sensor80211name, sensor80211isActive, scn80211passive);
+		ConfigSensor80211 snsCfg80211 = new ConfigSensor80211(sensor80211name, sensor80211isActive, scn80211passive);
 		return snsCfg80211;
 	}
 

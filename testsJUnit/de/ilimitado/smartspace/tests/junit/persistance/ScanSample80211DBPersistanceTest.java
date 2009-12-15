@@ -28,7 +28,7 @@ public class ScanSample80211DBPersistanceTest {
 
 	@Test
 	public void testGetTableName() {
-		assertEquals(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, dbPers.getTableName());
+		assertEquals(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, dbPers.getTableName());
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class ScanSample80211DBPersistanceTest {
 		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
-		lfpt.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSList);
+		lfpt.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
 		ArrayList<String> insertQueryList = dbPers.getSQLInsertQuerys(lfpt);
 		assertEquals(1, insertQueryList.size());
 		String insertQuery = insertQueryList.get(0);
@@ -67,7 +67,7 @@ public class ScanSample80211DBPersistanceTest {
 		sSList.add(scnS1);
 		sSList.add(scnS2);
 		sSList.add(scnS3);
-		lfpt.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSList);
+		lfpt.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
 		ArrayList<String> insertQueryList = dbPers.getSQLInsertQuerys(lfpt);
 		assertEquals(3, insertQueryList.size());
 		String insertQuery1 = insertQueryList.get(0);
@@ -91,7 +91,7 @@ public class ScanSample80211DBPersistanceTest {
 		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
-		lfpt.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSList);
+		lfpt.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
 		ArrayList<String> updateQueryList = dbPers.getSQLUpdateQuerys(lfpt);
 		assertEquals(1, updateQueryList.size());
 		String updateQuery = updateQueryList.get(0);
@@ -108,7 +108,7 @@ public class ScanSample80211DBPersistanceTest {
 		sSList.add(scnS1);
 		sSList.add(scnS2);
 		sSList.add(scnS3);
-		lfpt.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSList);
+		lfpt.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
 		ArrayList<String> updateQueryList = dbPers.getSQLUpdateQuerys(lfpt);
 		assertEquals(3, updateQueryList.size());
 		String updateQuery1 = updateQueryList.get(0);

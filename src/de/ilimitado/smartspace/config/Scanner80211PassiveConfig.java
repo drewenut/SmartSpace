@@ -11,6 +11,6 @@ public class Scanner80211PassiveConfig extends AbstractScannerConfig {
 			long timeoutInMS, DataProcessorCommands dp) {
 		super(Event_ID, name, isActive, synchronize, thres, timeoutInMS, dp);
 		if(isActive)
-			Sensor80211.scanners.add(this);
+			ConfigSensor80211.scanners.add(this);
 	}
 }

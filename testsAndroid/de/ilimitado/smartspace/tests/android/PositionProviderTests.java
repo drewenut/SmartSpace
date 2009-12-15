@@ -46,7 +46,7 @@ public class PositionProviderTests extends TestCase {
 		RTsSL1.add(ap1_4);
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
-		rtSample1.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, RTsSL1);
+		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, RTsSL1);
 		pProv.calculatePosition(rtSample1);
 		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
 		
@@ -71,7 +71,7 @@ public class PositionProviderTests extends TestCase {
 		RTsSL1.add(ap3_4);
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
-		rtSample1.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, RTsSL1);
+		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, RTsSL1);
 		pProv.calculatePosition(rtSample1);
 		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
 		
@@ -90,7 +90,7 @@ public class PositionProviderTests extends TestCase {
 		RTsSL1.add(ap3_3);
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
-		rtSample1.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, RTsSL1);
+		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, RTsSL1);
 		pProv.calculatePosition(rtSample1);
 		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
 		
@@ -112,7 +112,7 @@ public class PositionProviderTests extends TestCase {
 		sSL1.add(ap1_4);
 		
 		LFPT lfpt1 = new LFPT(12345, 270, new IGeoPoint(1,1));
-		lfpt1.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSL1);
+		lfpt1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSL1);
 		
 		
 		
@@ -129,7 +129,7 @@ public class PositionProviderTests extends TestCase {
 		sSL2.add(ap2_4);
 		
 		LFPT lfpt2 = new LFPT(22345, 270, new IGeoPoint(2,1));
-		lfpt2.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSL2);
+		lfpt2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSL2);
 		
 		
 		
@@ -148,7 +148,7 @@ public class PositionProviderTests extends TestCase {
 		sSL3.add(ap3_5);
 		
 		LFPT lfpt3 = new LFPT(32345, 270, new IGeoPoint(1,2));
-		lfpt3.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSL3);
+		lfpt3.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSL3);
 		
 		
 		
@@ -165,7 +165,7 @@ public class PositionProviderTests extends TestCase {
 		sSL4.add(ap4_4);
 		
 		LFPT lfpt4 = new LFPT(42345, 270, new IGeoPoint(2,2));
-		lfpt4.add(Configuration.getInstance().sensorConfig80211.scanner80211PassiveConf.ID, sSL4);
+		lfpt4.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSL4);
 		
 		RadioMap rM = new RadioMap();
 		

@@ -10,7 +10,7 @@ import de.ilimitado.smartspace.config.Configuration;
 
 public abstract class SynchronizerStrategy {
 	
-	protected static final int THREAD_POOL_SIZE = Configuration.getInstance().fptCollection.lfpt.SYNCHRONIZER_THREADPOOL_SIZE;
+	protected static final int THREAD_POOL_SIZE = Configuration.getInstance().sensing.lfpt.SYNCHRONIZER_THREADPOOL_SIZE;
 	protected Configuration config;
 	protected List<String> syncSet;
 
