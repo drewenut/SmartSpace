@@ -31,7 +31,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		AndroidLocalDBPersistanceStrategy persStrat = new AndroidLocalDBPersistanceStrategy(sSplDBPersProvider, getContext());
 		persMngr = new PersistanceManager();
 		persMngr.setStrategy(PersistanceManager.GATEWAY_LFPT, persStrat);
-		bufferSize = Configuration.getInstance().persitenceConfig.lfptPersistanceBufferSize;
+		bufferSize = Configuration.getInstance().persitenceConf.lfptPersistanceBufferSize;
 		persMngr.startPersistance(PersistanceManager.GATEWAY_LFPT);
 	}
 	
@@ -39,7 +39,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		persMngr.stopPersistance(PersistanceManager.GATEWAY_LFPT);
-		getContext().deleteDatabase(Configuration.getInstance().persitenceConfig.lfptPersistanceDBName);
+		getContext().deleteDatabase(Configuration.getInstance().persitenceConf.lfptPersistanceDBName);
 	}
 	
 	@MediumTest

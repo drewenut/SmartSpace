@@ -17,7 +17,7 @@ import de.ilimitado.smartspace.registry.RegistryProviderException;
 public class AndroidLocalDBPersistanceStrategy implements LFPTPersistanceStrategy{
 
 	private static final String LOG_TAG = "AndroidLocalDBPersistanceStrategy";
-	private static final String DATABASE_NAME = Configuration.getInstance().persitenceConfig.lfptPersistanceDBName;
+	private static final String DATABASE_NAME = Configuration.getInstance().persitenceConf.lfptPersistanceDBName;
 	
 	ScanSampleDBPersistanceProvider sSplDBPersProvider;
 	private Context androidCtx;

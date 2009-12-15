@@ -31,7 +31,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		getContext().deleteDatabase(Configuration.getInstance().persitenceConfig.lfptPersistanceDBName);
+		getContext().deleteDatabase(Configuration.getInstance().persitenceConf.lfptPersistanceDBName);
 	}
 	
 	public void testSave() {

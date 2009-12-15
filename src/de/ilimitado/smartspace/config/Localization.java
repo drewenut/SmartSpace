@@ -1,11 +1,8 @@
-/**
- * 
- */
 package de.ilimitado.smartspace.config;
 
-public class PositionAlgorithms{
+public class Localization{
 	public final boolean euklideanDistance;
-	public PositionAlgorithms(boolean euklid) {
+	public Localization(boolean euklid) {
 		this.euklideanDistance = euklid;
 	}
 }
