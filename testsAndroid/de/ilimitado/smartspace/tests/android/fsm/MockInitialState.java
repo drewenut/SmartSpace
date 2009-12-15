@@ -1,6 +1,6 @@
 package de.ilimitado.smartspace.tests.android.fsm;
 
-import de.ilimitado.smartspace.InitialState;
+import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.fsm.State;
 
 public class MockInitialState extends InitialState {

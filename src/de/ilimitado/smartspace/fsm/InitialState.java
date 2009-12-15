@@ -1,9 +1,6 @@
-package de.ilimitado.smartspace;
+package de.ilimitado.smartspace.fsm;
 
-import de.ilimitado.smartspace.fsm.InertialState;
-import de.ilimitado.smartspace.fsm.LearningState;
-import de.ilimitado.smartspace.fsm.RealtimeState;
-import de.ilimitado.smartspace.fsm.State;
+import de.ilimitado.smartspace.Dependencies;
 
 public class InitialState implements State {
 

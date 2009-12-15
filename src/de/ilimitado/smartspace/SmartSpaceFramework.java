@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.PowerManager;
 import de.ilimitado.smartspace.android.AndroidConfigTranslator;
 import de.ilimitado.smartspace.fsm.FSM;
+import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
 
