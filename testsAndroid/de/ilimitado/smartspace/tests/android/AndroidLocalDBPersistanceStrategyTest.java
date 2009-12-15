@@ -23,7 +23,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		super.setUp();
 		MockConfigTranslator.getInstance().translate();
 		ScanSampleDBPersistanceProvider sSplDBPersProvider = new ScanSampleDBPersistanceProvider();
-		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, ScanSample80211DBPersistance.class);
+		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211.ID, ScanSample80211DBPersistance.class);
 		sSplDBPersProvider.putItem(LFPT.VALUE_MAP_DEFAULT_DATA, LFPTDBPersistance.class);
 		persStrat = new AndroidLocalDBPersistanceStrategy(sSplDBPersProvider, getContext());
 	}
@@ -53,7 +53,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnSpl1);
-		lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
+		lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
 
 		persStrat.save(lfptToSave);
 		persStrat.loadRadioMap();
@@ -66,7 +66,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(1, sSList.size());
 		scnSpl1 = (ScanSample80211) sSList.get(0);
 		
@@ -86,7 +86,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnSpl1);
 		sSList.add(scnSpl2);
-		lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
+		lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
 
 		persStrat.save(lfptToSave);
 		persStrat.loadRadioMap();
@@ -99,7 +99,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList.size());
 		
 		scnSpl1 = (ScanSample80211) sSList.get(0);
@@ -152,7 +152,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
-		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList1);
+		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(30,50));
 		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
@@ -160,7 +160,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
-		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList2);
+		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList2);
 
 		persStrat.save(lfptToSave1);
 		persStrat.save(lfptToSave2);
@@ -174,7 +174,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
 		scnSpl1 = (ScanSample80211) sSList1.get(0);
@@ -202,7 +202,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(50, lfpt.getIndoorGP().position_y);
 		assertEquals(180, lfpt.getQuantizedOrientation());
 		
-		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList2.size());
 		
 		scnSpl3 = (ScanSample80211) sSList2.get(0);
@@ -231,7 +231,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
-		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList1);
+		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(30,50));
 		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
@@ -239,7 +239,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
-		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList2);
+		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList2);
 
 		persStrat.save(lfptToSave1);
 		persStrat.save(lfptToSave2);
@@ -255,7 +255,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
 		scnSpl1 = (ScanSample80211) sSList1.get(0);
@@ -283,7 +283,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(50, lfpt.getIndoorGP().position_y);
 		assertEquals(180, lfpt.getQuantizedOrientation());
 		
-		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList2.size());
 		
 		scnSpl3 = (ScanSample80211) sSList2.get(0);
@@ -312,7 +312,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
-		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList1);
+		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(3,7));
 		ScanSample80211 scnSpl3 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(22,22,22,22), 2222);
@@ -320,7 +320,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
-		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList2);
+		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList2);
 
 		persStrat.save(lfptToSave1);
 		persStrat.save(lfptToSave2); //should trigger update and merge and also change data
@@ -334,7 +334,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(180, lfpt.getQuantizedOrientation());
 		
-		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
 		scnSpl1 = (ScanSample80211) sSList1.get(0);
@@ -364,7 +364,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
-		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList1);
+		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(3,7));
 		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
@@ -372,7 +372,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
-		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList2);
+		lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList2);
 
 		persStrat.save(lfptToSave1);
 		persStrat.save(lfptToSave2); //should trigger update and merge and also change data
@@ -386,7 +386,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(180, lfpt.getQuantizedOrientation());
 		
-		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(3, sSList1.size());
 		
 		scnSpl1 = (ScanSample80211) sSList1.get(0);

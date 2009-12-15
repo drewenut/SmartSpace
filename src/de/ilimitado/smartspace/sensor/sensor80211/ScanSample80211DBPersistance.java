@@ -14,7 +14,7 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 
 	@Override
 	public String getTableName() {
-		return Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID;
+		return Configuration.getInstance().sensor80211.scanner80211.ID;
 	}
 	
 	@Override

@@ -26,7 +26,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		super.setUp();
 		MockConfigTranslator.getInstance().translate();
 		ScanSampleDBPersistanceProvider sSplDBPersProvider = new ScanSampleDBPersistanceProvider();
-		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, ScanSample80211DBPersistance.class);
+		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211.ID, ScanSample80211DBPersistance.class);
 		sSplDBPersProvider.putItem(LFPT.VALUE_MAP_DEFAULT_DATA, LFPTDBPersistance.class);
 		AndroidLocalDBPersistanceStrategy persStrat = new AndroidLocalDBPersistanceStrategy(sSplDBPersProvider, getContext());
 		persMngr = new PersistanceManager();
@@ -67,7 +67,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 			ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 			ScanSampleList sSList = new ScanSampleList();
 			sSList.add(scnSpl1);
-			lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
+			lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
 			persMngr.save(PersistanceManager.GATEWAY_LFPT, lfptToSave);
 		}
 		Thread.sleep(1000);
@@ -82,7 +82,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		ScanSampleList sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		ScanSampleList sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(1, sSList.size());
 		ScanSample80211 scnSpl1 = (ScanSample80211) sSList.get(0);
 		
@@ -105,7 +105,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 			ScanSampleList sSList = new ScanSampleList();
 			sSList.add(scnSpl1);
 			sSList.add(scnSpl2);
-			lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList);
+			lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
 			persMngr.save(PersistanceManager.GATEWAY_LFPT, lfptToSave);
 		}
 		Thread.sleep(1000);
@@ -120,7 +120,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		ScanSampleList sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		ScanSampleList sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList.size());
 		
 		ScanSample80211 scnSpl1 = (ScanSample80211) sSList.get(0);
@@ -182,7 +182,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 			ScanSampleList sSList1 = new ScanSampleList();
 			sSList1.add(scnSpl1);
 			sSList1.add(scnSpl2);
-			lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList1);
+			lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 			persMngr.save(PersistanceManager.GATEWAY_LFPT, lfptToSave1);
 		}
 		Thread.sleep(1000);
@@ -194,7 +194,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 			ScanSampleList sSList2 = new ScanSampleList();
 			sSList2.add(scnSpl3);
 			sSList2.add(scnSpl4);
-			lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID, sSList2);
+			lfptToSave2.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList2);
 			persMngr.save(PersistanceManager.GATEWAY_LFPT, lfptToSave2);
 		}
 		Thread.sleep(1000);
@@ -209,7 +209,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		assertEquals(7, lfpt.getIndoorGP().position_y);
 		assertEquals(90, lfpt.getQuantizedOrientation());
 		
-		ScanSampleList sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		ScanSampleList sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
 		ScanSample80211 scnSpl1 = (ScanSample80211) sSList1.get(0);
@@ -237,7 +237,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		assertEquals(50, lfpt.getIndoorGP().position_y);
 		assertEquals(180, lfpt.getQuantizedOrientation());
 		
-		ScanSampleList sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID);
+		ScanSampleList sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList2.size());
 		
 		ScanSample80211 scnSpl3 = (ScanSample80211) sSList2.get(0);

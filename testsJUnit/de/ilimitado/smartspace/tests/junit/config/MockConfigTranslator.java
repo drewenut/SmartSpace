@@ -8,7 +8,7 @@ import de.ilimitado.smartspace.config.DataProcessorCommands;
 import de.ilimitado.smartspace.config.ConfigSensing;
 import de.ilimitado.smartspace.config.ConfigPersistence;
 import de.ilimitado.smartspace.config.ConfigLocalization;
-import de.ilimitado.smartspace.config.Scanner80211PassiveConfig;
+import de.ilimitado.smartspace.config.ConfigScanner80211Passive;
 import de.ilimitado.smartspace.config.ConfigSensor80211;
 
 public class MockConfigTranslator implements ConfigTranslator{
@@ -56,19 +56,19 @@ public class MockConfigTranslator implements ConfigTranslator{
 	private ConfigSensor80211 getSensorConfig80211() {
 		String sensor80211name = "sensor80211";
 		boolean sensor80211isActive = true;
-		Scanner80211PassiveConfig scn80211passive = getScanner80211PassiveConfig();
+		ConfigScanner80211Passive scn80211passive = getScanner80211PassiveConfig();
 		ConfigSensor80211 snsCfg80211 = new ConfigSensor80211(sensor80211name, sensor80211isActive, scn80211passive);
 		return snsCfg80211;
 	}
 
-	private Scanner80211PassiveConfig getScanner80211PassiveConfig() {
+	private ConfigScanner80211Passive getScanner80211PassiveConfig() {
 		String passive80211Name = "Scanner80211Passive";
 		boolean passive80211isActive = true;
 		boolean passive80211synchronize = true;
 		int passive80211threshold = 20;
 		long passive80211timeout = 1000;
 		DataProcessorCommands passive80211dPCommands = getDataProcessCommands();
-		Scanner80211PassiveConfig scn80211passive = new Scanner80211PassiveConfig(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
+		ConfigScanner80211Passive scn80211passive = new ConfigScanner80211Passive(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
 		return scn80211passive;
 	}
 

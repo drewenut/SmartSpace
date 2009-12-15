@@ -10,15 +10,13 @@ import de.ilimitado.smartspace.registry.RegistryProviderException;
 
 public class DataProcessorResolver {
 
-	private static final String LOG_TAG = "DataProcessorResolver";
-	
 	private static final DataProcessorResolver instance = null;
-	private DataProcessorsMap<String, HashMap<String, Boolean>> activeDPList;
+	private DataProcessorsMap<String, HashMap<String, Boolean>> activeDPs;
 	private DataCommandProvider dCP;
 	
 	private DataProcessorResolver(DataCommandProvider dCP) {
 		this.dCP = dCP;
-		this.activeDPList = Configuration.getInstance().getDataProcessorList();
+		this.activeDPs = Configuration.getInstance().getDataProcessors();
 	}
 	
 	public static DataProcessorResolver getInstance(DataCommandProvider dCP) {
@@ -28,10 +26,10 @@ public class DataProcessorResolver {
 	
 	public HashMap<String, DataProcessor<ScanSampleList>> getDataProcessors() {
 		HashMap<String, DataProcessor<ScanSampleList>> dPs = new HashMap<String, DataProcessor<ScanSampleList>>();
-		for(String scannerID : activeDPList.keySet()) {
+		for(String scannerID : activeDPs.keySet()) {
 			DataCommandChain<Collection<?>, ScanSampleList> dCC = new DataCommandChain<Collection<?>, ScanSampleList>();
 			DataProcessor<ScanSampleList> sDP = new DataProcessor<ScanSampleList>(ScanSampleList.class, dCC);
-			for(HashMap<String, Boolean> requiredCommands : activeDPList.values()){
+			for(HashMap<String, Boolean> requiredCommands : activeDPs.values()){
 				for(String singleDataProcessorUri : requiredCommands.keySet()){
 					boolean isActive = requiredCommands.get(singleDataProcessorUri);
 					if(isActive){

@@ -20,7 +20,7 @@ public class SensorEventTests extends TestCase{
 	@Before
 	public void setUp() {
 		MockConfigTranslator.getInstance().translate();
-		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensor80211.scanner80211PassiveConf.ID;
+		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensor80211.scanner80211.ID;
 		apList = new ArrayList<ScanResult80211>(3);
 		apList.add(new ScanResult80211("ap1", 
 									   "00:00:00:00:01", 

@@ -26,7 +26,7 @@ public abstract class AbstractSensorConfig{
 		return constraintMap;
 	}
 
-	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessorsMap(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
+	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessors(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
 		for(AbstractScannerConfig scanner : scanners){
 			dPmap.put(scanner.ID, scanner.getDataProcessors());
 		}

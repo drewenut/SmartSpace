@@ -42,7 +42,7 @@ public final class Configuration {
 			throw new RuntimeException("Configuration Object not initialized...Does the precondition hold? Did you call Configuration.createConfiguration() before calling getInstance()?");
 	}
 	
-	public ConstraintsMap<String, List<Number>> getConstraintMap() {
+	public ConstraintsMap<String, List<Number>> getConstraints() {
 		ConstraintsMap<String, List<Number>> cMap = new ConstraintsMap<String, List<Number>>();
 		for(AbstractSensorConfig config : sensorConfigs){
 			config.getSensorConstraints(cMap);
@@ -50,10 +50,10 @@ public final class Configuration {
 		return cMap;
 	}
 	
-	public DataProcessorsMap<String,HashMap<String, Boolean>> getDataProcessorList() {
+	public DataProcessorsMap<String,HashMap<String, Boolean>> getDataProcessors() {
 		DataProcessorsMap<String,HashMap<String, Boolean>> dPMap = new DataProcessorsMap<String,HashMap<String, Boolean>>();
 		for(AbstractSensorConfig config : sensorConfigs){
-			dPMap = config.getSensorDataProcessorsMap(dPMap);
+			dPMap = config.getSensorDataProcessors(dPMap);
 		}
 		return dPMap;
 	}

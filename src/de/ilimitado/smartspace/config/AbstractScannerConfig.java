@@ -10,9 +10,9 @@ public class AbstractScannerConfig{
 	
 	public final boolean isActive;
 	public final boolean synchronize;
-	public final int sampleCollectionThreshold;
-	public final long timeout;
-	public final DataProcessorCommands dataProcessorCmds;
+	private final int sampleCollectionThreshold;
+	private final long timeout;
+	public final DataProcessorCommands dataCmds;
 	
 	protected AbstractScannerConfig(String ID, String name, boolean isActive, boolean synchronize, int sCThres, long timeoutInMS, DataProcessorCommands dP) {
 		this.ID = ID;
@@ -21,11 +21,11 @@ public class AbstractScannerConfig{
 		this.synchronize = synchronize;
 		this.sampleCollectionThreshold = sCThres;
 		this.timeout = timeoutInMS;
-		this.dataProcessorCmds = dP;
+		this.dataCmds = dP;
 	}
 	
 	HashMap<String, Boolean> getDataProcessors(){
-		return dataProcessorCmds.getDataProcessorCommands();
+		return dataCmds.getDataProcessorCommands();
 	}
 	
 	List<Number> getSensingConstraints() {

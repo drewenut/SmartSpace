@@ -51,7 +51,7 @@ public abstract class SensingState implements State {
 	}
 	
 	private void setHandlerConstraints() {
-		ConstraintsMap<String, List<Number>> constraints = Configuration.getInstance().getConstraintMap();
+		ConstraintsMap<String, List<Number>> constraints = Configuration.getInstance().getConstraints();
 		for(AbstractSensorHandler handler : registeredEventHandlers){
 			if(constraints.containsKey(handler.getAssociatedEventID()))
 				handler.setEventConstraints(constraints.get(handler.getAssociatedEventID()));
