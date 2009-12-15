@@ -28,7 +28,7 @@ public final class SmartSpaceFramework extends Service{
 	
 	public final static int INDOOR_POSITION_PROVIDER = 0;
 	
-	private static SSFLocationManager iPosMngr;
+	private static SSFLocationManager locationManager;
 	private static FSM appStateMachine;
 	
 	private final IBinder ssf = new SSFBinder();
@@ -58,13 +58,12 @@ public final class SmartSpaceFramework extends Service{
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
-		IndoorLocationManager posMngr = new IndoorLocationManager();
-		SSFLocationManager iPosMngr= new SSFLocationManager(posMngr, sMng);
-		SmartSpaceFramework.iPosMngr = iPosMngr;
+		IndoorLocationManager indrLocMngr = new IndoorLocationManager();
+		SmartSpaceFramework.locationManager = new SSFLocationManager(indrLocMngr);
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
-		Dependencies appDep = new Dependencies(this, sDep, mtnDet, persMngr, posMngr);
+		Dependencies appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		SensorLoader sensorLoader = new SensorLoader(appDep);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();
@@ -78,7 +77,7 @@ public final class SmartSpaceFramework extends Service{
 	public SSFLocationManager getLocationManager(int service) {
 		switch (service) {
 		case INDOOR_POSITION_PROVIDER:
-			return iPosMngr;
+			return locationManager;
 		default:
 			return null;
 		}

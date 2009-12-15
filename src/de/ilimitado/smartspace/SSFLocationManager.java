@@ -6,12 +6,10 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class SSFLocationManager {
 
-	private final SensorManager sMngr;
 	private final IndoorLocationManager indrLocMngr;
 	
-	public SSFLocationManager(IndoorLocationManager posMngr, SensorManager sMngr) {
+	public SSFLocationManager(IndoorLocationManager posMngr) {
 		this.indrLocMngr = posMngr;
-		this.sMngr = sMngr;
 	}
 	
 	public IGeoPoint getCurrentPosition() {
