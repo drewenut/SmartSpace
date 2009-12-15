@@ -2,11 +2,11 @@ package de.ilimitado.smartspace.config;
 
 import java.util.HashMap;
 
-public class DataProcessorCommands {
+public class ConfigDataCommands {
 	
 	public final HashMap<String, Boolean> dataCommands;
 
-	public DataProcessorCommands(HashMap<String, Boolean> dataCommands) {
+	public ConfigDataCommands(HashMap<String, Boolean> dataCommands) {
 		this.dataCommands = dataCommands;
 	}
 	

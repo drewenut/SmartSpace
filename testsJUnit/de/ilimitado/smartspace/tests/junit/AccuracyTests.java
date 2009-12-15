@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.ilimitado.smartspace.Accuracy;
+import de.ilimitado.smartspace.positioning.Accuracy;
 
 public class AccuracyTests extends TestCase{
      

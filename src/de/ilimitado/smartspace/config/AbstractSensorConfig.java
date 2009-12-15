@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.ilimitado.smartspace.ConstraintsMap;
-import de.ilimitado.smartspace.dataprocessors.DataProcessorsMap;
+import de.ilimitado.smartspace.sensing.DataProcessorsMap;
 
 public abstract class AbstractSensorConfig{
 	public final String ID;

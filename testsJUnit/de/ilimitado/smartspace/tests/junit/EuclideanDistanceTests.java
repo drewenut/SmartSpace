@@ -7,10 +7,10 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.RTFPT;
 import de.ilimitado.smartspace.ScanSampleList;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.sensor.sensor80211.RSS;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;

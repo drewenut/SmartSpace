@@ -3,7 +3,7 @@ package de.ilimitado.smartspace.tests.android;
 import org.json.JSONException;
 
 import android.test.AndroidTestCase;
-import de.ilimitado.smartspace.IGeoPoint;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class IGeoPointTests extends AndroidTestCase{
 	

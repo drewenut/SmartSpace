@@ -3,6 +3,8 @@ package de.ilimitado.smartspace;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ilimitado.smartspace.positioning.Accuracy;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 
 public class PositionManager {

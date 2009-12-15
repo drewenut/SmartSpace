@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace;
+package de.ilimitado.smartspace.positioning;
 
 public class Accuracy {
 

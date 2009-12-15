@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.ilimitado.smartspace.AbstractSensorHandler;
-import de.ilimitado.smartspace.ConstraintsMap;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorManager;
 import de.ilimitado.smartspace.config.Configuration;
-import de.ilimitado.smartspace.dataprocessors.DataProcessor;
-import de.ilimitado.smartspace.dataprocessors.DataProcessorResolver;
+import de.ilimitado.smartspace.config.ConstraintsMap;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.registry.SensorHandlerProvider;
+import de.ilimitado.smartspace.sensing.DataProcessor;
+import de.ilimitado.smartspace.sensing.DataProcessorResolver;
 
 public abstract class SensingState implements State {
 	

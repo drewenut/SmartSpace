@@ -4,10 +4,10 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import android.database.Cursor;
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistance;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class LFPTDBPersistance implements ScanSampleDBPersistance {
 

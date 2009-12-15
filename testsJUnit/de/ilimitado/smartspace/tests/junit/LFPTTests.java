@@ -6,11 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.ilimitado.smartspace.FPT;
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class LFPTTests extends TestCase{

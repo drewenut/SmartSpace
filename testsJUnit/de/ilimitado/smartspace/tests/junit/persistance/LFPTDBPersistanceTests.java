@@ -7,9 +7,9 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.android.LFPTDBPersistance;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class LFPTDBPersistanceTests extends TestCase{

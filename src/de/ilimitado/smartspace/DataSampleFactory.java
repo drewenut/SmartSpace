@@ -1,5 +1,7 @@
 package de.ilimitado.smartspace;
 
+import de.ilimitado.smartspace.positioning.IGeoPoint;
+
 
 public class DataSampleFactory {
 	

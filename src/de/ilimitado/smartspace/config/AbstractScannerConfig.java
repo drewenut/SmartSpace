@@ -12,9 +12,9 @@ public class AbstractScannerConfig{
 	public final boolean synchronize;
 	private final int sampleCollectionThreshold;
 	private final long timeout;
-	public final DataProcessorCommands dataCmds;
+	public final ConfigDataCommands dataCmds;
 	
-	protected AbstractScannerConfig(String ID, String name, boolean isActive, boolean synchronize, int sCThres, long timeoutInMS, DataProcessorCommands dP) {
+	protected AbstractScannerConfig(String ID, String name, boolean isActive, boolean synchronize, int sCThres, long timeoutInMS, ConfigDataCommands dP) {
 		this.ID = ID;
 		this.NAME = name;
 		this.isActive = isActive;

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
-import de.ilimitado.smartspace.config.DataProcessorCommands;
+import de.ilimitado.smartspace.config.ConfigDataCommands;
 import de.ilimitado.smartspace.config.ConfigSensing;
 import de.ilimitado.smartspace.config.ConfigPersistence;
 import de.ilimitado.smartspace.config.ConfigLocalization;
@@ -67,16 +67,16 @@ public class MockConfigTranslator implements ConfigTranslator{
 		boolean passive80211synchronize = true;
 		int passive80211threshold = 20;
 		long passive80211timeout = 1000;
-		DataProcessorCommands passive80211dPCommands = getDataProcessCommands();
+		ConfigDataCommands passive80211dPCommands = getDataProcessCommands();
 		ConfigScanner80211Passive scn80211passive = new ConfigScanner80211Passive(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
 		return scn80211passive;
 	}
 
-	private DataProcessorCommands getDataProcessCommands() {
+	private ConfigDataCommands getDataProcessCommands() {
 		boolean passive80211MeanCommand80211 = true;
 		HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
 		dataCommands.put("MeanCommand80211", passive80211MeanCommand80211);
-		DataProcessorCommands passive80211dPCommands = new DataProcessorCommands(dataCommands);
+		ConfigDataCommands passive80211dPCommands = new ConfigDataCommands(dataCommands);
 		return passive80211dPCommands;
 	}
 

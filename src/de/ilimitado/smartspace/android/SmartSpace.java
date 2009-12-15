@@ -32,12 +32,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.ilimitado.smartspace.Accuracy;
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.IndoorPositionListener;
 import de.ilimitado.smartspace.IndoorPositionManager;
 import de.ilimitado.smartspace.SmartSpaceFramework;
 import de.ilimitado.smartspace.config.Configuration;
+import de.ilimitado.smartspace.positioning.Accuracy;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class SmartSpace extends Activity {
 

@@ -1,6 +1,5 @@
 package de.ilimitado.smartspace.positioning;
 
-import de.ilimitado.smartspace.IGeoPoint;
 
 public class WeightedIGeoPoint implements Comparable<WeightedIGeoPoint> {
 	public final IGeoPoint igp;

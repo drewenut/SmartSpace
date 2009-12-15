@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
-import de.ilimitado.smartspace.dataprocessors.DataProcessor;
+import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.utils.L;
 
 public abstract class SensingStrategy extends SynchronizerStrategy {

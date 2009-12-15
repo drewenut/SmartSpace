@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import de.ilimitado.smartspace.IGeoPoint;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 
 public class WeightedGeoPointTest extends TestCase{

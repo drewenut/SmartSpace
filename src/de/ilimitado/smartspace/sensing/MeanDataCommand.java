@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace.dataprocessors;
+package de.ilimitado.smartspace.sensing;
 
 public abstract class MeanDataCommand<I, O> implements DataCommand<I, O> {
 	protected I stdIn;

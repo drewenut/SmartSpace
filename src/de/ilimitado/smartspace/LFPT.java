@@ -2,6 +2,7 @@ package de.ilimitado.smartspace;
 
 import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
 
 public class LFPT extends FPT{

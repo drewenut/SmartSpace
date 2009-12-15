@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.ilimitado.smartspace.ScanSampleList;
-import de.ilimitado.smartspace.dataprocessors.MeanDataCommand;
+import de.ilimitado.smartspace.sensing.MeanDataCommand;
 
 public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleList>{
 	HashMap<String, List<Integer>> meanValuesMap = new HashMap<String, List<Integer>>();

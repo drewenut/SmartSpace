@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace;
+package de.ilimitado.smartspace.config;
 
 import java.util.HashMap;
 

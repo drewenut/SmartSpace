@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.android.SmartSpace;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class SmartSpaceTests extends ActivityUnitTestCase<SmartSpace>{
 	

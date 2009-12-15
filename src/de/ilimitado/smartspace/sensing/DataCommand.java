@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace.dataprocessors;
+package de.ilimitado.smartspace.sensing;
 
 
 public interface DataCommand<I, O> {

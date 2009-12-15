@@ -2,10 +2,10 @@ package de.ilimitado.smartspace.fsm;
 
 import java.util.List;
 
-import de.ilimitado.smartspace.Accuracy;
 import de.ilimitado.smartspace.Dependencies;
-import de.ilimitado.smartspace.IGeoPoint;
 import de.ilimitado.smartspace.IndoorPositionListener;
+import de.ilimitado.smartspace.positioning.Accuracy;
+import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class FSM {
 	
