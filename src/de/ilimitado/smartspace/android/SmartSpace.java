@@ -18,11 +18,15 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.ilimitado.smartspace.IndoorPositionListener;
-import de.ilimitado.smartspace.IndoorPositionManager;
-import de.ilimitado.smartspace.SmartSpaceFramework;
+import de.ilimitado.smartspace.SSFLocationListener;
+import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
@@ -42,9 +45,10 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 public class SmartSpace extends Activity {
 
 	private static final String LOG_TAG = "SmartSpaceFramework";
-	private IndoorPositionManager posMngr;
+	protected static final int MSG_HTTP = 0x0001;
+	protected static final int MSG_SSF_LOC = 0x0002;
+	private SSFLocationManager posMngr;
 	private CharSequence NO_POSITION = "no position available";
-	private IndoorPositionListener indrPosList;
 	private Button learnButton;
 	private ScrollView consoleWrapper;
 	private TextView console;
@@ -53,28 +57,56 @@ public class SmartSpace extends Activity {
 	private Button realTimeButton;
 	private Button sendGeoPoint;
 	private Button flushDatabase;
+	private SmartSpaceFramework.SSFBinder ssfBinder;
 	private SmartSpaceFramework ssf;
 	private IGeoPoint currentPosition = new IGeoPoint("na", 0, 0, 0);
 	private Handler handler = new Handler() { 
 		
 		@Override
 		public void handleMessage(final Message msg) {
-			String status = msg.getData().getString("STATUS_CODE");
-			console.append("> STATUS_CODE: ");
-			console.append(status);
-			console.append("\n");
+			switch (msg.what) {
+			case MSG_HTTP:
+				HttpResponse response = (HttpResponse) msg.obj;
+				StatusLine status = response.getStatusLine();
+				String result = Integer.toString(status.getStatusCode());
+				console.append("> STATUS_CODE: ");
+				console.append(result);
+				console.append("\n");
+				break;
+			case MSG_SSF_LOC:
+				String currPos = msg.getData().getString("CUR_POS");
+				console.append("> ");
+				console.append(currPos);
+				console.append("\n");
+				break;
+			default:
+				break;
+			}
 		}
 	};
 	
-	private Handler smartSpacePosHandler = new Handler() { 
-		
+	private SSFLocationListener indrPosList = new SSFLocationListener(){
+
 		@Override
-		public void handleMessage(final Message msg) {
-			String currPos = msg.getData().getString("CUR_POS");
-			console.append("> ");
-			console.append(currPos);
-			console.append("\n");
+		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
+			Message message = new Message();
+			Bundle bundle = new Bundle();
+			bundle.putString("CUR_POS", "We got new position: " + location.toString());
+			message.setData(bundle);
+			handler.sendMessage(handler.obtainMessage(MSG_SSF_LOC, location));
+			if(!currentPosition.equals(location)) {
+				performHTTPRequest(location);
+				currentPosition = location;
+			}
+			Log.d(LOG_TAG, "We got new position: " + location.toString());
 		}
+
+		@Override
+		public void onStateChanged(int state) { }
+
+		@Override
+		public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) { }
+		
 	};
 	
 	
@@ -83,7 +115,121 @@ public class SmartSpace extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		setupView();
+	}
+
+	
+	private ServiceConnection ssfServiceConnection = new ServiceConnection() {
 		
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			ssf.kill();
+		}
+		
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			ssfBinder = (SmartSpaceFramework.SSFBinder) service;
+			ssf = ssfBinder.getSSF();
+			try {
+				ssf.start();
+			}
+			catch (Exception e) {
+				showMessage(e.getMessage());
+				Log.d(LOG_TAG, "Unexpected error - Here is what I know: "
+						+ e.getMessage());
+			}
+		}
+	};
+	
+	private void createSmartspaceFramework() {
+		Intent ssfServiceIntent = new Intent(getApplicationContext(), SmartSpaceFramework.class);
+		bindService(ssfServiceIntent, ssfServiceConnection, Context.BIND_AUTO_CREATE);
+		posMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
+	}
+	
+	private void destroySmartspaceFramework() {
+		unbindService(ssfServiceConnection);
+		ssfBinder= null;
+		ssf = null;
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                try {
+            		createSmartspaceFramework();
+                	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
+                    Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
+                	posMngr.setCurrentPosition(iGP, acc);
+                	Toast.makeText(this, iGP.toString(), Toast.LENGTH_SHORT).show();
+                	Toast.makeText(this, "Starting Recording...", Toast.LENGTH_SHORT).show();
+				} catch (Exception e) {
+					Toast.makeText(this, "Fail " + e.getMessage(), Toast.LENGTH_LONG).show();
+					e.printStackTrace();
+				}
+            } else if (resultCode == RESULT_CANCELED) {
+            	Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+	
+	private void showMessage(String message) {
+		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
+				.show();
+	}
+		
+	public void performHTTPRequest(final IGeoPoint iGP) {
+		
+		final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+		
+			public String handleResponse(HttpResponse response) {
+				handler.sendMessage(handler.obtainMessage(MSG_HTTP, response));
+				return "";
+			}
+		};
+		
+		new Thread("HTTPRequest") { 
+			@Override
+			public void run() {
+				try {
+					DefaultHttpClient client = new DefaultHttpClient();
+					client.getParams().setParameter("http.useragent","Smart Space Framework");
+					
+					URL serverUri = new URL("http://www.ilimitado.de/labs/SmartSpaceServer/de/ilimitado/smartspace/commit.php");
+					
+					List<BasicNameValuePair> formparams = new ArrayList<BasicNameValuePair>(1);
+					formparams.add(new BasicNameValuePair("position", iGP.toJSON()));
+					UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
+					
+					HttpPost postReq = new HttpPost(serverUri.toURI());
+					postReq.setEntity(entity);
+					
+					client.execute(postReq, responseHandler);
+				} catch (ClientProtocolException e) {
+					Log.e(LOG_TAG, "ClientProtocolException..., here is what i know:  ", e);
+					e.printStackTrace();
+				} catch (IOException e) {
+					Log.e(LOG_TAG, "IOException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+				catch (URISyntaxException e) {
+					Log.e(LOG_TAG, "URISyntaxException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+				catch (JSONException e) {
+					Log.e(LOG_TAG, "JSONException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+
+	public TextView getDebugConsole() {
+		return console;
+	}
+	
+	private void setupView() {
 		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainWrapper);
 		consoleWrapper = new ScrollView(this);
 		console = new TextView(this);
@@ -95,33 +241,6 @@ public class SmartSpace extends Activity {
 		
 		final TextView stateChangedView = new TextView(this);
 		stateChangedView.setText("");
-		indrPosList = new IndoorPositionListener(){
-
-			@Override
-			public void onLocationChanged(IGeoPoint location, Accuracy acc) {
-				Message message = new Message();
-				Bundle bundle = new Bundle();
-				bundle.putString("CUR_POS", "We got new position: " + location.toString());
-				message.setData(bundle);
-				smartSpacePosHandler.sendMessage(message);
-				if(!currentPosition.equals(location)) {
-					performRequest(location);
-					currentPosition = location;
-				}
-				Log.d(LOG_TAG, "We got new position: " + location.toString());
-			}
-
-			@Override
-			public void onStateChanged(int state) {
-				stateChangedView.setText(Integer.toString(state));
-			}
-
-			@Override
-			public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) {
-				// TODO implement
-			}
-			
-		};
 			
         final String defaultLBText = "Learn Some!";
 		learnButton = new Button(this);
@@ -170,7 +289,7 @@ public class SmartSpace extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				performRequest(currentPosition);
+				performHTTPRequest(currentPosition);
 			}
 			
 		});	
@@ -219,108 +338,5 @@ public class SmartSpace extends Activity {
 		mainLayout.addView(learnAndRealtimeButtons);
 		mainLayout.addView(pushAndFlushButtons);
 		mainLayout.addView(consoleWrapper);
-	}
-
-	private void createSmartspaceFramework() {
-		try {
-			ssf = new SmartSpaceFramework(this);
-			ssf.start();
-			Thread.sleep(1000);
-			posMngr = SmartSpaceFramework.getSystemService(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
-		}
-		catch (Exception e) {
-			showMessage(e.getMessage());
-			Log.d(LOG_TAG, "Unexpected error - Here is what I know: "
-					+ e.getMessage());
-		}
-	}
-	
-	private void destroySmartspaceFramework() {
-		SmartSpaceFramework.kill();
-		ssf.interrupt();
-		ssf.die();
-		ssf= null;
-	}
-	
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                try {
-            		createSmartspaceFramework();
-                	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
-                    Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
-                	posMngr.setCurrentPosition(iGP, acc);
-                	Toast.makeText(this, iGP.toString(), Toast.LENGTH_SHORT).show();
-                	Toast.makeText(this, "Starting Recording...", Toast.LENGTH_SHORT).show();
-				} catch (Exception e) {
-					Toast.makeText(this, "Fail " + e.getMessage(), Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
-            } else if (resultCode == RESULT_CANCELED) {
-            	Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-	
-	private void showMessage(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
-				.show();
-	}
-		
-	public void performRequest(final IGeoPoint iGP) {
-		
-		final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-		
-			public String handleResponse(HttpResponse response) {
-				StatusLine status = response.getStatusLine();
-				String result = Integer.toString(status.getStatusCode());
-				Message message = new Message();
-				Bundle bundle = new Bundle();
-				bundle.putString("STATUS_CODE", result);
-				message.setData(bundle);
-				handler.sendMessage(message);
-				return result;
-			}
-		};
-		
-		new Thread("HTTPRequest") { 
-			@Override
-			public void run() {
-				try {
-					DefaultHttpClient client = new DefaultHttpClient();
-					client.getParams().setParameter("http.useragent","Smart Space Framework");
-					
-					URL serverUri = new URL("http://www.ilimitado.de/labs/SmartSpaceServer/de/ilimitado/smartspace/commit.php");
-					
-					List<BasicNameValuePair> formparams = new ArrayList<BasicNameValuePair>(1);
-					formparams.add(new BasicNameValuePair("position", iGP.toJSON()));
-					UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
-					
-					HttpPost postReq = new HttpPost(serverUri.toURI());
-					postReq.setEntity(entity);
-					
-					client.execute(postReq, responseHandler);
-				} catch (ClientProtocolException e) {
-					Log.e(LOG_TAG, "ClientProtocolException..., here is what i know:  ", e);
-					e.printStackTrace();
-				} catch (IOException e) {
-					Log.e(LOG_TAG, "IOException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-				catch (URISyntaxException e) {
-					Log.e(LOG_TAG, "URISyntaxException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-				catch (JSONException e) {
-					Log.e(LOG_TAG, "JSONException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-			}
-		}.start();
-	}
-
-	public TextView getDebugConsole() {
-		return console;
 	}
 }

@@ -70,7 +70,7 @@ public class SensorManager {
 		}
 	}
 
-	SensorManager initSensors() {
+	public SensorManager initSensors() {
 		for (AbstractSensorDevice sensor : sensorDeviceList.values()) {
 			sensor.initDevice();
 		}

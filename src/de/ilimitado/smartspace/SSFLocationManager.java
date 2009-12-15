@@ -4,12 +4,12 @@ import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 
-public class IndoorPositionManager {
+public class SSFLocationManager {
 
 	private final SensorManager sMngr;
 	private final PositionManager posMngr;
 	
-	public IndoorPositionManager(PositionManager posMngr, SensorManager sMngr) {
+	public SSFLocationManager(PositionManager posMngr, SensorManager sMngr) {
 		this.posMngr = posMngr;
 		this.sMngr = sMngr;
 	}
@@ -22,11 +22,11 @@ public class IndoorPositionManager {
 		posMngr.setPosition(iGP, acc);
 	}
 	
-	public void registerListener(IndoorPositionListener iPP){
+	public void registerListener(SSFLocationListener iPP){
 		posMngr.registerListener(iPP);
 	}
 	
-	public void unregisterListener(IndoorPositionListener iPP){
+	public void unregisterListener(SSFLocationListener iPP){
 		posMngr.unregisterListener(iPP);
 	}
 }

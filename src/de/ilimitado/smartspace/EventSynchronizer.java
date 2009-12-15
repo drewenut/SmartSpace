@@ -8,8 +8,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.os.Looper;
-import android.util.Log;
-
 import de.ilimitado.smartspace.fsm.SynchronizerStrategy;
 import de.ilimitado.smartspace.utils.L;
 

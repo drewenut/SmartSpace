@@ -36,7 +36,7 @@ public class SmartSpaceTests extends ActivityUnitTestCase<SmartSpace>{
 			@Override
 			public void onClick(View v) {
 				IGeoPoint mockGP = new IGeoPoint("sid", 1, 1, 1);
-				smartSpace.performRequest(mockGP);
+				smartSpace.performHTTPRequest(mockGP);
 			}
 		});
 		

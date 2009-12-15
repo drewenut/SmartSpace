@@ -3,7 +3,7 @@ package de.ilimitado.smartspace.fsm;
 import java.util.List;
 
 import de.ilimitado.smartspace.Dependencies;
-import de.ilimitado.smartspace.IndoorPositionListener;
+import de.ilimitado.smartspace.SSFLocationListener;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 
@@ -15,7 +15,7 @@ public class FSM {
 	private State nextState;
 	private Dependencies dependencies;
 	
-	private IndoorPositionListener iPL = new IndoorPositionListener(){
+	private SSFLocationListener iPL = new SSFLocationListener(){
 
 		@Override
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
