@@ -13,7 +13,7 @@ import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.MotionDetector;
-import de.ilimitado.smartspace.PositionManager;
+import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorDependencies;
 import de.ilimitado.smartspace.SensorEvent;
@@ -28,8 +28,8 @@ public final class SmartSpaceFramework extends Service{
 	
 	public final static int INDOOR_POSITION_PROVIDER = 0;
 	
-	private SSFLocationManager iPosMngr;
-	private FSM appStateMachine;
+	private static SSFLocationManager iPosMngr;
+	private static FSM appStateMachine;
 	
 	private final IBinder ssf = new SSFBinder();
 	
@@ -58,9 +58,9 @@ public final class SmartSpaceFramework extends Service{
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
-		PositionManager posMngr = new PositionManager();
+		IndoorLocationManager posMngr = new IndoorLocationManager();
 		SSFLocationManager iPosMngr= new SSFLocationManager(posMngr, sMng);
-		iPosMngr = iPosMngr;
+		SmartSpaceFramework.iPosMngr = iPosMngr;
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);

@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.ilimitado.smartspace.DataSampleFactory;
 import de.ilimitado.smartspace.Dependencies;
-import de.ilimitado.smartspace.PositionManager;
+import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.RTFPT;
 import de.ilimitado.smartspace.RadioMap;
 import de.ilimitado.smartspace.ScanSampleList;
@@ -20,7 +20,7 @@ import de.ilimitado.smartspace.utils.L;
 
 public class RTFPTSyncStrategy extends SensingStrategy {
 	
-	private final PositionManager posMngr;
+	private final IndoorLocationManager posMngr;
 	private final PersistanceManager perMngr;
 
 	public RTFPTSyncStrategy(Dependencies dep, List<String> syncList, HashMap<String, DataProcessor<ScanSampleList>> dataProcessorList) {

@@ -5,7 +5,7 @@ import java.util.List;
 import de.ilimitado.smartspace.DataSampleFactory;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.LFPT;
-import de.ilimitado.smartspace.PositionManager;
+import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
@@ -17,7 +17,7 @@ import de.ilimitado.smartspace.utils.L;
 
 public class LFPTSyncStrategy extends SensingStrategy {
 	
-	private final PositionManager posMngr;
+	private final IndoorLocationManager posMngr;
 	private final PersistanceManager perMngr;
 
 	public LFPTSyncStrategy(Dependencies dep, List<String> syncList, HashMap<String, DataProcessor<ScanSampleList>> dataProcessorList) {

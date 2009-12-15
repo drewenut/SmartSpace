@@ -36,7 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.ilimitado.smartspace.SSFLocationListener;
+import de.ilimitado.smartspace.IndoorLocationListener;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.Accuracy;
@@ -47,7 +47,7 @@ public class SmartSpace extends Activity {
 	private static final String LOG_TAG = "SmartSpaceFramework";
 	protected static final int MSG_HTTP = 0x0001;
 	protected static final int MSG_SSF_LOC = 0x0002;
-	private SSFLocationManager posMngr;
+	private SSFLocationManager locationMngr;
 	private CharSequence NO_POSITION = "no position available";
 	private Button learnButton;
 	private ScrollView consoleWrapper;
@@ -85,7 +85,7 @@ public class SmartSpace extends Activity {
 		}
 	};
 	
-	private SSFLocationListener indrPosList = new SSFLocationListener(){
+	private IndoorLocationListener indoorLocList = new IndoorLocationListener(){
 
 		@Override
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
@@ -141,35 +141,147 @@ public class SmartSpace extends Activity {
 		}
 	};
 	
-	private void createSmartspaceFramework() {
+	private void createService() {
 		Intent ssfServiceIntent = new Intent(getApplicationContext(), SmartSpaceFramework.class);
 		bindService(ssfServiceIntent, ssfServiceConnection, Context.BIND_AUTO_CREATE);
-		posMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
+		locationMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
 	}
 	
-	private void destroySmartspaceFramework() {
+	private void killService() {
 		unbindService(ssfServiceConnection);
 		ssfBinder= null;
 		ssf = null;
 	}
 	
+	private void setupView() {
+		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainWrapper);
+		consoleWrapper = new ScrollView(this);
+		console = new TextView(this);
+		console.setTextColor(Color.GREEN);
+		console.append("> ");
+		console.append(NO_POSITION);
+		console.append("\n");
+		consoleWrapper.addView(console);
+		
+		final TextView stateChangedView = new TextView(this);
+		stateChangedView.setText("");
+			
+        final String defaultLBText = "Learn Some!";
+		learnButton = new Button(this);
+        learnButton.setText(defaultLBText);
+        learnButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+            	if(!learningActive) {
+            		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                    startActivityForResult(intent, 0);
+                    learningActive = true;
+                    learnButton.setText("Stop Learning...");
+            	}
+            	else if(learningActive) {
+            		killService();
+            		learningActive = false;
+                    learnButton.setText(defaultLBText);
+            	}
+            }
+        });
+        
+        realTimeButton = new Button(this);
+		realTimeButton.setText("Go Real Time...");
+		realTimeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(!rtActive) {
+					createService();
+					locationMngr.registerListener(indoorLocList);
+					realTimeButton.setText("Tracking now...click to Stop!");
+					rtActive = true;
+				}
+				else if(rtActive){
+					locationMngr.unregisterListener(indoorLocList);
+					killService();	
+					rtActive = false;
+					realTimeButton.setText("RT Positioning");
+				}
+			}
+		});	
+		
+		sendGeoPoint = new Button(this);
+		sendGeoPoint.setText("Push iGeoPoint to server");
+		sendGeoPoint.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				performHTTPRequest(currentPosition);
+			}
+			
+		});	
+		
+		flushDatabase = new Button(this);
+		flushDatabase.setText("Flush Database");
+		flushDatabase.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+                new AlertDialog.Builder(SmartSpace.this)
+                .setTitle("Warning!")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage("Do you realy want to flush the whole database? All Fingerprints will be lost!")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        	AndroidConfigTranslator.getInstance(getSharedPreferences("smartSpace", 1)).translate();
+            				boolean flushed = deleteDatabase(Configuration.getInstance().persistence.dbName);
+            				if(flushed)
+            					showMessage("Database flushed successfully.");
+            				else
+            					showMessage("Error while flushing database.");
+                        }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            showMessage("Cancelled flushing database");
+                        }
+                }).create().show();
+				
+			}
+			
+		});	
+		
+		LinearLayout learnAndRealtimeButtons = new LinearLayout(this);
+		learnAndRealtimeButtons.setWeightSum(1.0f);
+		learnAndRealtimeButtons.setOrientation(LinearLayout.HORIZONTAL);
+		learnAndRealtimeButtons.addView(learnButton);
+		learnAndRealtimeButtons.addView(realTimeButton);
+		
+		LinearLayout pushAndFlushButtons = new LinearLayout(this);
+		pushAndFlushButtons.setOrientation(LinearLayout.HORIZONTAL);
+		pushAndFlushButtons.addView(sendGeoPoint);
+		pushAndFlushButtons.addView(flushDatabase);
+		
+		mainLayout.addView(learnAndRealtimeButtons);
+		mainLayout.addView(pushAndFlushButtons);
+		mainLayout.addView(consoleWrapper);
+	}
+	
+	//Called by ZXing QR-Code Scanner
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 try {
-            		createSmartspaceFramework();
+            		createService();
                 	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
                     Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
-                	posMngr.setCurrentPosition(iGP, acc);
-                	Toast.makeText(this, iGP.toString(), Toast.LENGTH_SHORT).show();
-                	Toast.makeText(this, "Starting Recording...", Toast.LENGTH_SHORT).show();
+                	locationMngr.setCurrentPosition(iGP, acc);
+                	showMessage(iGP.toString());
+                	showMessage("Starting Recording...");
 				} catch (Exception e) {
-					Toast.makeText(this, "Fail " + e.getMessage(), Toast.LENGTH_LONG).show();
+					showMessage("Fail " + e.getMessage());
 					e.printStackTrace();
 				}
             } else if (resultCode == RESULT_CANCELED) {
-            	Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show();
+            	showMessage("Fail");
             }
         }
     }
@@ -179,6 +291,7 @@ public class SmartSpace extends Activity {
 				.show();
 	}
 		
+	//Push IGEOPoint to server
 	public void performHTTPRequest(final IGeoPoint iGP) {
 		
 		final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -227,116 +340,5 @@ public class SmartSpace extends Activity {
 
 	public TextView getDebugConsole() {
 		return console;
-	}
-	
-	private void setupView() {
-		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainWrapper);
-		consoleWrapper = new ScrollView(this);
-		console = new TextView(this);
-		console.setTextColor(Color.GREEN);
-		console.append("> ");
-		console.append(NO_POSITION);
-		console.append("\n");
-		consoleWrapper.addView(console);
-		
-		final TextView stateChangedView = new TextView(this);
-		stateChangedView.setText("");
-			
-        final String defaultLBText = "Learn Some!";
-		learnButton = new Button(this);
-        learnButton.setText(defaultLBText);
-        learnButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-            	if(!learningActive) {
-            		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                    startActivityForResult(intent, 0);
-                    learningActive = true;
-                    learnButton.setText("Stop Learning...");
-            	}
-            	else if(learningActive) {
-            		destroySmartspaceFramework();
-            		learningActive = false;
-                    learnButton.setText(defaultLBText);
-            	}
-            }
-        });
-        
-        realTimeButton = new Button(this);
-		realTimeButton.setText("Go Real Time...");
-		realTimeButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				if(!rtActive) {
-					createSmartspaceFramework();
-					posMngr.registerListener(indrPosList);
-					realTimeButton.setText("Tracking now...click to Stop!");
-					rtActive = true;
-				}
-				else if(rtActive){
-					posMngr.unregisterListener(indrPosList);
-					destroySmartspaceFramework();	
-					rtActive = false;
-					realTimeButton.setText("RT Positioning");
-				}
-			}
-		});	
-		
-		sendGeoPoint = new Button(this);
-		sendGeoPoint.setText("Push iGeoPoint to server");
-		sendGeoPoint.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				performHTTPRequest(currentPosition);
-			}
-			
-		});	
-		
-		flushDatabase = new Button(this);
-		flushDatabase.setText("Flush Database");
-		flushDatabase.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-                new AlertDialog.Builder(SmartSpace.this)
-                .setTitle("Warning!")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage("Do you realy want to flush the whole database? All FPTs will be lost!")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                        	AndroidConfigTranslator.getInstance(getSharedPreferences("smartSpace", 1)).translate();
-            				boolean flushed = deleteDatabase(Configuration.getInstance().persistence.dbName);
-            				if(flushed)
-            					showMessage("Database flushed successfully.");
-            				else
-            					showMessage("Error while flushing database.");
-                        }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            showMessage("Cancelled flushing database");
-                        }
-                }).create().show();
-				
-			}
-			
-		});	
-		
-		LinearLayout learnAndRealtimeButtons = new LinearLayout(this);
-		learnAndRealtimeButtons.setWeightSum(1.0f);
-		learnAndRealtimeButtons.setOrientation(LinearLayout.HORIZONTAL);
-		learnAndRealtimeButtons.addView(learnButton);
-		learnAndRealtimeButtons.addView(realTimeButton);
-		
-		LinearLayout pushAndFlushButtons = new LinearLayout(this);
-		pushAndFlushButtons.setOrientation(LinearLayout.HORIZONTAL);
-		pushAndFlushButtons.addView(sendGeoPoint);
-		pushAndFlushButtons.addView(flushDatabase);
-		
-		mainLayout.addView(learnAndRealtimeButtons);
-		mainLayout.addView(pushAndFlushButtons);
-		mainLayout.addView(consoleWrapper);
 	}
 }

@@ -10,9 +10,9 @@ public class Dependencies {
 	
 	public final MotionDetector motionDetector;
 	public final PersistanceManager persistanceManager;
-	public final PositionManager positionManager;
+	public final IndoorLocationManager positionManager;
 
-	public Dependencies(Context androidDep, SensorDependencies sDep, MotionDetector mtnDet, PersistanceManager persMngr, PositionManager posMngr) {
+	public Dependencies(Context androidDep, SensorDependencies sDep, MotionDetector mtnDet, PersistanceManager persMngr, IndoorLocationManager posMngr) {
 		this.sensorDependencies = sDep;
 		this.androidDependencies = androidDep;
 		this.motionDetector = mtnDet;

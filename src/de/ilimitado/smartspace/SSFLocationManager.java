@@ -7,26 +7,26 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 public class SSFLocationManager {
 
 	private final SensorManager sMngr;
-	private final PositionManager posMngr;
+	private final IndoorLocationManager indrLocMngr;
 	
-	public SSFLocationManager(PositionManager posMngr, SensorManager sMngr) {
-		this.posMngr = posMngr;
+	public SSFLocationManager(IndoorLocationManager posMngr, SensorManager sMngr) {
+		this.indrLocMngr = posMngr;
 		this.sMngr = sMngr;
 	}
 	
 	public IGeoPoint getCurrentPosition() {
-		return posMngr.getCurrentPosition();
+		return indrLocMngr.getCurrentPosition();
 	}
 	
 	public void setCurrentPosition(IGeoPoint iGP, Accuracy acc) {
-		posMngr.setPosition(iGP, acc);
+		indrLocMngr.setPosition(iGP, acc);
 	}
 	
-	public void registerListener(SSFLocationListener iPP){
-		posMngr.registerListener(iPP);
+	public void registerListener(IndoorLocationListener iPP){
+		indrLocMngr.registerListener(iPP);
 	}
 	
-	public void unregisterListener(SSFLocationListener iPP){
-		posMngr.unregisterListener(iPP);
+	public void unregisterListener(IndoorLocationListener iPP){
+		indrLocMngr.unregisterListener(iPP);
 	}
 }
