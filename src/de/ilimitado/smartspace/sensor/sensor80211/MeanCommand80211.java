@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.sensing.MeanDataCommand;
 

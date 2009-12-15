@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.database.Cursor;
 import de.ilimitado.smartspace.LFPT;
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSample;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;

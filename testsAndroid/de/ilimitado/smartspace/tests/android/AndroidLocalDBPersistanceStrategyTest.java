@@ -2,6 +2,7 @@ package de.ilimitado.smartspace.tests.android;
 
 import android.test.AndroidTestCase;
 import de.ilimitado.smartspace.LFPT;
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.RadioMap;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.android.AndroidLocalDBPersistanceStrategy;
@@ -9,7 +10,6 @@ import de.ilimitado.smartspace.android.LFPTDBPersistance;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
-import de.ilimitado.smartspace.sensor.sensor80211.RSS;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;

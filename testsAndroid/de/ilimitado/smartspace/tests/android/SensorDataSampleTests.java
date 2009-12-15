@@ -2,13 +2,13 @@ package de.ilimitado.smartspace.tests.android;
 
 import junit.framework.TestCase;
 import android.test.suitebuilder.annotation.SmallTest;
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSample;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensor80211.RSS;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.tests.junit.MockSample;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;

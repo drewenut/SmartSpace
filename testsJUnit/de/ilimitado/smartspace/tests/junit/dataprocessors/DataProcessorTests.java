@@ -14,6 +14,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSample;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.config.Configuration;
@@ -23,7 +24,6 @@ import de.ilimitado.smartspace.sensing.DataCommandChain;
 import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.sensing.DataProcessorResolver;
 import de.ilimitado.smartspace.sensor.sensor80211.MeanCommand80211;
-import de.ilimitado.smartspace.sensor.sensor80211.RSS;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanResult80211;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
