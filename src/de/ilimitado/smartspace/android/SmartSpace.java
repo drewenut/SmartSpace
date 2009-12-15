@@ -74,9 +74,9 @@ public class SmartSpace extends Activity {
 				console.append("\n");
 				break;
 			case MSG_SSF_LOC:
-				String currPos = msg.getData().getString("CUR_POS");
+				IGeoPoint currentlocation =  (IGeoPoint) msg.obj;
 				console.append("> ");
-				console.append(currPos);
+				console.append("We got new position: " + currentlocation.toString());
 				console.append("\n");
 				break;
 			default:
@@ -89,11 +89,8 @@ public class SmartSpace extends Activity {
 
 		@Override
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
-			Message message = new Message();
-			Bundle bundle = new Bundle();
-			bundle.putString("CUR_POS", "We got new position: " + location.toString());
-			message.setData(bundle);
 			handler.sendMessage(handler.obtainMessage(MSG_SSF_LOC, location));
+			
 			if(!currentPosition.equals(location)) {
 				performHTTPRequest(location);
 				currentPosition = location;
@@ -115,7 +112,14 @@ public class SmartSpace extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		createService();
 		setupView();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		killService();
 	}
 
 	
@@ -123,34 +127,47 @@ public class SmartSpace extends Activity {
 		
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			ssf.kill();
+			ssfKill();
+			ssfBinder= null;
+			ssf = null;
 		}
 		
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ssfBinder = (SmartSpaceFramework.SSFBinder) service;
 			ssf = ssfBinder.getSSF();
-			try {
-				ssf.start();
-			}
-			catch (Exception e) {
-				showMessage(e.getMessage());
-				Log.d(LOG_TAG, "Unexpected error - Here is what I know: "
-						+ e.getMessage());
-			}
 		}
+
 	};
 	
 	private void createService() {
 		Intent ssfServiceIntent = new Intent(getApplicationContext(), SmartSpaceFramework.class);
 		bindService(ssfServiceIntent, ssfServiceConnection, Context.BIND_AUTO_CREATE);
-		locationMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
 	}
 	
 	private void killService() {
-		unbindService(ssfServiceConnection);
-		ssfBinder= null;
-		ssf = null;
+//		unbindService(ssfServiceConnection);
+	}
+	
+	private void ssfStart() {
+		try {
+			ssf.start();
+			locationMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
+		}
+		catch (Exception e) {
+			showMessage(e.getMessage());
+			Log.d(LOG_TAG, "Unexpected error - Here is what I know: "
+					+ e.getMessage());
+		}
+	}
+	
+	private void ssfKill() {
+		ssf.kill();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setupView() {
@@ -179,7 +196,7 @@ public class SmartSpace extends Activity {
                     learnButton.setText("Stop Learning...");
             	}
             	else if(learningActive) {
-            		killService();
+            		ssfKill();
             		learningActive = false;
                     learnButton.setText(defaultLBText);
             	}
@@ -193,14 +210,14 @@ public class SmartSpace extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(!rtActive) {
-					createService();
+					ssfStart();
 					locationMngr.registerListener(indoorLocList);
 					realTimeButton.setText("Tracking now...click to Stop!");
 					rtActive = true;
 				}
 				else if(rtActive){
 					locationMngr.unregisterListener(indoorLocList);
-					killService();	
+					ssfKill();	
 					rtActive = false;
 					realTimeButton.setText("RT Positioning");
 				}
@@ -270,7 +287,7 @@ public class SmartSpace extends Activity {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 try {
-            		createService();
+                	ssfStart();
                 	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
                     Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
                 	locationMngr.setCurrentPosition(iGP, acc);
