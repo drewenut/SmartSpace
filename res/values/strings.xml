@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SmartSpace</string>
-
+	<!-- Menu -->
+	<string name="menu_preferences">Preferences</string>
+    
     <!-- Preferences -->
    	<string name="save">Save</string>
 	<string name="restore_defaults">Restore Defaults</string>

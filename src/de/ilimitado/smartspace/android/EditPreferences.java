@@ -49,5 +49,4 @@ public class EditPreferences extends PreferenceActivity{
 	private void showMessage(int message) {
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
-	
 }

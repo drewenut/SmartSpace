@@ -29,6 +29,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,6 +49,8 @@ public class SmartSpace extends Activity {
 	private static final String LOG_TAG = "SmartSpaceFramework";
 	protected static final int MSG_HTTP = 0x0001;
 	protected static final int MSG_SSF_LOC = 0x0002;
+	private static final int MENU_PREFERENCES = 0x0010;
+	
 	private SSFLocationManager locationMngr;
 	private CharSequence NO_POSITION = "no position available";
 	private Button learnButton;
@@ -120,6 +124,31 @@ public class SmartSpace extends Activity {
 	protected void onPause() {
 		super.onPause();
 		killService();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, MENU_PREFERENCES, 0, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		super.onMenuItemSelected(featureId, item);
+		switch (item.getItemId()) {
+			case MENU_PREFERENCES:
+				openPreferencesScreen();
+				break;
+			default:
+				break;
+		}
+		return true;
+	}
+	
+	private void openPreferencesScreen() {
+		Intent intent = new Intent(this, EditPreferences.class);
+		startActivity(intent);
 	}
 
 	
