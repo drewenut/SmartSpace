@@ -12,18 +12,21 @@ public final class Configuration {
 	public final ConfigPersistence persistence;
 	public final ConfigSensing sensing;
 	public final ConfigSensor80211 sensor80211;
+	public final ConfigSensorGSM sensorGSM;
 	private static Configuration instance = null;
 	protected static List<AbstractSensorConfig> sensorConfigs = new ArrayList<AbstractSensorConfig>(); 
 	
 	private Configuration(	ConfigLocalization algos,
 			   			  	ConfigPersistence configPersistence,
 			   			  	ConfigSensing configSensing,
-			   			  	ConfigSensor80211 config80211
+			   			  	ConfigSensor80211 config80211,
+			   			  	ConfigSensorGSM configGSM
 			   			  	) {
 		this.localization = algos;
 		this.persistence = configPersistence;
 		this.sensing = configSensing;
 		this.sensor80211 = config80211;
+		this.sensorGSM = configGSM;
 	}
 	
 	public static void createConfiguration(	ConfigLocalization algos,
@@ -31,8 +34,17 @@ public final class Configuration {
 										   	ConfigSensing fptColl,
 										   	ConfigSensor80211 snsCfg80211
 											) {
-		instance = new Configuration(algos, persConf, fptColl , snsCfg80211);
+		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, null);
 	}
+	
+	public static void createConfiguration(	ConfigLocalization algos,
+		   	ConfigPersistence persConf,
+		   	ConfigSensing fptColl,
+		   	ConfigSensor80211 snsCfg80211,
+		   	ConfigSensorGSM configGSM
+			) {
+instance = new Configuration(algos, persConf, fptColl , snsCfg80211, configGSM);
+}
 	
 	public static Configuration getInstance() {
 		if(instance != null)

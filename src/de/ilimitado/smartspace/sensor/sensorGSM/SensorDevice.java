@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
@@ -21,28 +22,25 @@ import de.ilimitado.smartspace.utils.L;
 
 public class SensorDevice extends AbstractSensorDevice {
 
-	private final String SENSOR_80211_AP_SCAN_EVENT_ID;
-	private final String SENSOR_80211_AP_SCAN_EVENT_NAME;
-	private WifiManager wifiManager = null;
+	private final String SENSOR_GSM_AP_SCAN_EVENT_ID;
+	private final String SENSOR_GSM_AP_SCAN_EVENT_NAME;
+	private TelephonyManager telephonyManager = null;
 	private boolean prevWifiState = false;
 
 	public SensorDevice(Dependencies appDeps) {
 		super(appDeps);
-		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensor80211.scanner80211.ID;
-		SENSOR_80211_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensor80211.scanner80211.NAME;
+		SENSOR_GSM_AP_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerGSM_RSS.ID;
+		SENSOR_GSM_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerGSM_RSS.NAME;
 	}
 
 	@Override
 	public boolean deviceAvailable() {
-		this.wifiManager = (WifiManager) androidCtx.getSystemService(Context.WIFI_SERVICE);
-		return wifiManager == null ? false : true;
+		this.telephonyManager = (TelephonyManager) androidCtx.getSystemService(Context.TELEPHONY_SERVICE);
+		return telephonyManager == null ? false : true;
 	}
 
 	@Override
 	public void initDevice() {
-		if (!wifiManager.isWifiEnabled())
-			enableWifi();
-
 		if (deviceAvailable()) {
 			createRunnables();
 		}
@@ -50,8 +48,8 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	@Override
 	public void createRunnables() {
-		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sensorRunnables.add(new Scanner80211Passive());
+		if(Configuration.getInstance().sensorGSM.scannerGSM_RSS.isActive) {
+			sensorRunnables.add(new ScannerGSMRSS());
 		}
 	}
 	
@@ -68,7 +66,7 @@ public class SensorDevice extends AbstractSensorDevice {
 	@Override
 	public void registerEvents(Dependencies dep) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			dep.sensorDependencies.reactor.registerHandler(SENSOR_GSM_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_GSM_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
 	
@@ -82,14 +80,14 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sSReg.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211.class);
+			sSReg.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSample80211.class);
 		}
 	}
 	
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sSplDBPers.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
+			sSplDBPers.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
 		}
 	}
 
@@ -98,9 +96,9 @@ public class SensorDevice extends AbstractSensorDevice {
 	}
 
 	public void disableWifi() {
-		if (wifiManager.isWifiEnabled()) {
+		if (telephonyManager.isWifiEnabled()) {
 			prevWifiState = true;
-			wifiManager.setWifiEnabled(false);
+			telephonyManager.setWifiEnabled(false);
 			Log.d(LOG_TAG, "Wifi disabled!");
 			// Waiting for interface-shutdown
 			try {
@@ -114,7 +112,7 @@ public class SensorDevice extends AbstractSensorDevice {
 	public void enableWifi() {
 		if (prevWifiState) {
 			// Waiting for interface-restart
-			wifiManager.setWifiEnabled(true);
+			telephonyManager.setWifiEnabled(true);
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
@@ -125,12 +123,12 @@ public class SensorDevice extends AbstractSensorDevice {
 		}
 	}
 
-	class Scanner80211Passive implements Runnable {
+	class ScannerGSMRSS implements Runnable {
 		private WifiReceiver receiverWifi;
 		private IntentFilter intentFilter;
 		private volatile boolean receiverRegistered;
 
-		public Scanner80211Passive() {
+		public ScannerGSMRSS() {
 			this.receiverWifi = new WifiReceiver();
 			this.intentFilter = new IntentFilter();
 		}
@@ -144,37 +142,37 @@ public class SensorDevice extends AbstractSensorDevice {
 				}
 				if(!receiverRegistered){
 					registerReceiver();
-					wifiManager.startScan();
+					telephonyManager.startScan();
 				}
 			}
 		}
 		
 		public String getEventID(){
-			return SENSOR_80211_AP_SCAN_EVENT_ID;
+			return SENSOR_GSM_AP_SCAN_EVENT_ID;
 		}
 		
 		public String getEventName(){
-			return SENSOR_80211_AP_SCAN_EVENT_NAME;
+			return SENSOR_GSM_AP_SCAN_EVENT_NAME;
 		}
 
 		private void advertiseScanResults() {
-			List<ScanResult> wifiList = wifiManager.getScanResults();
-			List<ScanResult80211> apList = new ArrayList<ScanResult80211>(wifiList.size());
+			List<ScanResult> wifiList = telephonyManager.getScanResults();
+			List<ScanResultGSM> apList = new ArrayList<ScanResultGSM>(wifiList.size());
 			for(ScanResult scnRes : wifiList){
-				apList.add(new ScanResult80211(scnRes.SSID, 
+				apList.add(new ScanResultGSM(scnRes.SSID, 
 											   scnRes.BSSID, 
 											   scnRes.capabilities, 
 											   scnRes.level, 
 											   scnRes.frequency));
 			}
 			try {
-				systemRawDataQueue.put(new SensorEvent<ScanResult80211>(apList,getEventID()));
+				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(apList,getEventID()));
 			} catch (InterruptedException e) {
 				//Do nothing, we are just dropping last measurement.
 				e.printStackTrace();
 			}
 			L.d(LOG_TAG, "SensorEvent<ScanResult80211> added, current systemRawDataQueue Size "+systemRawDataQueue.size());
-			wifiManager.startScan();
+			telephonyManager.startScan();
 		}
 
 		private synchronized void registerReceiver() {

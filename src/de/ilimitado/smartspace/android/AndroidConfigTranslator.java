@@ -9,7 +9,7 @@ import de.ilimitado.smartspace.config.ConfigDataCommands;
 import de.ilimitado.smartspace.config.ConfigSensing;
 import de.ilimitado.smartspace.config.ConfigPersistence;
 import de.ilimitado.smartspace.config.ConfigLocalization;
-import de.ilimitado.smartspace.config.ConfigScanner80211Passive;
+import de.ilimitado.smartspace.config.ConfigScannerGSMRSS;
 import de.ilimitado.smartspace.config.ConfigSensor80211;
 
 public class AndroidConfigTranslator implements ConfigTranslator{
@@ -60,19 +60,19 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	private ConfigSensor80211 getSensorConfig80211() {
 		String sensor80211name = androidPreferences.getString("sensor_config_80211_sensor_name", "Sensor80211");
 		boolean sensor80211isActive = androidPreferences.getBoolean("sensor_config_80211_sensor_is_active", true);
-		ConfigScanner80211Passive scn80211passive = getScanner80211PassiveConfig();
+		ConfigScannerGSMRSS scn80211passive = getScanner80211PassiveConfig();
 		ConfigSensor80211 snsCfg80211 = new ConfigSensor80211(sensor80211name, sensor80211isActive, scn80211passive);
 		return snsCfg80211;
 	}
 
-	private ConfigScanner80211Passive getScanner80211PassiveConfig() {
+	private ConfigScannerGSMRSS getScanner80211PassiveConfig() {
 		String passive80211Name = androidPreferences.getString("scanner_config_80211_passive_scanner_name", "Sensor80211ScannerPassive");
 		boolean passive80211isActive = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_is_active", true);
 		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", true);
 		int passive80211threshold = androidPreferences.getInt("scanner_config_80211_passive_threshold", 10);
 		long passive80211timeout = androidPreferences.getLong("scanner_config_80211_passive_timeout", 1000);
 		ConfigDataCommands passive80211dPCommands = getDataProcessCommands();
-		ConfigScanner80211Passive scn80211passive = new ConfigScanner80211Passive(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
+		ConfigScannerGSMRSS scn80211passive = new ConfigScannerGSMRSS(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
 		return scn80211passive;
 	}
 
