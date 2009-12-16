@@ -17,7 +17,7 @@ import de.ilimitado.smartspace.SensorLoader;
 import de.ilimitado.smartspace.SensorManager;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
-import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice;
+import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class SensorLoaderTests extends AndroidTestCase{
@@ -48,7 +48,7 @@ public class SensorLoaderTests extends AndroidTestCase{
 		HashMap<String, AbstractSensorDevice> sensorDeviceList = sMng.getSensorDeviceList();
 		assertEquals(1, sensorDeviceList.size());
 		assertTrue(sensorDeviceList.containsKey("Sensor80211"));
-		assertTrue(sensorDeviceList.get("Sensor80211") instanceof SensorDevice);
+		assertTrue(sensorDeviceList.get("Sensor80211") instanceof SensorDevice80211);
 	}
 
 }

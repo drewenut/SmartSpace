@@ -1,5 +1,6 @@
 package de.ilimitado.smartspace.android;
 
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import android.app.Service;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.IndoorLocationManager;
@@ -23,6 +25,8 @@ import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
+import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
+import de.ilimitado.smartspace.sensor.sensorGSM.SensorDeviceGSM;
 
 public final class SmartSpaceFramework extends Service{
 	
@@ -66,7 +70,10 @@ public final class SmartSpaceFramework extends Service{
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
-		SensorLoader sensorLoader = new SensorLoader(appDep);
+		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
+		sensorDevices.add(new SensorDevice80211(appDep));
+		sensorDevices.add(new SensorDeviceGSM(appDep));
+		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();
 	}

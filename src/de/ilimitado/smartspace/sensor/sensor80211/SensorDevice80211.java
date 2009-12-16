@@ -19,7 +19,7 @@ import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
 import de.ilimitado.smartspace.utils.L;
 
-public class SensorDevice extends AbstractSensorDevice {
+public class SensorDevice80211 extends AbstractSensorDevice {
 
 	private final String SENSOR_80211_AP_SCAN_EVENT_ID;
 	private final String SENSOR_80211_AP_SCAN_EVENT_NAME;
@@ -27,7 +27,7 @@ public class SensorDevice extends AbstractSensorDevice {
 
 	private boolean prevWifiState = false;
 
-	public SensorDevice(Dependencies appDeps) {
+	public SensorDevice80211(Dependencies appDeps) {
 		super(appDeps);
 		SENSOR_80211_AP_SCAN_EVENT_ID = Configuration.getInstance().sensor80211.scanner80211.ID;
 		SENSOR_80211_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensor80211.scanner80211.NAME;

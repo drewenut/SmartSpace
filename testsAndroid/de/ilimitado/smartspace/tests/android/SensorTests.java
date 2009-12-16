@@ -25,12 +25,12 @@ import de.ilimitado.smartspace.android.AndroidConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
-import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice;
+import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 import de.ilimitado.smartspace.sensor.sensor80211.EventHandler80211;
 
 public class SensorTests extends AndroidTestCase{
 
-	private SensorDevice sD;
+	private SensorDevice80211 sD;
 	private Dependencies appDep;
 	private Configuration config;
 	private SensorManager sMng;
@@ -53,7 +53,7 @@ public class SensorTests extends AndroidTestCase{
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, sSync, sMng, systemRawDataQueue, reg);
 		this.appDep = new Dependencies(androidCtx, sDep, mtnDet, persMngr, posMngr);
-		this.sD = new SensorDevice(appDep);
+		this.sD = new SensorDevice80211(appDep);
 	}
 	
 	public void testManualSensorLoadWithSensorDevice80211(){

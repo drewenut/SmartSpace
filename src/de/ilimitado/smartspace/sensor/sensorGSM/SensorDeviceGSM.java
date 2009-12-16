@@ -20,13 +20,13 @@ import de.ilimitado.smartspace.registry.ScanSampleProvider;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.utils.L;
 
-public class SensorDevice extends AbstractSensorDevice {
+public class SensorDeviceGSM extends AbstractSensorDevice {
 
 	private final String SENSOR_GSM_AP_SCAN_EVENT_ID;
 	private final String SENSOR_GSM_AP_SCAN_EVENT_NAME;
 	private TelephonyManager telephonyManager = null;
 
-	public SensorDevice(Dependencies appDeps) {
+	public SensorDeviceGSM(Dependencies appDeps) {
 		super(appDeps);
 		SENSOR_GSM_AP_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerGSM_RSS.ID;
 		SENSOR_GSM_AP_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerGSM_RSS.NAME;
