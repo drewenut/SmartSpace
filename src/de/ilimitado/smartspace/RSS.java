@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace.sensor.sensor80211;
+package de.ilimitado.smartspace;
 
 import java.util.ArrayList;
 import java.util.List;

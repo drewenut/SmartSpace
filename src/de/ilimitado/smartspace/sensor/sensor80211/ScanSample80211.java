@@ -3,6 +3,7 @@ package de.ilimitado.smartspace.sensor.sensor80211;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSample;
 import de.ilimitado.smartspace.persistance.Component;
 import de.ilimitado.smartspace.persistance.ValueMap;
