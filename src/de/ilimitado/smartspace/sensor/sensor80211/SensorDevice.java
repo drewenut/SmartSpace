@@ -69,7 +69,7 @@ public class SensorDevice extends AbstractSensorDevice {
 	@Override
 	public void registerEvents(Dependencies dep) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new EventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
 	

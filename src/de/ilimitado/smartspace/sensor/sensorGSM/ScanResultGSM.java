@@ -10,8 +10,8 @@ public class ScanResultGSM {
     
     public int frequency;
 
-    public ScanResultGSM(String CID, String PROVIDER, int level) {
-        this.CID = CID;
+    public ScanResultGSM(int CID, String PROVIDER, int level) {
+        this.CID = Integer.toString(CID);
         this.PROVIDER = PROVIDER;
         this.level = level;
     }

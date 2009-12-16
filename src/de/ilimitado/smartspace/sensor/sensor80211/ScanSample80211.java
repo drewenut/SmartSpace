@@ -84,12 +84,12 @@ public class ScanSample80211 implements ScanSample{
 
 	@Override
 	public void add(String key, Component value) {
-		throw new UnsupportedOperationException("You can not add a component to a leaf (read composite pattern)");
+		throw new UnsupportedOperationException("You can not add a component to a leaf!");
 	}
 
 	@Override
 	public Component get(String key) {
-		throw new UnsupportedOperationException("You can not get a component from a leaf (read composite pattern)");
+		throw new UnsupportedOperationException("You can not get a component from a leaf!");
 	}
 
 	@Override

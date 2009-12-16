@@ -26,7 +26,7 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice;
-import de.ilimitado.smartspace.sensor.sensor80211.SensorEventHandler80211;
+import de.ilimitado.smartspace.sensor.sensor80211.EventHandler80211;
 
 public class SensorTests extends AndroidTestCase{
 
@@ -66,7 +66,7 @@ public class SensorTests extends AndroidTestCase{
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
 		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
+			assertTrue(aSH instanceof EventHandler80211);
 		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);
@@ -86,7 +86,7 @@ public class SensorTests extends AndroidTestCase{
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
 		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
+			assertTrue(aSH instanceof EventHandler80211);
 		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);
@@ -129,7 +129,7 @@ public class SensorTests extends AndroidTestCase{
 		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
 		assertTrue(activeEventHandlers.size() == 1);
 		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
+			assertTrue(aSH instanceof EventHandler80211);
 		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);

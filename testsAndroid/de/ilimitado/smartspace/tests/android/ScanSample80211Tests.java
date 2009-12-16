@@ -1,9 +1,6 @@
 package de.ilimitado.smartspace.tests.android;
 
 import junit.framework.TestCase;
-
-import org.junit.Test;
-
 import android.test.suitebuilder.annotation.SmallTest;
 import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.registry.RegistryProviderException;

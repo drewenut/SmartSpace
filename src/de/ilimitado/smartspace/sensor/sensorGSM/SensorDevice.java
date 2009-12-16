@@ -3,13 +3,12 @@ package de.ilimitado.smartspace.sensor.sensorGSM;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
+import android.telephony.CellLocation;
+import android.telephony.NeighboringCellInfo;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
@@ -18,6 +17,9 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
+import de.ilimitado.smartspace.sensor.sensor80211.MeanCommand80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.utils.L;
 
 public class SensorDevice extends AbstractSensorDevice {
@@ -25,7 +27,6 @@ public class SensorDevice extends AbstractSensorDevice {
 	private final String SENSOR_GSM_AP_SCAN_EVENT_ID;
 	private final String SENSOR_GSM_AP_SCAN_EVENT_NAME;
 	private TelephonyManager telephonyManager = null;
-	private boolean prevWifiState = false;
 
 	public SensorDevice(Dependencies appDeps) {
 		super(appDeps);
@@ -36,7 +37,7 @@ public class SensorDevice extends AbstractSensorDevice {
 	@Override
 	public boolean deviceAvailable() {
 		this.telephonyManager = (TelephonyManager) androidCtx.getSystemService(Context.TELEPHONY_SERVICE);
-		return telephonyManager == null ? false : true;
+		return (telephonyManager == null || telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UNKNOWN) ? false : true;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	@Override
 	public void createRunnables() {
-		if(Configuration.getInstance().sensorGSM.scannerGSM_RSS.isActive) {
+		if(isActive()) {
 			sensorRunnables.add(new ScannerGSMRSS());
 		}
 	}
@@ -65,75 +66,58 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	@Override
 	public void registerEvents(Dependencies dep) {
-		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			dep.sensorDependencies.reactor.registerHandler(SENSOR_GSM_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_GSM_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+		if(isActive()) {
+			dep.sensorDependencies.reactor.registerHandler(SENSOR_GSM_AP_SCAN_EVENT_ID, new EventHandlerGSM(SENSOR_GSM_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
 	
 	@Override
 	public void registerProcessorCommands(DataCommandProvider dCProv) {
 		
-		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			dCProv.putItem("MeanCommand80211", MeanCommand80211.class);
+		if(isActive()) {
+			dCProv.putItem("MeanCommandGSM", MeanCommandGSM.class);
 		}
 	}
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
-		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sSReg.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSample80211.class);
+		if(isActive()) {
+			sSReg.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSampleGSM.class);
 		}
 	}
 	
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
-		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
+		if(isActive()) {
 			sSplDBPers.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
 		}
+	}
+	
+	private boolean isActive() {
+		return Configuration.getInstance().sensorGSM.scannerGSM_RSS.isActive;
 	}
 
 	public String toString(){
 		return "sensor_80211";
 	}
 
-	public void disableWifi() {
-		if (telephonyManager.isWifiEnabled()) {
-			prevWifiState = true;
-			telephonyManager.setWifiEnabled(false);
-			Log.d(LOG_TAG, "Wifi disabled!");
-			// Waiting for interface-shutdown
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// nothing
-			}
-		}
-	}
-
-	public void enableWifi() {
-		if (prevWifiState) {
-			// Waiting for interface-restart
-			telephonyManager.setWifiEnabled(true);
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// nothing
-			}
-
-			Log.d(LOG_TAG, "Wifi started!");
-		}
-	}
-
 	class ScannerGSMRSS implements Runnable {
-		private WifiReceiver receiverWifi;
-		private IntentFilter intentFilter;
 		private volatile boolean receiverRegistered;
+		
+		final int NO_SIGNAL = -113;
+		final int VERY_GOOD_SIGNAL = -51;
+		final int NO_CID = 0x000200;
+		
+		private PhoneStateListener gsmListener;
+		private int currentCellID = NO_CID;
+		private String provider = telephonyManager.getSimOperator();
+		private volatile ScanResultGSM currentCellScan = null;
+		private ArrayList<ScanResultGSM> cellList = new ArrayList<ScanResultGSM>();
 
 		public ScannerGSMRSS() {
-			this.receiverWifi = new WifiReceiver();
-			this.intentFilter = new IntentFilter();
+			initGSMListener();
 		}
 
-		// @Override
+		@Override
 		public void run() {
 			while (true) {
 				if (Thread.currentThread().isInterrupted()) {
@@ -142,7 +126,34 @@ public class SensorDevice extends AbstractSensorDevice {
 				}
 				if(!receiverRegistered){
 					registerReceiver();
-					telephonyManager.startScan();
+					startScan();
+					try {
+						wait(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		private void startScan() {
+			List<NeighboringCellInfo> neighborCells = telephonyManager.getNeighboringCellInfo();
+			synchronized (currentCellScan) {
+				if(neighborCells != null  && currentCellScan != null) {
+					cellList.add(currentCellScan);
+					for(NeighboringCellInfo cellInfo : neighborCells) {
+						int cid = cellInfo.getCid();
+						int rssi = -113 + 2 * cellInfo.getRssi();
+						cellList.add(new ScanResultGSM(cid, provider, rssi));
+					}
+					try {
+						systemRawDataQueue.put(new SensorEvent<ScanResultGSM>((ArrayList<ScanResultGSM>) cellList.clone(), getEventID()));
+						cellList.clear();
+					} catch (InterruptedException e) {
+						//Do nothing, we are just dropping last measurement.
+						e.printStackTrace();
+					}
+					L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 				}
 			}
 		}
@@ -155,47 +166,51 @@ public class SensorDevice extends AbstractSensorDevice {
 			return SENSOR_GSM_AP_SCAN_EVENT_NAME;
 		}
 
-		private void advertiseScanResults() {
-			List<ScanResult> wifiList = telephonyManager.getScanResults();
-			List<ScanResultGSM> apList = new ArrayList<ScanResultGSM>(wifiList.size());
-			for(ScanResult scnRes : wifiList){
-				apList.add(new ScanResultGSM(scnRes.SSID, 
-											   scnRes.BSSID, 
-											   scnRes.capabilities, 
-											   scnRes.level, 
-											   scnRes.frequency));
-			}
-			try {
-				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(apList,getEventID()));
-			} catch (InterruptedException e) {
-				//Do nothing, we are just dropping last measurement.
-				e.printStackTrace();
-			}
-			L.d(LOG_TAG, "SensorEvent<ScanResult80211> added, current systemRawDataQueue Size "+systemRawDataQueue.size());
-			telephonyManager.startScan();
+		private void initGSMListener() {
+			
+			gsmListener = new PhoneStateListener() {
+				
+				@Override
+				public void onSignalStrengthChanged(int asu) {
+					super.onSignalStrengthChanged(asu);
+					//rssi in dBm
+					int rssi = NO_SIGNAL;
+					Log.d(LOG_TAG, "GSM Current Cell RSS changed: " + Integer.toString(asu));
+					
+					if(asu != -1 && currentCellID != NO_CID) {
+						if(asu == 0) rssi = NO_SIGNAL;
+						else if (asu == 31) rssi = VERY_GOOD_SIGNAL;
+						else {
+							rssi = -113 + 2*asu;
+						}
+						currentCellScan = new ScanResultGSM(currentCellID, provider, rssi);
+						notifyAll();
+					}
+				}
+	
+				public void onCellLocationChanged(CellLocation location) {
+					super.onCellLocationChanged(location);
+					Log.d(LOG_TAG, "CellLocation changed");
+					if (location.getClass() == GsmCellLocation.class) {
+						GsmCellLocation currentLocation = (GsmCellLocation) location;
+						currentCellID = currentLocation.getCid();
+					}
+				}
+			};
 		}
-
+			
 		private synchronized void registerReceiver() {
-			intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-			androidCtx.registerReceiver(receiverWifi, intentFilter);
+			telephonyManager.listen(gsmListener,
+					PhoneStateListener.LISTEN_CELL_LOCATION
+							| PhoneStateListener.LISTEN_SIGNAL_STRENGTH);
 			receiverRegistered = true;
 		}
 
 		private synchronized void unregisterReceiver() {
 			if (receiverRegistered)
-				androidCtx.unregisterReceiver(receiverWifi);
+				telephonyManager.listen(gsmListener,
+						PhoneStateListener.LISTEN_NONE);
 			receiverRegistered = false;
-		}
-
-		class WifiReceiver extends BroadcastReceiver {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				final String action = intent.getAction();
-				if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-					advertiseScanResults();
-				}
-			}
 		}
 	}
 }
