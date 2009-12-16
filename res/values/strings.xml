@@ -55,6 +55,35 @@
 	<string name="scanner_config_80211_passive_commands_mean_command">Mean Command</string>
 	<string name="scanner_config_80211_passive_commands_mean_command_on">MC is ON</string>
 	<string name="scanner_config_80211_passive_commands_mean_command_off">MC is OFF</string>
+	
+	<string name="sensor_config_gsm">Sensor Config GSM</string>
+	<string name="sensor_config_gsm_sensor_name">Sensor Name</string>
+	<string name="sensor_config_gsm_sensor_name_summary"></string>
+	<string name="sensor_config_gsm_sensor_name_title">Enter the sensor's name</string>
+	<string name="sensor_config_gsm_sensor_is_active">Is Active</string>
+	<string name="sensor_config_gsm_sensor_is_active_on">GSM Sensor is ON</string>
+	<string name="sensor_config_gsm_sensor_is_active_off">GSM Sensor is OFF</string>
+	<string name="scanner_config_gsm_rss">Scanner Config GSM RSS</string>
+	<string name="scanner_config_gsm_rss_settings">80211 Passive Settings</string>
+	<string name="scanner_config_gsm_rss_scanner_name">Scanner Name</string>
+	<string name="scanner_config_gsm_rss_scanner_name_summary"></string>
+	<string name="scanner_config_gsm_rss_scanner_name_title">Enter the scanner's name</string>
+	<string name="scanner_config_gsm_rss_scanner_is_active">Is Active</string>
+	<string name="scanner_config_gsm_rss_scanner_is_active_on">GSM RSS Scanner is ON</string>
+	<string name="scanner_config_gsm_rss_scanner_is_active_off">GSM RSS Scanner is OFF</string>
+	<string name="scanner_config_gsm_rss_scanner_synchronize">Synchronize</string>
+	<string name="scanner_config_gsm_rss_scanner_synchronize_on">is ON</string>
+	<string name="scanner_config_gsm_rss_scanner_synchronize_off">is OFF</string>
+	<string name="scanner_config_gsm_rss_threshold">Threshold</string>
+	<string name="scanner_config_gsm_rss_threshold_summary"></string>
+	<string name="scanner_config_gsm_rss_threshold_title">Enter scanner's threshold</string>
+	<string name="scanner_config_gsm_rss_timeout">Timeout</string>
+	<string name="scanner_config_gsm_rss_timeout_summary"></string>
+	<string name="scanner_config_gsm_rss_timeout_title">Enter scanner's timeout</string>
+	<string name="scanner_config_gsm_rss_commands">Scanner commands</string>
+	<string name="scanner_config_gsm_rss_commands_mean_command">Mean Command</string>
+	<string name="scanner_config_gsm_rss_commands_mean_command_on">MC is ON</string>
+	<string name="scanner_config_gsm_rss_commands_mean_command_off">MC is OFF</string>
 
     <string-array name="persistance_config_modes">
     	<item>Science mode</item>

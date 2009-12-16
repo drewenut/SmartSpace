@@ -3,6 +3,7 @@ package de.ilimitado.smartspace.android;
 import java.util.HashMap;
 
 import android.content.SharedPreferences;
+import de.ilimitado.smartspace.config.ConfigSensorGSM;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.config.ConfigDataCommands;
@@ -30,10 +31,11 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	public void translate() {
 		ConfigLocalization algos = getPositionAlgorithms();
 		ConfigPersistence persConf = getPersistanceConfig();
-		ConfigSensing fptColl = getFPTCollection();
+		ConfigSensing sensingConf = getFPTCollection();
 		ConfigSensor80211 snsCfg80211 = getSensorConfig80211();
+		ConfigSensorGSM snsCfgGSM = getSensorConfig_GSM();
 
-		Configuration.createConfiguration(algos, persConf, fptColl, snsCfg80211);
+		Configuration.createConfiguration(algos, persConf, sensingConf, snsCfg80211, snsCfgGSM);
 	}
 
 	private ConfigLocalization getPositionAlgorithms() {
@@ -71,17 +73,43 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", true);
 		int passive80211threshold = androidPreferences.getInt("scanner_config_80211_passive_threshold", 10);
 		long passive80211timeout = androidPreferences.getLong("scanner_config_80211_passive_timeout", 1000);
-		ConfigDataCommands passive80211dPCommands = getDataProcessCommands();
+		ConfigDataCommands passive80211dPCommands = getScanner80211DataProcessCommands();
 		ConfigScannerGSMRSS scn80211passive = new ConfigScannerGSMRSS(passive80211Name, passive80211isActive, passive80211synchronize, passive80211threshold, passive80211timeout, passive80211dPCommands);
 		return scn80211passive;
 	}
 
-	private ConfigDataCommands getDataProcessCommands() {
+	private ConfigDataCommands getScanner80211DataProcessCommands() {
 		boolean passive80211MeanCommand80211 = androidPreferences.getBoolean("scanner_config_80211_passive_commands_mean_command", true);
 		HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
 		dataCommands.put("MeanCommand80211", passive80211MeanCommand80211);
 		ConfigDataCommands passive80211dPCommands = new ConfigDataCommands(dataCommands);
 		return passive80211dPCommands;
 	}
+	
+	private ConfigSensorGSM getSensorConfig_GSM() {
+		String sensorGSMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorGSM");
+		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", true);
+		ConfigScannerGSMRSS scnGSMpassive = getScannerGSM_RSS_Config();
+		ConfigSensorGSM snsCfgGSM = new ConfigSensorGSM(sensorGSMname, sensorGSMisActive, scnGSMpassive);
+		return snsCfgGSM;
+	}
 
+	private ConfigScannerGSMRSS getScannerGSM_RSS_Config() {
+		String scnGSMName = androidPreferences.getString("scanner_config_gsm_rss_scanner_name", "scannerGsmRss");
+		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_rss_scanner_is_active", true);
+		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_rss_scanner_synchronize", true);
+		int scnGSMThreshold = androidPreferences.getInt("scanner_config_gsm_rss_threshold", 10);
+		long scnGSMTimeout = androidPreferences.getLong("scanner_config_gsm_rss_timeout", 1000);
+		ConfigDataCommands scnGSMCommands = getGSM_DataProcessCommands();
+		ConfigScannerGSMRSS scnGSM = new ConfigScannerGSMRSS(scnGSMName, scnGSMisActive, scnGSMSynchronize, scnGSMThreshold, scnGSMTimeout, scnGSMCommands);
+		return scnGSM;
+	}
+
+	private ConfigDataCommands getGSM_DataProcessCommands() {
+		boolean gsm_RSS_MeanCommand = androidPreferences.getBoolean("scanner_config_gsm_rss_commands_mean_command", true);
+		HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
+		dataCommands.put("MeanCommandGSM", gsm_RSS_MeanCommand);
+		ConfigDataCommands gsmRSSdPCommands = new ConfigDataCommands(dataCommands);
+		return gsmRSSdPCommands;
+	}
 }

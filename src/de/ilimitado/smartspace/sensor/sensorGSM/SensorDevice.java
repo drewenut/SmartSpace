@@ -17,8 +17,6 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensor80211.MeanCommand80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.utils.L;
 
