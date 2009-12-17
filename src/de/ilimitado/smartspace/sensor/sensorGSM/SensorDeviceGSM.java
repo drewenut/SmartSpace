@@ -1,6 +1,7 @@
 package de.ilimitado.smartspace.sensor.sensorGSM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -17,7 +18,6 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.utils.L;
 
 public class SensorDeviceGSM extends AbstractSensorDevice {
@@ -54,12 +54,12 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	
 	@Override
 	public void initSensorID() {
-		SENSOR_ID = config.sensor80211.ID;
+		SENSOR_ID = config.sensorGSM.ID;
 	}
 
 	@Override
 	public void initSensorName() {
-		SENSOR_NAME = config.sensor80211.NAME;
+		SENSOR_NAME = config.sensorGSM.NAME;
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(isActive()) {
-			sSplDBPers.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
+			sSplDBPers.putItem(SENSOR_GSM_AP_SCAN_EVENT_ID, ScanSampleGSMDBPersistance.class);
 		}
 	}
 	
@@ -95,12 +95,11 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	}
 
 	public String toString(){
-		return "sensor_80211";
+		return "sensor_gsm";
 	}
 
 	class ScannerGSMRSS implements Runnable {
 		private volatile boolean receiverRegistered;
-		
 		final int NO_SIGNAL = -113;
 		final int VERY_GOOD_SIGNAL = -51;
 		final int NO_CID = 0x000200;
@@ -110,6 +109,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		private String provider = telephonyManager.getSimOperator();
 		private volatile ScanResultGSM currentCellScan = null;
 		private ArrayList<ScanResultGSM> cellList = new ArrayList<ScanResultGSM>();
+		private List<ScanResultGSM> syncedCellList = Collections.synchronizedList(cellList);
 
 		public ScannerGSMRSS() {
 			initGSMListener();
@@ -136,17 +136,17 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		
 		private void startScan() {
 			List<NeighboringCellInfo> neighborCells = telephonyManager.getNeighboringCellInfo();
-			synchronized (currentCellScan) {
-				if(neighborCells != null  && currentCellScan != null) {
-					cellList.add(currentCellScan);
+			if(neighborCells != null  && currentCellScan != null) {
+				synchronized (currentCellScan) {
+					syncedCellList.add(currentCellScan);
 					for(NeighboringCellInfo cellInfo : neighborCells) {
 						int cid = cellInfo.getCid();
 						int rssi = -113 + 2 * cellInfo.getRssi();
-						cellList.add(new ScanResultGSM(cid, provider, rssi));
+						syncedCellList.add(new ScanResultGSM(cid, provider, rssi));
 					}
 					try {
 						systemRawDataQueue.put(new SensorEvent<ScanResultGSM>((ArrayList<ScanResultGSM>) cellList.clone(), getEventID()));
-						cellList.clear();
+						syncedCellList.clear();
 					} catch (InterruptedException e) {
 						//Do nothing, we are just dropping last measurement.
 						e.printStackTrace();

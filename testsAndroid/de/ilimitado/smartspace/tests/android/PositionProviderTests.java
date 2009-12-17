@@ -19,7 +19,7 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.SimpleEuclideanDistanceProvider;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class PositionProviderTests extends TestCase {
@@ -35,10 +35,10 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList RTsSL1 = new ScanSampleList();
 
-		ScanSample80211 ap1_1 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-64), 2410);
-		ScanSample80211 ap1_2 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-60), 2420);
-		ScanSample80211 ap1_3 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-55), 2430);
-		ScanSample80211 ap1_4 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-80), 2440);
+		ScanSampleGSM ap1_1 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-64), 2410);
+		ScanSampleGSM ap1_2 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-60), 2420);
+		ScanSampleGSM ap1_3 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-55), 2430);
+		ScanSampleGSM ap1_4 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-80), 2440);
 		
 		RTsSL1.add(ap1_1);
 		RTsSL1.add(ap1_2);
@@ -60,10 +60,10 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList RTsSL1 = new ScanSampleList();
 
-		ScanSample80211 ap3_1 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-54), 2400);
-		ScanSample80211 ap3_2 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-40), 2410);
-		ScanSample80211 ap3_3 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-35), 2420);
-		ScanSample80211 ap3_4 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-50), 2430);
+		ScanSampleGSM ap3_1 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-54), 2400);
+		ScanSampleGSM ap3_2 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-40), 2410);
+		ScanSampleGSM ap3_3 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-35), 2420);
+		ScanSampleGSM ap3_4 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-50), 2430);
 		
 		RTsSL1.add(ap3_1);
 		RTsSL1.add(ap3_2);
@@ -85,7 +85,7 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList RTsSL1 = new ScanSampleList();
 
-		ScanSample80211 ap3_3 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-35), 2420);
+		ScanSampleGSM ap3_3 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-35), 2420);
 		
 		RTsSL1.add(ap3_3);
 		
@@ -101,10 +101,10 @@ public class PositionProviderTests extends TestCase {
 	private RadioMap createRadioMapMock() {
 		ScanSampleList sSL1 = new ScanSampleList();
 
-		ScanSample80211 ap1_1 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-64), 2410);
-		ScanSample80211 ap1_2 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-60), 2420);
-		ScanSample80211 ap1_3 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-55), 2430);
-		ScanSample80211 ap1_4 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-80), 2440);
+		ScanSampleGSM ap1_1 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-64), 2410);
+		ScanSampleGSM ap1_2 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-60), 2420);
+		ScanSampleGSM ap1_3 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-55), 2430);
+		ScanSampleGSM ap1_4 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-80), 2440);
 		
 		sSL1.add(ap1_1);
 		sSL1.add(ap1_2);
@@ -118,10 +118,10 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList sSL2 = new ScanSampleList();
 
-		ScanSample80211 ap2_1 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-24), 2400);
-		ScanSample80211 ap2_2 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-30), 2410);
-		ScanSample80211 ap2_3 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-15), 2420);
-		ScanSample80211 ap2_4 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-20), 2430);
+		ScanSampleGSM ap2_1 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-24), 2400);
+		ScanSampleGSM ap2_2 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-30), 2410);
+		ScanSampleGSM ap2_3 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-15), 2420);
+		ScanSampleGSM ap2_4 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-20), 2430);
 		
 		sSL2.add(ap2_1);
 		sSL2.add(ap2_2);
@@ -135,11 +135,11 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList sSL3 = new ScanSampleList();
 
-		ScanSample80211 ap3_4 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-54), 2400);
-		ScanSample80211 ap3_1 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-40), 2410);
-		ScanSample80211 ap3_2 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-35), 2420);
-		ScanSample80211 ap3_5 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-50), 2430);
-		ScanSample80211 ap3_3 = new ScanSample80211("ap5", "00:00:00:00:05", new RSS(-89), 2430);
+		ScanSampleGSM ap3_4 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-54), 2400);
+		ScanSampleGSM ap3_1 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-40), 2410);
+		ScanSampleGSM ap3_2 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-35), 2420);
+		ScanSampleGSM ap3_5 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-50), 2430);
+		ScanSampleGSM ap3_3 = new ScanSampleGSM("ap5", "00:00:00:00:05", new RSS(-89), 2430);
 		
 		sSL3.add(ap3_1);
 		sSL3.add(ap3_2);
@@ -154,10 +154,10 @@ public class PositionProviderTests extends TestCase {
 		
 		ScanSampleList sSL4 = new ScanSampleList();
 
-		ScanSample80211 ap4_1 = new ScanSample80211("ap3", "00:00:00:00:03", new RSS(-90), 2400);
-		ScanSample80211 ap4_2 = new ScanSample80211("ap2", "00:00:00:00:02", new RSS(-95), 2410);
-		ScanSample80211 ap4_3 = new ScanSample80211("ap1", "00:00:00:00:01", new RSS(-70), 2420);
-		ScanSample80211 ap4_4 = new ScanSample80211("ap4", "00:00:00:00:04", new RSS(-85), 2430);
+		ScanSampleGSM ap4_1 = new ScanSampleGSM("ap3", "00:00:00:00:03", new RSS(-90), 2400);
+		ScanSampleGSM ap4_2 = new ScanSampleGSM("ap2", "00:00:00:00:02", new RSS(-95), 2410);
+		ScanSampleGSM ap4_3 = new ScanSampleGSM("ap1", "00:00:00:00:01", new RSS(-70), 2420);
+		ScanSampleGSM ap4_4 = new ScanSampleGSM("ap4", "00:00:00:00:04", new RSS(-85), 2430);
 		
 		sSL4.add(ap4_1);
 		sSL4.add(ap4_2);

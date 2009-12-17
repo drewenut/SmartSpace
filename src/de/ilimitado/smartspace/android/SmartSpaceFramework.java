@@ -71,7 +71,7 @@ public final class SmartSpaceFramework extends Service{
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
-		sensorDevices.add(new SensorDevice80211(appDep));
+//		sensorDevices.add(new SensorDevice80211(appDep));
 		sensorDevices.add(new SensorDeviceGSM(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();

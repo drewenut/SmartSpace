@@ -83,7 +83,7 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sSReg.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211.class);
+			sSReg.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSampleGSM.class);
 		}
 	}
 	
@@ -160,16 +160,16 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 
 		private void advertiseScanResults() {
 			List<ScanResult> wifiList = wifiManager.getScanResults();
-			List<ScanResult80211> apList = new ArrayList<ScanResult80211>(wifiList.size());
+			List<ScanResultGSM> apList = new ArrayList<ScanResultGSM>(wifiList.size());
 			for(ScanResult scnRes : wifiList){
-				apList.add(new ScanResult80211(scnRes.SSID, 
+				apList.add(new ScanResultGSM(scnRes.SSID, 
 											   scnRes.BSSID, 
 											   scnRes.capabilities, 
 											   scnRes.level, 
 											   scnRes.frequency));
 			}
 			try {
-				systemRawDataQueue.put(new SensorEvent<ScanResult80211>(apList,getEventID()));
+				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(apList,getEventID()));
 			} catch (InterruptedException e) {
 				//Do nothing, we are just dropping last measurement.
 				e.printStackTrace();

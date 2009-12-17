@@ -12,7 +12,7 @@ import de.ilimitado.smartspace.RSS;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
@@ -47,7 +47,7 @@ public class ScanSample80211DBPersistanceTest {
 	@Test
 	public void testGetSQLInsertQueryWithScanSample() {
 		LFPT lfpt = new LFPT(123456789, 95, new IGeoPoint("gPname",3,7));
-		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
+		ScanSampleGSM scnS1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
 		lfpt.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
@@ -60,9 +60,9 @@ public class ScanSample80211DBPersistanceTest {
 	@Test
 	public void testGetSQLInsertQueryWithMultipleScanSamples() {
 		LFPT lfpt = new LFPT(123456789, 95, new IGeoPoint("iGpName",3,7));
-		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
-		ScanSample80211 scnS2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(11,21,31,41), 1020);
-		ScanSample80211 scnS3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(15,25,35,45), 1050);
+		ScanSampleGSM scnS1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
+		ScanSampleGSM scnS2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(11,21,31,41), 1020);
+		ScanSampleGSM scnS3 = new ScanSampleGSM("spl3", "00:00:00:00:03", new RSS(15,25,35,45), 1050);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
 		sSList.add(scnS2);
@@ -88,7 +88,7 @@ public class ScanSample80211DBPersistanceTest {
 	@Test
 	public void testGetSQLUpdateQueryWithScanSample() {
 		LFPT lfpt = new LFPT(123456789, 95, new IGeoPoint("iGpName", 3,7));
-		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
+		ScanSampleGSM scnS1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
 		lfpt.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
@@ -101,9 +101,9 @@ public class ScanSample80211DBPersistanceTest {
 	@Test
 	public void testGetSQLUpdateQueryWithMultipleScanSamples() {
 		LFPT lfpt = new LFPT(123456789, 95, new IGeoPoint("iGpName",3,7));
-		ScanSample80211 scnS1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
-		ScanSample80211 scnS2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(11,21,31,41), 1020);
-		ScanSample80211 scnS3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(15,25,35,45), 1050);
+		ScanSampleGSM scnS1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
+		ScanSampleGSM scnS2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(11,21,31,41), 1020);
+		ScanSampleGSM scnS3 = new ScanSampleGSM("spl3", "00:00:00:00:03", new RSS(15,25,35,45), 1050);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnS1);
 		sSList.add(scnS2);

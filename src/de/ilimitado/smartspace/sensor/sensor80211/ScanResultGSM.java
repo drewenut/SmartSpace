@@ -1,6 +1,6 @@
 package de.ilimitado.smartspace.sensor.sensor80211;
 
-public class ScanResult80211 {
+public class ScanResultGSM {
     /** The network name. */
     public String SSID;
     /** The address of the access point. */
@@ -12,7 +12,7 @@ public class ScanResult80211 {
     
     public int frequency;
 
-    public ScanResult80211(String SSID, String BSSID, String caps, int level, int frequency) {
+    public ScanResultGSM(String SSID, String BSSID, String caps, int level, int frequency) {
         this.SSID = SSID;
         this.BSSID = BSSID;
         this.capabilities = caps;
@@ -22,8 +22,8 @@ public class ScanResult80211 {
 
     @Override
 	public boolean equals(Object o) {
-    	if((o instanceof ScanResult80211)){
-    		ScanResult80211 scanResult80211 = (ScanResult80211) o;
+    	if((o instanceof ScanResultGSM)){
+    		ScanResultGSM scanResult80211 = (ScanResultGSM) o;
 			return (BSSID.equals(scanResult80211.BSSID)) ? true : false;
 		}
 		return false;

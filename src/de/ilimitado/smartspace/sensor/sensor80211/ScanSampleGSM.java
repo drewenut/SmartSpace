@@ -10,7 +10,7 @@ import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
 import de.ilimitado.smartspace.utils.L;
 
-public class ScanSample80211 implements ScanSample{
+public class ScanSampleGSM implements ScanSample{
 	
 	public static final String VALUE_MEAN_FREQUENCY = "MeanFrequency";
 	public static final String VALUE_SSID = "SSID";
@@ -23,7 +23,7 @@ public class ScanSample80211 implements ScanSample{
 	public int meanFrequency;
 	private boolean isMerged = true;
 	
-	public ScanSample80211(String SSID, String BSSID, RSS rss, int frequency) {
+	public ScanSampleGSM(String SSID, String BSSID, RSS rss, int frequency) {
 		this.SSID = SSID;
 		this.MAC = BSSID;
 		this.rss = rss;
@@ -32,8 +32,8 @@ public class ScanSample80211 implements ScanSample{
 	
 	@Override
 	public boolean equals(Object o) {
-		if((o instanceof ScanSample80211)){
-			ScanSample80211 scanSample80211 = (ScanSample80211) o;
+		if((o instanceof ScanSampleGSM)){
+			ScanSampleGSM scanSample80211 = (ScanSampleGSM) o;
 			return (MAC.equals(scanSample80211.MAC) && SSID.equals(scanSample80211.SSID)) ? true : false;
 		}
 		return false;
@@ -102,7 +102,7 @@ public class ScanSample80211 implements ScanSample{
 	
 	@Override
 	public void merge(ScanSample sSpl) {
-		ScanSample80211 sSpl80211 = (ScanSample80211) sSpl;
+		ScanSampleGSM sSpl80211 = (ScanSampleGSM) sSpl;
 		meanFrequency = (sSpl80211.meanFrequency + meanFrequency) / 2;
 		rss.mean = (sSpl80211.rss.mean + rss.mean) / 2;
 		rss.variance = (sSpl80211.rss.variance + rss.variance) / 2;
@@ -129,7 +129,7 @@ public class ScanSample80211 implements ScanSample{
 
 	@Override
 	public ScanSample getDefaultScanSample() {
-		return new ScanSample80211(SSID, MAC, new RSS(), meanFrequency);
+		return new ScanSampleGSM(SSID, MAC, new RSS(), meanFrequency);
 	}
 
 }

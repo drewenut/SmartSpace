@@ -11,18 +11,18 @@ import org.junit.Test;
 import de.ilimitado.smartspace.ScanSample;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.sensor.sensor80211.MeanCommand80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanResult80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanResultGSM;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
 
 public class MeanCommand80211Tests extends TestCase{
 
 	private MeanCommand80211 mCmd;
 	private ScanSampleList stdOut;
-	private ArrayList<List<ScanResult80211>> stdIn;
+	private ArrayList<List<ScanResultGSM>> stdIn;
 
 	@Before
 	public void setUp() throws Exception {
-		stdIn = new ArrayList<List<ScanResult80211>>(3); 
+		stdIn = new ArrayList<List<ScanResultGSM>>(3); 
 		stdOut = new ScanSampleList();
 		mCmd = new MeanCommand80211();
 	}
@@ -39,25 +39,25 @@ public class MeanCommand80211Tests extends TestCase{
 	
 	@Test
 	public void testComputeMeanCollectionOfMockScanSampleListDifferentSizes() {
-		List<List<ScanResult80211>> stdIn = new ArrayList<List<ScanResult80211>>(3);
+		List<List<ScanResultGSM>> stdIn = new ArrayList<List<ScanResultGSM>>(3);
 		
-		List<ScanResult80211> scSplsList1 = new ArrayList<ScanResult80211>();
-		scSplsList1.add(new ScanResult80211("res0", "00:00:00:00:00", "caps", -23, 2410));
-		scSplsList1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", -60, 2410));
-		scSplsList1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", -32, 2410));
-		scSplsList1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", -80, 2410));
-		scSplsList1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", -41, 2410));
+		List<ScanResultGSM> scSplsList1 = new ArrayList<ScanResultGSM>();
+		scSplsList1.add(new ScanResultGSM("res0", "00:00:00:00:00", "caps", -23, 2410));
+		scSplsList1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", -60, 2410));
+		scSplsList1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", -32, 2410));
+		scSplsList1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", -80, 2410));
+		scSplsList1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", -41, 2410));
 		
-		List<ScanResult80211> scSplsList2 = new ArrayList<ScanResult80211>();
-		scSplsList2.add(new ScanResult80211("res0", "00:00:00:00:00", "caps", -22, 2410));
-		scSplsList2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", -74, 2410));
-		scSplsList2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", -65, 2410));
+		List<ScanResultGSM> scSplsList2 = new ArrayList<ScanResultGSM>();
+		scSplsList2.add(new ScanResultGSM("res0", "00:00:00:00:00", "caps", -22, 2410));
+		scSplsList2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", -74, 2410));
+		scSplsList2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", -65, 2410));
 		
-		List<ScanResult80211> scSplsList3 = new ArrayList<ScanResult80211>();
-		scSplsList3.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", -37, 2410));
-		scSplsList3.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", -43, 2410));
-		scSplsList3.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", -61, 2410));
-		scSplsList3.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", -80, 2410));
+		List<ScanResultGSM> scSplsList3 = new ArrayList<ScanResultGSM>();
+		scSplsList3.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", -37, 2410));
+		scSplsList3.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", -43, 2410));
+		scSplsList3.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", -61, 2410));
+		scSplsList3.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", -80, 2410));
 		
 		stdIn.add(scSplsList1);
 		stdIn.add(scSplsList2);
@@ -77,7 +77,7 @@ public class MeanCommand80211Tests extends TestCase{
 		assertEquals(5, stdOut.size());
 		
 		for (ScanSample scnSpl : stdOut) {
-			ScanSample80211 scnSpl80211 = (ScanSample80211) scnSpl;
+			ScanSampleGSM scnSpl80211 = (ScanSampleGSM) scnSpl;
 			if(scnSpl80211.MAC == "00:00:00:00:00") {
 				containsRES0 = true;
 				assertEquals(-22.0, scnSpl80211.rss.mean);
@@ -114,9 +114,9 @@ public class MeanCommand80211Tests extends TestCase{
 				count = (int) ((Math.random() * 10000) % 9);
 			}
 			
-			List<ScanResult80211> scSplsColl = new ArrayList<ScanResult80211>();
+			List<ScanResultGSM> scSplsColl = new ArrayList<ScanResultGSM>();
 			for(int j=0; j<count; j++){
-				scSplsColl.add(new ScanResult80211("res" + j, "00:00:00:00:0" + j, "caps",rss, 2410));
+				scSplsColl.add(new ScanResultGSM("res" + j, "00:00:00:00:0" + j, "caps",rss, 2410));
 			}
 			stdIn.add(scSplsColl);
 		}

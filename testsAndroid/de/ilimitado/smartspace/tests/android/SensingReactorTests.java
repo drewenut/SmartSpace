@@ -9,7 +9,7 @@ import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.registry.Registry;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanResult80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanResultGSM;
 import de.ilimitado.smartspace.tests.junit.MockSensorHandler;
 import de.ilimitado.smartspace.tests.junit.MockSensorHandler2;
 
@@ -35,47 +35,47 @@ public class SensingReactorTests extends AndroidTestCase{
 	}
 
 	public void testEventDispatchingScanner80211() {
-		List<ScanResult80211> apList = new ArrayList<ScanResult80211>(3);
-		apList.add(new ScanResult80211("ap1", 
+		List<ScanResultGSM> apList = new ArrayList<ScanResultGSM>(3);
+		apList.add(new ScanResultGSM("ap1", 
 									   "00:00:00:00:01", 
 									   "wpa2, wep", 
 									   -80, 
 									   2400));
 		
-		apList.add(new ScanResult80211("ap2", 
+		apList.add(new ScanResultGSM("ap2", 
 				   "00:00:00:00:02", 
 				   "wep", 
 				   -75, 
 				   2410));
 		
-		apList.add(new ScanResult80211("ap3", 
+		apList.add(new ScanResultGSM("ap3", 
 				   "00:00:00:00:03", 
 				   "wpa2", 
 				   -65, 
 				   2405));
 		
-		List<ScanResult80211> apList2 = new ArrayList<ScanResult80211>(3);
-		apList.add(new ScanResult80211("ap1", 
+		List<ScanResultGSM> apList2 = new ArrayList<ScanResultGSM>(3);
+		apList.add(new ScanResultGSM("ap1", 
 									   "00:00:00:00:11", 
 									   "wpa2, wep", 
 									   -80, 
 									   2400));
 		
-		apList.add(new ScanResult80211("ap2", 
+		apList.add(new ScanResultGSM("ap2", 
 				   "00:00:00:00:012", 
 				   "wep", 
 				   -75, 
 				   2410));
 		
-		apList.add(new ScanResult80211("ap3", 
+		apList.add(new ScanResultGSM("ap3", 
 				   "00:00:00:00:013", 
 				   "wpa2", 
 				   -65, 
 				   2405));
 		
-        systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
-		systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
-		systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+        systemRawDataQueue.add(new SensorEvent<ScanResultGSM>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
+		systemRawDataQueue.add(new SensorEvent<ScanResultGSM>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+		systemRawDataQueue.add(new SensorEvent<ScanResultGSM>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
 		sReactorThread = new Thread(sReactor);
 		sReactor.startDispatching();
 		sReactorThread.start();
