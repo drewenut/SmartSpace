@@ -1,7 +1,12 @@
 package de.ilimitado.smartspace.config;
 
+import java.util.HashMap;
+
+import de.ilimitado.smartspace.sensing.DataProcessorsMap;
+
 public class ConfigSensorGSM extends AbstractSensorConfig{
 	private final static String SENSOR_ID = "SensorGSM";
+	private final HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
 	
 	public final ConfigScannerActive scannerActiveCell;
 	public final ConfigScannerNeigbhorCells scannerNeigbhorCells;
@@ -28,5 +33,10 @@ public class ConfigSensorGSM extends AbstractSensorConfig{
 		this.scannerNeigbhorCells = scnNeigbhorCells;
 			if(isActive)
 				Configuration.sensorConfigs.add(this);
+	}
+	
+	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessors(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
+		dPmap.put(SENSOR_ID, dataCommands.getDataProcessors());
+		return dPmap;
 	}
 }

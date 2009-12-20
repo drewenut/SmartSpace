@@ -136,54 +136,115 @@ android:title="Settings"
 		android:defaultValue="true"
 		/>	
 		<PreferenceScreen
-		android:title="@string/scanner_config_gsm_rss">
+		android:title="@string/scanner_config_gsm_active_cell">
 			<PreferenceCategory
-			android:title="@string/scanner_config_gsm_rss_settings">
+			android:title="@string/scanner_config_gsm_active_cell_settings">
 				<EditTextPreference
-			 	android:key="scanner_config_gsm_rss_scanner_name"
-			 	android:title="@string/scanner_config_gsm_rss_scanner_name"
-			 	android:summary="@string/scanner_config_gsm_rss_scanner_name_summary"
-				android:dialogTitle="@string/scanner_config_gsm_rss_scanner_name_title"
+			 	android:key="scanner_config_gsm_active_cell_scanner_name"
+			 	android:title="@string/scanner_config_gsm_active_cell_scanner_name"
+			 	android:summary="@string/scanner_config_gsm_active_cell_scanner_name_summary"
+				android:dialogTitle="@string/scanner_config_gsm_active_cell_scanner_name_title"
 				android:defaultValue="scannerGsmRss"
 				/>
 				<CheckBoxPreference
-				android:key="scanner_config_gsm_rss_scanner_is_active"
-			 	android:title="@string/scanner_config_gsm_rss_scanner_is_active"
-			 	android:summaryOn="@string/scanner_config_gsm_rss_scanner_is_active_on"
-			 	android:summaryOff="@string/scanner_config_gsm_rss_scanner_is_active_off"
-				android:defaultValue="true"
-				/>	
-				<CheckBoxPreference
-				android:key="scanner_config_gsm_rss_scanner_synchronize"
-			 	android:title="@string/scanner_config_gsm_rss_scanner_synchronize"
-			 	android:summaryOn="@string/scanner_config_gsm_rss_scanner_synchronize_on"
-			 	android:summaryOff="@string/scanner_config_gsm_rss_scanner_synchronize_off"
+				android:key="scanner_config_gsm_active_cell_scanner_is_active"
+			 	android:title="@string/scanner_config_gsm_active_cell_scanner_is_active"
+			 	android:summaryOn="@string/scanner_config_gsm_active_cell_scanner_is_active_on"
+			 	android:summaryOff="@string/scanner_config_gsm_active_cell_scanner_is_active_off"
 				android:defaultValue="true"
 				/>
 				<EditTextPreference
-			 	android:key="scanner_config_gsm_rss_threshold"
-			 	android:title="@string/scanner_config_gsm_rss_threshold"
-			 	android:summary="@string/scanner_config_gsm_rss_threshold_summary"
-				android:dialogTitle="@string/scanner_config_gsm_rss_threshold_title"
+			 	android:key="scanner_config_gsm_neighbor_cells_scanner_refresh_interval"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_scanner_refresh_interval"
+			 	android:summary="@string/scanner_config_gsm_neighbor_cells_scanner_refresh_interval_summary"
+				android:dialogTitle="@string/scanner_config_gsm_neighbor_cells_scanner_refresh_interval_title"
+				android:defaultValue="10"
+				android:numeric="integer"
+				/>
+				<CheckBoxPreference
+				android:key="scanner_config_gsm_active_cell_scanner_synchronize"
+			 	android:title="@string/scanner_config_gsm_active_cell_scanner_synchronize"
+			 	android:summaryOn="@string/scanner_config_gsm_active_cell_scanner_synchronize_on"
+			 	android:summaryOff="@string/scanner_config_gsm_active_cell_scanner_synchronize_off"
+				android:defaultValue="true"
+				/>
+				<EditTextPreference
+			 	android:key="scanner_config_gsm_active_cell_threshold"
+			 	android:title="@string/scanner_config_gsm_active_cell_threshold"
+			 	android:summary="@string/scanner_config_gsm_active_cell_threshold_summary"
+				android:dialogTitle="@string/scanner_config_gsm_active_cell_threshold_title"
 				android:defaultValue="10"
 				android:numeric="integer"
 				/>
 				<EditTextPreference
-			 	android:key="scanner_config_gsm_rss_timeout"
-			 	android:title="@string/scanner_config_gsm_rss_timeout"
-			 	android:summary="@string/scanner_config_gsm_rss_timeout_summary"
-				android:dialogTitle="@string/scanner_config_gsm_rss_timeout_title"
+			 	android:key="scanner_config_gsm_active_cell_timeout"
+			 	android:title="@string/scanner_config_gsm_active_cell_timeout"
+			 	android:summary="@string/scanner_config_gsm_active_cell_timeout_summary"
+				android:dialogTitle="@string/scanner_config_gsm_active_cell_timeout_title"
 				android:defaultValue="1000"
 				android:numeric="integer"
 				/>
 			</PreferenceCategory>			
 			<PreferenceCategory
-			android:title="@string/scanner_config_gsm_rss_commands">
+			android:title="@string/scanner_config_gsm_commands">
 				<CheckBoxPreference
-				android:key="scanner_config_gsm_rss_commands_mean_command"
-			 	android:title="@string/scanner_config_gsm_rss_commands_mean_command"
-			 	android:summaryOn="@string/scanner_config_gsm_rss_commands_mean_command_on"
-			 	android:summaryOff="@string/scanner_config_gsm_rss_commands_mean_command_off"
+				android:key="scanner_config_gsm__commands_mean_command"
+			 	android:title="@string/scanner_config_gsm_commands_mean_command"
+			 	android:summaryOn="@string/scanner_config_gsm_commands_mean_command_on"
+			 	android:summaryOff="@string/scanner_config_gsm_commands_mean_command_off"
+				android:defaultValue="true"
+				/>
+			</PreferenceCategory>
+		</PreferenceScreen>
+		<PreferenceScreen
+		android:title="@string/scanner_config_gsm_neighbor_cells">
+			<PreferenceCategory
+			android:title="@string/scanner_config_gsm_neighbor_cells_settings">
+				<EditTextPreference
+			 	android:key="scanner_config_gsm_neighbor_cells_scanner_name"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_scanner_name"
+			 	android:summary="@string/scanner_config_gsm_neighbor_cells_scanner_name_summary"
+				android:dialogTitle="@string/scanner_config_gsm_neighbor_cells_scanner_name_title"
+				android:defaultValue="scannerGsmRss"
+				/>
+				<CheckBoxPreference
+				android:key="scanner_config_gsm_neighbor_cells_scanner_is_active"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_scanner_is_active"
+			 	android:summaryOn="@string/scanner_config_gsm_neighbor_cells_scanner_is_active_on"
+			 	android:summaryOff="@string/scanner_config_gsm_neighbor_cells_scanner_is_active_off"
+				android:defaultValue="true"
+				/>	
+				<CheckBoxPreference
+				android:key="scanner_config_gsm_neighbor_cells_scanner_synchronize"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_scanner_synchronize"
+			 	android:summaryOn="@string/scanner_config_gsm_neighbor_cells_scanner_synchronize_on"
+			 	android:summaryOff="@string/scanner_config_gsm_neighbor_cells_scanner_synchronize_off"
+				android:defaultValue="true"
+				/>
+				<EditTextPreference
+			 	android:key="scanner_config_gsm_neighbor_cells_threshold"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_threshold"
+			 	android:summary="@string/scanner_config_gsm_neighbor_cells_threshold_summary"
+				android:dialogTitle="@string/scanner_config_gsm_neighbor_cells_threshold_title"
+				android:defaultValue="10"
+				android:numeric="integer"
+				/>
+				<EditTextPreference
+			 	android:key="scanner_config_gsm_neighbor_cells_timeout"
+			 	android:title="@string/scanner_config_gsm_neighbor_cells_timeout"
+			 	android:summary="@string/scanner_config_gsm_neighbor_cells_timeout_summary"
+				android:dialogTitle="@string/scanner_config_gsm_neighbor_cells_timeout_title"
+				android:defaultValue="1000"
+				android:numeric="integer"
+				/>
+			</PreferenceCategory>			
+			<PreferenceCategory
+			android:title="@string/scanner_config_gsm_commands">
+				<CheckBoxPreference
+				android:key="scanner_config_gsm__commands_mean_command"
+			 	android:title="@string/scanner_config_gsm_commands_mean_command"
+			 	android:summaryOn="@string/scanner_config_gsm_commands_mean_command_on"
+			 	android:summaryOff="@string/scanner_config_gsm_commands_mean_command_off"
 				android:defaultValue="true"
 				/>
 			</PreferenceCategory>
