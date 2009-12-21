@@ -16,7 +16,13 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
+	//TODO put in Configuration Object...
+	//just take every 20th value from sensor data stream...
+	private static final int VALUE_COUNT_THRESHOLD = 20; 
+	
 	private final PersistanceManager persistanceMgr;
+	private int valueCount = 0;
+	
 
 	public RawDataHandler80211(String associatedSensorID, String associatedEventID, PersistanceManager persMgr) {
 		super(associatedSensorID, associatedEventID);
@@ -26,7 +32,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	@Override
 	public void handleEvent(SensorEvent<Collection> evt) {
 		List<ScanResult80211> wifiList =  (List<ScanResult80211>) evt.getEventHandle();
-		if(wifiList != null) {
+		if(wifiList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
 			Log.d(LOG_TAG, "Adding 80211 scan result to wifi event cache...");
 			for(ScanResult80211 scnRes : wifiList) {
 				String ap = scnRes.SSID;
@@ -35,6 +41,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 				}
 				wifiEventCache.get(ap).add(scnRes);
 			}
+			valueCount = 0;
 		}
 	}
 	

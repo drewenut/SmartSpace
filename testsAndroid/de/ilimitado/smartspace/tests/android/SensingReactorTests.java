@@ -18,8 +18,6 @@ public class SensingReactorTests extends AndroidTestCase{
 	
 	private SensingReactor sReactor;
 	private LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue;
-	private MockSensorHandler2 mockHandler1;
-	private MockSensorHandler2 mockHandler2;
 	private String SENSOR_ID1 = "SNS1";
 	private String SENSOR_ID2 = "SNS2";
 	private Thread sReactorThread;
