@@ -27,6 +27,8 @@ import de.ilimitado.smartspace.registry.Registry;
 public final class SmartSpaceFramework extends Service{
 	
 	public final static int INDOOR_POSITION_PROVIDER = 0;
+	public final static int SCIENCE_MODE = 0;
+	public final static int PROLIFERATION_MODE = 1;
 	
 	private SSFLocationManager locationManager;
 	private FSM appStateMachine;

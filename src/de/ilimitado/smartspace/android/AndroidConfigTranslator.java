@@ -43,11 +43,11 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 
 	private ConfigPersistence getPersistanceConfig() {
-		int lfptPM = androidPreferences.getInt("persistance_config_mode", 0);
+		int persistanceMode = androidPreferences.getInt("persistance_config_mode", 0);
 		int refreshInterval = androidPreferences.getInt("persistance_config_refreshInterval", 60000);
 		String lfptPersistanceDBName = androidPreferences.getString("persistance_config_lfptPersistanceDBName", "RadioMap");
 		int lfptPersistanceBufferSize = androidPreferences.getInt("persistance_config_lfptPersistanceBufferSize", 10);
-		ConfigPersistence persConf = new ConfigPersistence(lfptPersistanceDBName, lfptPM, lfptPersistanceBufferSize, refreshInterval);
+		ConfigPersistence persConf = new ConfigPersistence(lfptPersistanceDBName, persistanceMode, lfptPersistanceBufferSize, refreshInterval);
 		return persConf;
 	}
 

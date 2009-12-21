@@ -83,5 +83,8 @@ public class SensingReactor implements Runnable{
 	
 	public void stopDispatching() {
 		isAlive.set(false);
+		for(AbstractSensorHandler aSnsHdl : sensorHandlerRegistry.values()) {
+			aSnsHdl.onShutdown();
+		}
 	}
 }

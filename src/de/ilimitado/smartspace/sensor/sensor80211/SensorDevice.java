@@ -13,6 +13,7 @@ import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.SensorEvent;
+import de.ilimitado.smartspace.android.SmartSpaceFramework;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
@@ -70,6 +71,9 @@ public class SensorDevice extends AbstractSensorDevice {
 	public void registerEvents(Dependencies dep) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
 			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+		}
+		if(Configuration.getInstance().persistence.mode  == SmartSpaceFramework.SCIENCE_MODE) {
+			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new RawDataHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID));
 		}
 	}
 	

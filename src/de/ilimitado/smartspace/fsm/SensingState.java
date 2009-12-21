@@ -20,7 +20,7 @@ import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.sensing.DataProcessorResolver;
 
 public abstract class SensingState implements State {
-	
+
 	protected SensorManager sMngr;
 	protected PersistanceManager persMngr;
 	protected EventSynchronizer evtSync;
@@ -53,7 +53,7 @@ public abstract class SensingState implements State {
 	private void setHandlerConstraints() {
 		ConstraintsMap<String, List<Number>> constraints = Configuration.getInstance().getConstraints();
 		for(AbstractSensorHandler handler : registeredEventHandlers){
-			if(constraints.containsKey(handler.getAssociatedEventID()))
+			if(constraints.containsKey(handler.getAssociatedEventID()) && handler.isSyncable())
 				handler.setEventConstraints(constraints.get(handler.getAssociatedEventID()));
 		}
 	}

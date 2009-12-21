@@ -14,13 +14,11 @@ import de.ilimitado.smartspace.android.FileManager;
 public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
-	private StringBuffer eventDataCache;
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	private static final String LOG_TAG = "RawDataHandler80211";
 
-	public RawDataHandler80211(String associatedEventID, StringBuffer eventDataCache) {
+	public RawDataHandler80211(String associatedEventID) {
 		super(associatedEventID);
-		this.eventDataCache = eventDataCache;
 	}
 
 	@Override
@@ -46,9 +44,14 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	private void postProcessWifiData() {
 		Set<String> activeAPs = wifiEventCache.keySet();
 		for(String ap : activeAPs) {
+			StringBuffer eventDataCache = new StringBuffer();
 			long lasttime = 0;
 			double time = 0;
-			initCache(ap);
+			
+			eventDataCache.append("time;");
+			eventDataCache.append("802.11"+ ap + ";");
+//				wifiBuffer.append("802.11;");
+			eventDataCache.append("\n");
 			
 			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(ap);
 			for(ScanResult80211 scnRes : wifiAps) {
@@ -63,14 +66,6 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 				eventDataCache.append("\n");
 			}
 			FileManager.writeFile("wifi-log-"+ ap, eventDataCache);
-			eventDataCache = new StringBuffer();
 		}
-	}
-
-	private void initCache(String ap) {
-		eventDataCache.append("time;");
-		eventDataCache.append("802.11"+ ap + ";");
-//			wifiBuffer.append("802.11;");
-		eventDataCache.append("\n");
 	}
 }

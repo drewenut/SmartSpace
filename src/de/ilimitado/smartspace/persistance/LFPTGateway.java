@@ -12,8 +12,6 @@ public class LFPTGateway implements Gateway{
 
 	private static final String LOG_TAG = "LFPTGateway";
 	
-	public static final int SCIENCE_MODE = 0;
-	public static final int PROLIFERATION_MODE = 1;
 	private final long REFRESH_INTERVAL;
 	private final int BUFFER_THRESHOLD;
 	
