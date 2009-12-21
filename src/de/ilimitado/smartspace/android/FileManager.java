@@ -34,14 +34,14 @@ public class FileManager{
 	//			  Log.d(LOG_TAG, "Error while writing file: " + filename);
 	}
 	
-	public void readFile(String fileName) {
-		try {
-			FileInputStream inputStream = context.openFileInput(fileName);
-		} catch (FileNotFoundException e) {
-			Log.i(LOG_TAG, "File contents for: " + fileName + " does not exist");
-			Log.d(LOG_TAG, "File: " + fileName + " does not exist");
-			e.printStackTrace();
-		} 
+	public String readFile(String fileName) throws IOException {
+		FileInputStream inputStream = null;
+		inputStream = context.openFileInput(fileName);
+		String content = org.apache.commons.io.IOUtils.toString(inputStream);
+		if (inputStream != null) {
+			inputStream.close();
+		}
+		return content;
 	}
 
 	public synchronized static FileManager getInstance(Context ctx) {

@@ -1,8 +1,9 @@
 package de.ilimitado.smartspace.persistance;
 
+import java.io.IOException;
+
 import android.content.Context;
 import de.ilimitado.smartspace.android.FileManager;
-import de.ilimitado.smartspace.sensor.sensor80211.DataBuffer;
 import de.ilimitado.smartspace.utils.L;
 
 public class FileGateway implements Gateway{
@@ -20,18 +21,28 @@ public class FileGateway implements Gateway{
 		return fileManager != null ? true :false;
 	}
 
-	public void save(Object fileBuffer) {
-		fileManager.writeFile(((DataBuffer) fileBuffer).name, ((DataBuffer) fileBuffer).buffer);
-		L.d(LOG_TAG, "Saving Buffer: " + ((DataBuffer) fileBuffer).name + "to file...");
+	public void save(String fileName, StringBuffer fileBuffer) {
+		try {
+			fileManager.writeFile(fileName, fileBuffer);
+			L.d(LOG_TAG, "Saving Buffer: " + fileName + " to file...");
+		} catch (IOException e) {
+			L.d(LOG_TAG, "Error while saving: " + fileName + " to file...");
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void setStrategy(Object strategy) {	}
 
-	public DataBuffer load(String query) { 
-		//TODO
-		//		fileManager.readFile(query);
-		//		L.d(LOG_TAG, "Loading Buffer: from file...");
-		return new DataBuffer(query);
+	public StringBuffer load(String fileName) { 
+		StringBuffer filebuffer = new StringBuffer();	
+		try {
+			L.d(LOG_TAG, "Loading Buffer: from file...");
+			filebuffer = new StringBuffer(fileManager.readFile(fileName));
+			} catch (IOException e) {
+				L.d(LOG_TAG, "File could not be loaded...");
+				e.printStackTrace();
+		}
+		return filebuffer;
 	}
 }

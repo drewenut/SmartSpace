@@ -9,6 +9,7 @@ import java.util.Set;
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.SensorEvent;
+import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 
 public class RawDataHandler80211 extends AbstractSensorHandler {
@@ -50,14 +51,14 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	private void postProcessWifiData() {
 		Set<String> activeAPs = wifiEventCache.keySet();
 		for(String ap : activeAPs) {
-			DataBuffer eventDatabuffer = new DataBuffer("wifi-log-"+ ap);
+			StringBuffer eventDatabuffer = new StringBuffer();
 			long lasttime = 0;
 			double time = 0;
 			
-			eventDatabuffer.buffer.append("time;");
-			eventDatabuffer.buffer.append("802.11"+ ap + ";");
-//				wifiBuffer.buffer.append("802.11;");
-			eventDatabuffer.buffer.append("\n");
+			eventDatabuffer.append("time;");
+			eventDatabuffer.append("802.11"+ ap + ";");
+//				wifiBuffer.append("802.11;");
+			eventDatabuffer.append("\n");
 			
 			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(ap);
 			for(ScanResult80211 scnRes : wifiAps) {
@@ -67,12 +68,13 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 				time  += deltaTime;
 				lasttime = scnRes.timestamp;
 				
-				eventDatabuffer.buffer.append(time + ";");
-				eventDatabuffer.buffer.append(Integer.toString(scnRes.level) + ";");
-				eventDatabuffer.buffer.append("\n");
+				eventDatabuffer.append(time + ";");
+				eventDatabuffer.append(Integer.toString(scnRes.level) + ";");
+				eventDatabuffer.append("\n");
 			}
 			
-			persistanceMgr.save(PersistanceManager.GATEWAY_FILE_SYSTEM, eventDatabuffer);
+			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
+			fileGW.save("wifi-log-"+ ap, eventDatabuffer);
 		}
 	}
 }

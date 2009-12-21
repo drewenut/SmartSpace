@@ -1,16 +1,9 @@
 package de.ilimitado.smartspace.tests.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.test.AndroidTestCase;
-import de.ilimitado.smartspace.EventSynchronizer;
-import de.ilimitado.smartspace.SensorEvent;
+import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.sensor.sensor80211.DataBuffer;
-import de.ilimitado.smartspace.tests.junit.MockSensorHandler;
-import de.ilimitado.smartspace.tests.junit.MockSyncStrategy;
-import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class FileManagerTests extends AndroidTestCase {
 	
@@ -20,19 +13,15 @@ public class FileManagerTests extends AndroidTestCase {
 		persMngr = new PersistanceManager(getContext());
 	}
 	
-	public void testwriteFile() {
-		DataBuffer db = new DataBuffer("FileManagerTests");
-		db.buffer = new StringBuffer().append("timestamp; AP1; AP2;");
+	public void testReadWriteFile() {
+		String fileName = "FileManagerTests";
+		DataBuffer db = new DataBuffer(fileName);
+		String fileContent = "timestamp; AP1; AP2;";
+		db.buffer = new StringBuffer().append(fileContent);
 		persMngr.save(PersistanceManager.GATEWAY_FILE_SYSTEM, db);
-		assertEquals(6, eventHandler1.getEventQueueSize());
-		assertEquals(7, eventHandler2.getEventQueueSize());
-		assertEquals(1, eventHandler1.getCommitDataCalls());
-		assertEquals(1, eventHandler2.getCommitDataCalls());
-		assertEquals(1, syncStrategy.getProcessDataCalls());
-		assertEquals(1, syncStrategy.getFusionateSamplesCalls());
-		assertEquals(1, syncStrategy.getDeploySampleDataCalls());
-		
-		eventSync.stopSync();
-		evtSyncWorker.interrupt();
+		FileGateway fileGW = (FileGateway) persMngr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
+		assertNotNull(fileGW);
+		StringBuffer result = fileGW.load(fileName);
+		assertEquals(fileContent, result.toString());
 	}
 }

@@ -38,8 +38,6 @@ public class PersistanceManager implements Persistance{
 			}
 			break;
 		case GATEWAY_FILE_SYSTEM:
-			if(fileGW.isLoaded())
-				fileGW.load(query);
 			break;
 		default:
 			throw new PersitanceException("You tried to load some values from a non existing GW");
@@ -53,7 +51,6 @@ public class PersistanceManager implements Persistance{
 			lfptGW.save(value);
 			break;
 		case GATEWAY_FILE_SYSTEM:
-			fileGW.save(value);
 			break;
 		default:
 			throw new PersitanceException("You tried to save some values on a non existing GW");
@@ -79,6 +76,8 @@ public class PersistanceManager implements Persistance{
 		case GATEWAY_LFPT:
 			lfptGW.startGateway();
 			break;
+		case GATEWAY_FILE_SYSTEM:
+			break;
 		default:
 			throw new PersitanceException("You tried to start a non existing GW");
 		}	
@@ -88,6 +87,8 @@ public class PersistanceManager implements Persistance{
 		switch (gateway) {
 		case GATEWAY_LFPT:
 			lfptGW.stopGateway();
+			break;
+		case GATEWAY_FILE_SYSTEM:
 			break;
 		default:
 			throw new PersitanceException("You tried to stop a non existing GW");
