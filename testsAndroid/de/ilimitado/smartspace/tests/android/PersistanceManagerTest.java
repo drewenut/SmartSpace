@@ -29,7 +29,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211.ID, ScanSample80211DBPersistance.class);
 		sSplDBPersProvider.putItem(LFPT.VALUE_MAP_DEFAULT_DATA, LFPTDBPersistance.class);
 		AndroidLocalDBPersistanceStrategy persStrat = new AndroidLocalDBPersistanceStrategy(sSplDBPersProvider, getContext());
-		persMngr = new PersistanceManager();
+		persMngr = new PersistanceManager(getContext());
 		persMngr.setStrategy(PersistanceManager.GATEWAY_LFPT, persStrat);
 		bufferSize = Configuration.getInstance().persistence.bufferSize;
 		persMngr.startPersistance(PersistanceManager.GATEWAY_LFPT);

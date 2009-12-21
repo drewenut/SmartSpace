@@ -9,15 +9,17 @@ import java.util.Set;
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.SensorEvent;
-import de.ilimitado.smartspace.android.FileManager;
+import de.ilimitado.smartspace.persistance.PersistanceManager;
 
 public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
+	private final PersistanceManager persistanceMgr;
 
-	public RawDataHandler80211(String associatedEventID) {
+	public RawDataHandler80211(String associatedEventID, PersistanceManager persMgr) {
 		super(associatedEventID);
+		this.persistanceMgr = persMgr;
 	}
 
 	@Override
@@ -35,6 +37,11 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 		}
 	}
 	
+	/**
+	 * Called from SensingReactor before he shuts itself down! 
+	 * Any Data that you Cache in handlers must be saved here!
+	 */
+
 	@Override
 	public void onShutdown() {
 		postProcessWifiData();
@@ -43,14 +50,14 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	private void postProcessWifiData() {
 		Set<String> activeAPs = wifiEventCache.keySet();
 		for(String ap : activeAPs) {
-			StringBuffer eventDataCache = new StringBuffer();
+			DataBuffer eventDatabuffer = new DataBuffer("wifi-log-"+ ap);
 			long lasttime = 0;
 			double time = 0;
 			
-			eventDataCache.append("time;");
-			eventDataCache.append("802.11"+ ap + ";");
-//				wifiBuffer.append("802.11;");
-			eventDataCache.append("\n");
+			eventDatabuffer.buffer.append("time;");
+			eventDatabuffer.buffer.append("802.11"+ ap + ";");
+//				wifiBuffer.buffer.append("802.11;");
+			eventDatabuffer.buffer.append("\n");
 			
 			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(ap);
 			for(ScanResult80211 scnRes : wifiAps) {
@@ -60,11 +67,12 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 				time  += deltaTime;
 				lasttime = scnRes.timestamp;
 				
-				eventDataCache.append(time + ";");
-				eventDataCache.append(Integer.toString(scnRes.level) + ";");
-				eventDataCache.append("\n");
+				eventDatabuffer.buffer.append(time + ";");
+				eventDatabuffer.buffer.append(Integer.toString(scnRes.level) + ";");
+				eventDatabuffer.buffer.append("\n");
 			}
-			FileManager.writeFile("wifi-log-"+ ap, eventDataCache);
+			
+			persistanceMgr.save(PersistanceManager.GATEWAY_FILE_SYSTEM, eventDatabuffer);
 		}
 	}
 }

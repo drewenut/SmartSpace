@@ -46,7 +46,7 @@ public class SensorTests extends AndroidTestCase{
 		systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
-		PersistanceManager persMngr = new PersistanceManager();
+		PersistanceManager persMngr = new PersistanceManager(getContext());
 		sMng = new SensorManager();
 		IndoorLocationManager posMngr = new IndoorLocationManager();
 		EventSynchronizer sSync = new EventSynchronizer();

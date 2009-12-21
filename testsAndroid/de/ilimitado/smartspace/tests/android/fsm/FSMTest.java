@@ -34,7 +34,7 @@ public class FSMTest extends AndroidTestCase{
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
-		PersistanceManager persMngr = new PersistanceManager();
+		PersistanceManager persMngr = new PersistanceManager(getContext());
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
@@ -42,7 +42,7 @@ public class FSMTest extends AndroidTestCase{
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
-		appDep = new Dependencies(null, sDep, mtnDet, persMngr, posMngr);
+		appDep = new Dependencies(getContext(), sDep, mtnDet, persMngr, posMngr);
 	}
 
 	@SmallTest

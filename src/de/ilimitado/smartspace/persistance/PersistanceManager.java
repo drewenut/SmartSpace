@@ -1,22 +1,29 @@
 package de.ilimitado.smartspace.persistance;
 
+import android.content.Context;
+
 
 
 public class PersistanceManager implements Persistance{
 
-	public static final int GATEWAY_LFPT = 0;
+	public static final int GATEWAY_LFPT = 0x0001;
+	public static final int GATEWAY_FILE_SYSTEM = 0x0002;
 	
 	private LFPTGateway lfptGW;
+	private FileGateway fileGW;
 
-	public PersistanceManager() {
+	public PersistanceManager(Context ctx) {
 		this.lfptGW = new LFPTGateway();
+		this.fileGW = new FileGateway(ctx);
 	}
 	
 	@Override
 	public Object get(int gateway) {
 		switch (gateway) {
 		case GATEWAY_LFPT:
-			return lfptGW.getRadioMap(); 
+			return lfptGW.getRadioMap();
+		case GATEWAY_FILE_SYSTEM:
+			return fileGW;
 		default:
 			throw new PersitanceException("You tried to query some values from a non existing GW");
 		}
@@ -30,6 +37,10 @@ public class PersistanceManager implements Persistance{
 				lfptGW.loadRadioMap();
 			}
 			break;
+		case GATEWAY_FILE_SYSTEM:
+			if(fileGW.isLoaded())
+				fileGW.load(query);
+			break;
 		default:
 			throw new PersitanceException("You tried to load some values from a non existing GW");
 		}
@@ -41,6 +52,9 @@ public class PersistanceManager implements Persistance{
 		case GATEWAY_LFPT:
 			lfptGW.save(value);
 			break;
+		case GATEWAY_FILE_SYSTEM:
+			fileGW.save(value);
+			break;
 		default:
 			throw new PersitanceException("You tried to save some values on a non existing GW");
 		}
@@ -51,6 +65,9 @@ public class PersistanceManager implements Persistance{
 		switch (gateway) {
 		case GATEWAY_LFPT:
 			lfptGW.setStrategy(strategy);
+			break;
+		case GATEWAY_FILE_SYSTEM:
+			fileGW.setStrategy(strategy);
 			break;
 		default:
 			throw new PersitanceException("You tried to set a strategy on a non existing GW");
@@ -76,5 +93,4 @@ public class PersistanceManager implements Persistance{
 			throw new PersitanceException("You tried to stop a non existing GW");
 		}	
 	}
-
 }

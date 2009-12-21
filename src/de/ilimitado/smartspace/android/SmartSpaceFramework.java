@@ -58,7 +58,7 @@ public final class SmartSpaceFramework extends Service{
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
-		PersistanceManager persMngr = new PersistanceManager();
+		PersistanceManager persMngr = new PersistanceManager(this);
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
