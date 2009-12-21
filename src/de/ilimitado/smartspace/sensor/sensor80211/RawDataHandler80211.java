@@ -15,7 +15,6 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
-	private static final String LOG_TAG = "RawDataHandler80211";
 
 	public RawDataHandler80211(String associatedEventID) {
 		super(associatedEventID);

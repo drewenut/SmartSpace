@@ -8,6 +8,7 @@ public abstract class AbstractSensorHandler{
 	
 	protected int SENSOR_EVENT_CONSTRAINT_THRESHOLD = 10;
 	protected long SENSOR_EVENT_CONSTRAINT_TIMEOUT = 10000;
+	protected static final String LOG_TAG = "AbstractSensorHandler";
 
 	protected final String associatedEventID;
 
