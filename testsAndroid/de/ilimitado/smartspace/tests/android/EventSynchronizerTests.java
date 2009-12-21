@@ -16,6 +16,8 @@ public class EventSynchronizerTests extends AndroidTestCase {
 	private MockSyncStrategy syncStrategy;
 	private MockSensorHandler eventHandler1;
 	private MockSensorHandler eventHandler2;
+	private String SENSOR_ID1 = "SNS1";
+	private String SENSOR_ID2 = "SNS2";
 
 	public void setUp() {
 		MockConfigTranslator.getInstance().translate();
@@ -24,8 +26,8 @@ public class EventSynchronizerTests extends AndroidTestCase {
 		syncSet.add(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1);
 		syncSet.add(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2);
 		syncStrategy = new MockSyncStrategy(syncSet);
-		eventHandler1 = new MockSensorHandler(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, eventSync);
-		eventHandler2 = new MockSensorHandler(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, eventSync);
+		eventHandler1 = new MockSensorHandler(SENSOR_ID1, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, eventSync);
+		eventHandler2 = new MockSensorHandler(SENSOR_ID2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, eventSync);
 		List<Number> constraintsEvtHdl1 = new ArrayList<Number>(2);
 		constraintsEvtHdl1.add(10);
 		constraintsEvtHdl1.add(1000);
@@ -42,8 +44,8 @@ public class EventSynchronizerTests extends AndroidTestCase {
 		Thread evtSyncWorker = new Thread(eventSync);
 		evtSyncWorker.start();
 		for(int i = 0; i<16; i++) {
-        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
-        	eventHandler2.handleEvent(new SensorEvent(new ArrayList(), MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, SENSOR_ID1));
+        	eventHandler2.handleEvent(new SensorEvent(new ArrayList(), MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, SENSOR_ID2));
         }
 		
 		try {

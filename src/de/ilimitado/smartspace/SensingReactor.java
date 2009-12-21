@@ -2,8 +2,6 @@ package de.ilimitado.smartspace;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,26 +24,18 @@ public class SensingReactor implements Runnable{
 		this.systemRawDataQueue = systemRawDataQueue;
 	}
 
-	public void registerHandler(String eventID, AbstractSensorHandler handler) {
-		sensorHandlerRegistry.addSensorHandler(eventID, handler);
+	public void registerHandler(String eventID, ArrayList<AbstractSensorHandler> handlers) {
+		sensorHandlerRegistry.addSensorHandler(eventID, handlers);
 	}
 
-	public Set<String> getActiveEventList(){
-		return sensorHandlerRegistry.keySet();
-	}
-	
-	public Collection<AbstractSensorHandler> getActiveEventHandlers(){
-		return (Collection<AbstractSensorHandler>) sensorHandlerRegistry.values();
-	}
-	
-	public List<AbstractSensorHandler> getActiveSyncableEventHandlers(){
-		List<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>();
-		for(AbstractSensorHandler handler : sensorHandlerRegistry.values()){
-			if(handler.isSyncable())
-				sensorHandlers.add(handler);
-		}
-		return sensorHandlers;
-	}
+//	public List<AbstractSensorHandler> getActiveSyncableEventHandlers(){
+//		List<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>();
+//		for(AbstractSensorHandler handler : sensorHandlerRegistry.values()){
+//			if(handler.isSyncable())
+//				sensorHandlers.add(handler);
+//		}
+//		return sensorHandlers;
+//	}
 
 	@SuppressWarnings("unchecked")
 	public void handleEvents() {
@@ -53,9 +43,11 @@ public class SensingReactor implements Runnable{
 			try {
 				SensorEvent<Collection> sEvt = (SensorEvent<Collection>) systemRawDataQueue.take();
 				String eventType = sEvt.getEventType();
-				AbstractSensorHandler eventHandler = getEventHandler(eventType);
-				eventHandler.handleEvent(sEvt);
-				L.d(LOG_TAG, "Triggered event handler: " + eventHandler.getAssociatedEventID());
+				ArrayList<AbstractSensorHandler> eventHandlers = getEventHandler(eventType);
+				for(AbstractSensorHandler handler : eventHandlers) {
+					handler.handleEvent(sEvt);
+					L.d(LOG_TAG, "Triggered event handler: " + handler.getAssociatedEventID());
+				}
 			} catch (InterruptedException e) {
 				//Do nothing, because head element was not removed and thus will be read next iteration.
 				L.d(LOG_TAG, "Received interrupt for SensingReactor, shutting down");
@@ -64,7 +56,7 @@ public class SensingReactor implements Runnable{
 		}
 	}
 
-	private AbstractSensorHandler getEventHandler(String eventID)
+	private ArrayList<AbstractSensorHandler> getEventHandler(String eventID)
 			throws SensorEventHandlerDoesNotExitException {
 		if (sensorHandlerRegistry.isRegistered(eventID))
 			return sensorHandlerRegistry.getSensorHandler(eventID);
@@ -83,8 +75,10 @@ public class SensingReactor implements Runnable{
 	
 	public void stopDispatching() {
 		isAlive.set(false);
-		for(AbstractSensorHandler aSnsHdl : sensorHandlerRegistry.values()) {
-			aSnsHdl.onShutdown();
+		for(ArrayList<AbstractSensorHandler> aSnsHdlList : sensorHandlerRegistry.values()) {
+			for(AbstractSensorHandler aSnsHdl : aSnsHdlList) {
+				aSnsHdl.onShutdown();
+			}
 		}
 	}
 }

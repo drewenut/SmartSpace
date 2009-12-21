@@ -18,8 +18,8 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	private final PersistanceManager persistanceMgr;
 
-	public RawDataHandler80211(String associatedEventID, PersistanceManager persMgr) {
-		super(associatedEventID);
+	public RawDataHandler80211(String associatedSensorID, String associatedEventID, PersistanceManager persMgr) {
+		super(associatedSensorID, associatedEventID);
 		this.persistanceMgr = persMgr;
 	}
 

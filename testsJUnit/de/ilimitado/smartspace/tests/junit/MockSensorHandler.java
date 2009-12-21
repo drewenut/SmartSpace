@@ -13,8 +13,8 @@ public class MockSensorHandler extends AbstractSyncableSensorHandler {
 	private int dataCommitedCalls = 0;
 	private int handleEventCalls;
 	
-	public MockSensorHandler(String associatedEventID, EventSynchronizer evtSync) {
-		super(associatedEventID, evtSync);
+	public MockSensorHandler(String associatedSensorID, String associatedEventID, EventSynchronizer evtSync) {
+		super(associatedSensorID, associatedEventID, evtSync);
 	}
 	
 	public int getEventQueueSize(){

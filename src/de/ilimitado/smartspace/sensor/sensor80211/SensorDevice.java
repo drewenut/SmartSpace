@@ -11,6 +11,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorDevice;
+import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.android.SmartSpaceFramework;
@@ -69,12 +70,14 @@ public class SensorDevice extends AbstractSensorDevice {
 	
 	@Override
 	public void registerEvents(Dependencies dep) {
+		ArrayList<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>(); 
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new SensorEventHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			sensorHandlers.add(new SensorEventHandler80211(SENSOR_ID, SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 		if(Configuration.getInstance().persistence.mode  == SmartSpaceFramework.SCIENCE_MODE) {
-			dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, new RawDataHandler80211(SENSOR_80211_AP_SCAN_EVENT_ID, dep.persistanceManager));
+			sensorHandlers.add(new RawDataHandler80211(SENSOR_ID, SENSOR_80211_AP_SCAN_EVENT_ID, dep.persistanceManager));
 		}
+		dep.sensorDependencies.reactor.registerHandler(SENSOR_80211_AP_SCAN_EVENT_ID, sensorHandlers);
 	}
 	
 	@Override
@@ -173,7 +176,7 @@ public class SensorDevice extends AbstractSensorDevice {
 											   scnRes.frequency));
 			}
 			try {
-				systemRawDataQueue.put(new SensorEvent<List<ScanResult80211>>(apList,getEventID()));
+				systemRawDataQueue.put(new SensorEvent<List<ScanResult80211>>(apList,getEventID(), SENSOR_ID));
 			} catch (InterruptedException e) {
 				//Do nothing, we are just dropping last measurement.
 				e.printStackTrace();

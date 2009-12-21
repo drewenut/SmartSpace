@@ -14,8 +14,8 @@ public abstract class AbstractSyncableSensorHandler extends AbstractSensorHandle
 	@SuppressWarnings("unchecked")
 	protected ArrayList<SensorEvent> sensorEventThresholdQueue = new ArrayList<SensorEvent>();
 	
-	public AbstractSyncableSensorHandler(String associatedEventID, EventSynchronizer evtSync) {
-		super(associatedEventID);
+	public AbstractSyncableSensorHandler(String associatedSensorID, String associatedEventID, EventSynchronizer evtSync) {
+		super(associatedSensorID, associatedEventID);
 		setSyncronizer(evtSync);
 	}
 	

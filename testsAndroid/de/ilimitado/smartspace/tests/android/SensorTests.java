@@ -63,11 +63,6 @@ public class SensorTests extends AndroidTestCase{
 		sD.initSensorName();
 		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
-		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
-		assertTrue(activeEventHandlers.size() == 1);
-		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
-		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);
 		HashMap<String, AbstractSensorDevice> sensorDeviceList = sMng.getSensorDeviceList();
@@ -83,11 +78,6 @@ public class SensorTests extends AndroidTestCase{
 		sD.initSensorName();
 		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
-		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
-		assertTrue(activeEventHandlers.size() == 1);
-		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
-		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);
 		HashMap<String, AbstractSensorDevice> sensorDeviceList = sMng.getSensorDeviceList();
@@ -126,11 +116,6 @@ public class SensorTests extends AndroidTestCase{
 		sD.initSensorName();
 		assertEquals(config.sensor80211.NAME, sD.getName());
 		sD.registerEvents(appDep);
-		Collection<AbstractSensorHandler> activeEventHandlers = appDep.sensorDependencies.reactor.getActiveEventHandlers();
-		assertTrue(activeEventHandlers.size() == 1);
-		for(AbstractSensorHandler aSH : activeEventHandlers) {
-			assertTrue(aSH instanceof SensorEventHandler80211);
-		}
 		
 		appDep.sensorDependencies.sensorManager.addSensor(sD);
 		HashMap<String, AbstractSensorDevice> sensorDeviceList = sMng.getSensorDeviceList();

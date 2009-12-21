@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import android.test.AndroidTestCase;
+import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorEvent;
@@ -19,6 +20,8 @@ public class SensingReactorTests extends AndroidTestCase{
 	private LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue;
 	private MockSensorHandler2 mockHandler1;
 	private MockSensorHandler2 mockHandler2;
+	private String SENSOR_ID1 = "SNS1";
+	private String SENSOR_ID2 = "SNS2";
 	private Thread sReactorThread;
 	
 	public void setUp() {
@@ -26,12 +29,16 @@ public class SensingReactorTests extends AndroidTestCase{
 		EventSynchronizer evtSync = new EventSynchronizer();
 		systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		sReactor = new SensingReactor(reg, systemRawDataQueue);
-		mockHandler1 = new MockSensorHandler2(MockSensorHandler2.ASSOC_EVENT_ID_MOCK_HANDLER_1, evtSync);
+		ArrayList<AbstractSensorHandler> sensorHandlers1 = new ArrayList<AbstractSensorHandler>();
+		sensorHandlers1.add(new MockSensorHandler2(SENSOR_ID1, MockSensorHandler2.ASSOC_EVENT_ID_MOCK_HANDLER_1, evtSync));
 		sReactor.registerHandler(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, 
-								  mockHandler1);
-		mockHandler2 = new MockSensorHandler2(MockSensorHandler2.ASSOC_EVENT_ID_MOCK_HANDLER_2, evtSync);
+				sensorHandlers1);
+		
+		ArrayList<AbstractSensorHandler> sensorHandlers2 = new ArrayList<AbstractSensorHandler>();
+		
+		sensorHandlers2.add(new MockSensorHandler2(SENSOR_ID2, MockSensorHandler2.ASSOC_EVENT_ID_MOCK_HANDLER_2, evtSync));
 		sReactor.registerHandler(MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, 
-				  mockHandler2);
+				sensorHandlers2);
 	}
 
 	public void testEventDispatchingScanner80211() {
@@ -73,9 +80,9 @@ public class SensingReactorTests extends AndroidTestCase{
 				   -65, 
 				   2405));
 		
-        systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
-		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
-		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+        systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, SENSOR_ID1));
+		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, SENSOR_ID2));
+		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, SENSOR_ID2));
 		sReactorThread = new Thread(sReactor);
 		sReactor.startDispatching();
 		sReactorThread.start();

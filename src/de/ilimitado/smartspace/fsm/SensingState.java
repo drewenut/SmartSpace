@@ -1,5 +1,6 @@
 package de.ilimitado.smartspace.fsm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public abstract class SensingState implements State {
 	protected DataCommandProvider dCP;
 	protected List<String> syncSet;
 	protected HashMap<String, DataProcessor<ScanSampleList>> dataProcessors;
-	protected Collection<AbstractSensorHandler> registeredEventHandlers;
+	protected Collection<ArrayList<AbstractSensorHandler>> registeredEventHandlers;
 	protected Thread syncWorker = null;
 	protected Thread sReactorWorker = null;
 	protected SensorHandlerProvider sHdlProv;
@@ -52,9 +53,11 @@ public abstract class SensingState implements State {
 	
 	private void setHandlerConstraints() {
 		ConstraintsMap<String, List<Number>> constraints = Configuration.getInstance().getConstraints();
-		for(AbstractSensorHandler handler : registeredEventHandlers){
-			if(constraints.containsKey(handler.getAssociatedEventID()) && handler.isSyncable())
-				handler.setEventConstraints(constraints.get(handler.getAssociatedEventID()));
+		for(ArrayList<AbstractSensorHandler> eventHandlers : registeredEventHandlers){
+			for(AbstractSensorHandler handler : eventHandlers) {
+				if(constraints.containsKey(handler.getAssociatedEventID()) && handler.isSyncable())
+					handler.setEventConstraints(constraints.get(handler.getAssociatedEventID()));
+			}
 		}
 	}
 	

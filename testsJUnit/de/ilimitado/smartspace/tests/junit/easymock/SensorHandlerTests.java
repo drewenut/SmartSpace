@@ -42,7 +42,7 @@ public class SensorHandlerTests extends TestCase {
 		evtSyncMock.isReady(EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, eventHandler1);
         replay(evtSyncMock);
         for(int i = 0; i<10; i++) {
-        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
+        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, "Sensor_ID1"));
         }
         verify(evtSyncMock);
 	}
@@ -53,8 +53,8 @@ public class SensorHandlerTests extends TestCase {
 		evtSyncMock.isReady(EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, eventHandler1);
         replay(evtSyncMock);
         for(int i = 0; i<10; i++) {
-        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
-        	eventHandler2.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+        	eventHandler1.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1, "Sensor_ID1"));
+        	eventHandler2.handleEvent(new SensorEvent(new ArrayList(), EasyMockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2, "Sensor_ID2"));
         }
         verify(evtSyncMock);
 	}

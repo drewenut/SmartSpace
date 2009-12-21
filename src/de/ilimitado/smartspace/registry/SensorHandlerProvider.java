@@ -1,5 +1,6 @@
 package de.ilimitado.smartspace.registry;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -7,7 +8,7 @@ import java.util.Set;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 
 
-public class SensorHandlerProvider extends HashMap<String, AbstractSensorHandler>{
+public class SensorHandlerProvider extends HashMap<String, ArrayList<AbstractSensorHandler>>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,9 +16,9 @@ public class SensorHandlerProvider extends HashMap<String, AbstractSensorHandler
 		return (this.containsKey(eventID));
 	}
 
-	public AbstractSensorHandler addSensorHandler(String eventID,
-			AbstractSensorHandler sensorHandler) {
-		return this.put(eventID, sensorHandler);
+	public ArrayList<AbstractSensorHandler> addSensorHandler(String eventID,
+			ArrayList<AbstractSensorHandler> sensorHandlers) {
+		return this.put(eventID, sensorHandlers);
 	}
 
 	public void removeSensorHandler(String eventID) {
@@ -25,7 +26,7 @@ public class SensorHandlerProvider extends HashMap<String, AbstractSensorHandler
 			this.remove(eventID);
 	}
 
-	public AbstractSensorHandler getSensorHandler(String eventID) {
+	public ArrayList<AbstractSensorHandler> getSensorHandler(String eventID) {
 		return this.get(eventID);
 	}
 	
@@ -33,7 +34,7 @@ public class SensorHandlerProvider extends HashMap<String, AbstractSensorHandler
 		return this.keySet();
 	}
 	
-	public Collection<AbstractSensorHandler> getValues(){
+	public Collection<ArrayList<AbstractSensorHandler>> getValues(){
 		return this.values();
 	}
 }

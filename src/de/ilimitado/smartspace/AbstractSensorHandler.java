@@ -11,8 +11,10 @@ public abstract class AbstractSensorHandler{
 	protected static final String LOG_TAG = "AbstractSensorHandler";
 
 	protected final String associatedEventID;
+	protected final String associatedSensorID;
 
-	public AbstractSensorHandler(String associatedEventID) {
+	public AbstractSensorHandler(String associatedSensorID, String associatedEventID) {
+		this.associatedSensorID = associatedSensorID;
 		this.associatedEventID = associatedEventID;
 	}
 	
