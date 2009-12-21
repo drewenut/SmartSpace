@@ -11,15 +11,19 @@ public class ScanResult80211 {
     public int level;
     
     public int frequency;
+    
+    public long timestamp;
 
+    
     public ScanResult80211(String SSID, String BSSID, String caps, int level, int frequency) {
         this.SSID = SSID;
         this.BSSID = BSSID;
         this.capabilities = caps;
         this.level = level;
         this.frequency = frequency;
+        this.timestamp = System.currentTimeMillis();
     }
-
+    
     @Override
 	public boolean equals(Object o) {
     	if((o instanceof ScanResult80211)){

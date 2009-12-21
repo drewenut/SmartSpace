@@ -169,7 +169,7 @@ public class SensorDevice extends AbstractSensorDevice {
 											   scnRes.frequency));
 			}
 			try {
-				systemRawDataQueue.put(new SensorEvent<ScanResult80211>(apList,getEventID()));
+				systemRawDataQueue.put(new SensorEvent<List<ScanResult80211>>(apList,getEventID()));
 			} catch (InterruptedException e) {
 				//Do nothing, we are just dropping last measurement.
 				e.printStackTrace();

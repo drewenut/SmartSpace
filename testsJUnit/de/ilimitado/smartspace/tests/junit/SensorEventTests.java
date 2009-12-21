@@ -1,6 +1,7 @@
 package de.ilimitado.smartspace.tests.junit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -31,7 +32,7 @@ public class SensorEventTests extends TestCase{
 	
 	@Test
 	public void testSensorEvent() {
-		SensorEvent<ScanResult80211> sensorEvent = new SensorEvent<ScanResult80211>(apList, SENSOR_80211_AP_SCAN_EVENT_ID);
+		SensorEvent<List<ScanResult80211>> sensorEvent = new SensorEvent<List<ScanResult80211>>(apList, SENSOR_80211_AP_SCAN_EVENT_ID);
 		assertEquals(SENSOR_80211_AP_SCAN_EVENT_ID, sensorEvent.getEventType());
 		assertEquals(apList, sensorEvent.getEventHandle());
 	}

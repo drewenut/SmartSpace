@@ -73,9 +73,9 @@ public class SensingReactorTests extends AndroidTestCase{
 				   -65, 
 				   2405));
 		
-        systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
-		systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
-		systemRawDataQueue.add(new SensorEvent<ScanResult80211>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+        systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_1));
+		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
+		systemRawDataQueue.add(new SensorEvent<List<ScanResult80211>>(apList2, MockSensorHandler.ASSOC_EVENT_ID_MOCK_HANDLER_2));
 		sReactorThread = new Thread(sReactor);
 		sReactor.startDispatching();
 		sReactorThread.start();

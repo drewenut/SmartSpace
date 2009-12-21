@@ -51,7 +51,7 @@ public class SensingReactor implements Runnable{
 	public void handleEvents() {
 		while (isAlive.get()) {
 			try {
-				SensorEvent<Collection<?>> sEvt = (SensorEvent<Collection<?>>) systemRawDataQueue.take();
+				SensorEvent<Collection> sEvt = (SensorEvent<Collection>) systemRawDataQueue.take();
 				String eventType = sEvt.getEventType();
 				AbstractSensorHandler eventHandler = getEventHandler(eventType);
 				eventHandler.handleEvent(sEvt);
