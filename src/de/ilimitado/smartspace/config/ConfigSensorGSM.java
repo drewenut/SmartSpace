@@ -39,9 +39,10 @@ public class ConfigSensorGSM extends AbstractSensorConfig{
 	
 	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessors(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
 		for(AbstractScannerConfig scanner : scanners){
-			merge(scanner.getDataProcessors());
+//			merge(scanner.getDataProcessors());
+			
+			dPmap.put(SENSOR_ID, scanner.getDataProcessors());
 		}
-		dPmap.put(SENSOR_ID, dataCommands);
 		return dPmap;
 	}
 	
@@ -54,7 +55,8 @@ public class ConfigSensorGSM extends AbstractSensorConfig{
 
 	ConstraintsMap<String, List<Number>> getSensorConstraints(ConstraintsMap<String, List<Number>> constraintMap){
 		for(AbstractScannerConfig scanner : scanners){
-			constraintMap.put(scanner.ID, scanner.getSensingConstraints());
+			constraintMap.put(SENSOR_ID, scanner.getSensingConstraints());
+			break;
 		}
 		return constraintMap;
 	}
