@@ -1,0 +1,10 @@
+<script id="source" language="javascript" type="text/javascript">
+function load(){
+	document.getElementById('graphtitle').innerHTML = window.testhandler.getGraphTitle();
+	window.testhandler.loadGraph();
+}
+
+function GotGraph(gdata) {
+	$.plot($("#placeholder"), gdata);
+}
+</script>
