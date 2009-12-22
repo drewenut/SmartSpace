@@ -23,10 +23,8 @@ import de.ilimitado.smartspace.utils.L;
 
 public class SensorDeviceGSM extends AbstractSensorDevice {
 
-	private final String ACTIVE_CELL_SCAN_EVENT_ID;
-	private final String ACTIVE_CELL_SCAN_EVENT_NAME;
-	private final String NEIGHBOR_CELL_SCAN_EVENT_ID;
-	private final String NEIGHBOR_CELL_SCAN_EVENT_NAME;
+	private final String GSM_CELL_SCAN_EVENT_ID;
+	private final String GSM_CELL_SCAN_EVENT_NAME;
 	
 	private static final int NO_SIGNAL = -113;
 	private static final int VERY_GOOD_SIGNAL = -51;
@@ -40,18 +38,16 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	
 	public SensorDeviceGSM(Dependencies appDeps) {
 		super(appDeps);
-		ACTIVE_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerActiveCell.ID;
-		ACTIVE_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerActiveCell.NAME;
 		
-		NEIGHBOR_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerNeigbhorCells.ID;
-		NEIGHBOR_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerNeigbhorCells.NAME;
+		GSM_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerGSMCells.ID;
+		GSM_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerGSMCells.NAME;
 		
+		this.telephonyManager = (TelephonyManager) androidCtx.getSystemService(Context.TELEPHONY_SERVICE);
 		this.provider = telephonyManager.getSimOperator();
 	}
 
 	@Override
 	public boolean deviceAvailable() {
-		this.telephonyManager = (TelephonyManager) androidCtx.getSystemService(Context.TELEPHONY_SERVICE);
 		return (telephonyManager == null || telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_UNKNOWN) ? false : true;
 	}
 
@@ -65,7 +61,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	@Override
 	public void createRunnables() {
 		if(isActive()) {
-			sensorRunnables.add(new ScannerGSMNeigbhorCells());
+			sensorRunnables.add(new ScannerGSM());
 		}
 	}
 	
@@ -82,7 +78,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	@Override
 	public void registerEvents(Dependencies dep) {
 		if(isActive()) {
-			dep.sensorDependencies.reactor.registerHandler(getID(), new EventHandlerGSM(ACTIVE_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			dep.sensorDependencies.reactor.registerHandler(GSM_CELL_SCAN_EVENT_ID, new EventHandlerGSM(GSM_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
 	
@@ -96,160 +92,176 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
 		if(isActive()) {
-			sSReg.putItem(getID(), ScanSampleGSM.class);
+			sSReg.putItem(GSM_CELL_SCAN_EVENT_ID, ScanSampleGSM.class);
 		}
 	}
 	
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(isActive()) {
-			sSplDBPers.putItem(getID(), ScanSampleGSMDBPersistance.class);
+			sSplDBPers.putItem(GSM_CELL_SCAN_EVENT_ID, ScanSampleGSMDBPersistance.class);
 		}
 	}
 	
 	private boolean isActive() {
-		return Configuration.getInstance().sensorGSM.scannerActiveCell.isActive;
+		return Configuration.getInstance().sensorGSM.scannerGSMCells.isActive;
 	}
 
 	public String toString(){
 		return "sensor_gsm";
 	}
 	
-	private synchronized void postSensorData() {
-		try {
-			if(neighborCellScan.size() > 0 && activeCellScan != null) {
-				ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
-				cells.add(activeCellScan);
-				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(cells, getID()));
-				L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 
-	class ScannerGSMNeigbhorCells implements Runnable {
-		private static final long SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL = 3000;
-		
-		private String provider = telephonyManager.getSimOperator();
-		private ArrayList<ScanResultGSM> cellList = new ArrayList<ScanResultGSM>();
-		private List<ScanResultGSM> syncedCellList = Collections.synchronizedList(cellList);
+	class ScannerGSM implements Runnable {
 
-		private AtomicBoolean isActive;
+		public AtomicBoolean isActive;
+		ActiveCellScan activeCells = new ActiveCellScan();
+		NeigbhorCellsScan neighbourCells = new NeigbhorCellsScan();;
 
 		@Override
 		public void run() {
 			while (isActive.get()) {
 				if (Thread.currentThread().isInterrupted()) {
 					isActive.set(false);
+					activeCells.isActive.set(false);
+					neighbourCells.isActive.set(false);
 					break;
 				}
-				try {
-					startScan();
-					wait(SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				if(!activeCells.isActive.get())
+					activeCells.start();
+				if(!neighbourCells.isActive.get())
+					neighbourCells.start();
 			}
 		}
 		
-		private void startScan() {
-			List<NeighboringCellInfo> neighborCells = telephonyManager.getNeighboringCellInfo();
-			if(neighborCells != null) {
-				syncedNeighborCellList.clear();
-				syncedCellList.add(activeCellScan);
-				for(NeighboringCellInfo cellInfo : neighborCells) {
-					int cid = cellInfo.getCid();
-					int rssi = -113 + 2 * cellInfo.getRssi();
-					syncedCellList.add(new ScanResultGSM(cid, provider, rssi));
+		private synchronized void postSensorData() {
+			try {
+				if(neighborCellScan.size() > 0 && activeCellScan != null) {
+					ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
+					cells.add(activeCellScan);
+					systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(cells, getID()));
+					L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 				}
-				postSensorData();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		
 		public String getEventID(){
-			return NEIGHBOR_CELL_SCAN_EVENT_ID;
+			return GSM_CELL_SCAN_EVENT_ID;
 		}
 		
 		public String getEventName(){
-			return NEIGHBOR_CELL_SCAN_EVENT_NAME;
-		}
-	}
-	
-	class ScannerActiveCell implements Runnable {
-		private boolean receiverRegistered;
-		private PhoneStateListener gsmListener;
-		private int currentCellID = SensorDeviceGSM.NO_CID;
-		private AtomicBoolean isActive;
-
-		@Override
-		public void run() {
-			initGSMListener();
-			while (isActive.get()) {
-				if (Thread.currentThread().isInterrupted()) {
-					isActive.set(false);
-					unregisterReceiver();
-					break;
-				}
-				if(!receiverRegistered){
-					registerReceiver();
-				}
-			}
+			return GSM_CELL_SCAN_EVENT_NAME;
 		}
 		
-		public String getEventID(){
-			return ACTIVE_CELL_SCAN_EVENT_ID;
-		}
-		
-		public String getEventName(){
-			return ACTIVE_CELL_SCAN_EVENT_NAME;
-		}
-
-		private void initGSMListener() {
+		private class NeigbhorCellsScan extends Thread {
+			private static final long SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL = 3000;
 			
-			gsmListener = new PhoneStateListener() {
+			private String provider = telephonyManager.getSimOperator();
+			private ArrayList<ScanResultGSM> cellList = new ArrayList<ScanResultGSM>();
+			private List<ScanResultGSM> syncedCellList = Collections.synchronizedList(cellList);
+
+			public AtomicBoolean isActive;
+
+			@Override
+			public void run() {
+				while (isActive.get()) {
+					if (Thread.currentThread().isInterrupted()) {
+						isActive.set(false);
+						break;
+					}
+					try {
+						startScan();
+						wait(SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			private void startScan() {
+				List<NeighboringCellInfo> neighborCells = telephonyManager.getNeighboringCellInfo();
+				if(neighborCells != null) {
+					syncedNeighborCellList.clear();
+					syncedCellList.add(activeCellScan);
+					for(NeighboringCellInfo cellInfo : neighborCells) {
+						int cid = cellInfo.getCid();
+						int rssi = -113 + 2 * cellInfo.getRssi();
+						syncedCellList.add(new ScanResultGSM(cid, provider, rssi));
+					}
+					postSensorData();
+				}
+			}
+		}
+		
+		private class ActiveCellScan extends Thread {
+			private boolean receiverRegistered;
+			private PhoneStateListener gsmListener;
+			private int currentCellID = SensorDeviceGSM.NO_CID;
+			public AtomicBoolean isActive;
+
+			@Override
+			public void run() {
+				initGSMListener();
+				while (isActive.get()) {
+					if (Thread.currentThread().isInterrupted()) {
+						isActive.set(false);
+						unregisterReceiver();
+						break;
+					}
+					if(!receiverRegistered){
+						registerReceiver();
+					}
+				}
+			}
+			
+			private void initGSMListener() {
 				
-				@Override
-				public void onSignalStrengthChanged(int asu) {
-					super.onSignalStrengthChanged(asu);
-					//rssi in dBm
-					int rssi = SensorDeviceGSM.NO_SIGNAL;
-					Log.d(LOG_TAG, "GSM Current Cell RSS changed: " + Integer.toString(asu));
+				gsmListener = new PhoneStateListener() {
 					
-					if(asu != -1 && currentCellID != SensorDeviceGSM.NO_CID) {
-						if(asu == 0) rssi = SensorDeviceGSM.NO_SIGNAL;
-						else if (asu == 31) rssi = SensorDeviceGSM.VERY_GOOD_SIGNAL;
-						else {
-							rssi = -113 + 2*asu;
+					@Override
+					public void onSignalStrengthChanged(int asu) {
+						super.onSignalStrengthChanged(asu);
+						//rssi in dBm
+						int rssi = SensorDeviceGSM.NO_SIGNAL;
+						Log.d(LOG_TAG, "GSM Current Cell RSS changed: " + Integer.toString(asu));
+						
+						if(asu != -1 && currentCellID != SensorDeviceGSM.NO_CID) {
+							if(asu == 0) rssi = SensorDeviceGSM.NO_SIGNAL;
+							else if (asu == 31) rssi = SensorDeviceGSM.VERY_GOOD_SIGNAL;
+							else {
+								rssi = -113 + 2*asu;
+							}
+							activeCellScan = new ScanResultGSM(currentCellID, provider, rssi);
+							postSensorData();
 						}
-						activeCellScan = new ScanResultGSM(currentCellID, provider, rssi);
-						postSensorData();
 					}
-				}
-	
-				public void onCellLocationChanged(CellLocation location) {
-					super.onCellLocationChanged(location);
-					Log.d(LOG_TAG, "CellLocation changed");
-					if (location.getClass() == GsmCellLocation.class) {
-						GsmCellLocation currentLocation = (GsmCellLocation) location;
-						currentCellID = currentLocation.getCid();
+		
+					public void onCellLocationChanged(CellLocation location) {
+						super.onCellLocationChanged(location);
+						Log.d(LOG_TAG, "CellLocation changed");
+						if (location.getClass() == GsmCellLocation.class) {
+							GsmCellLocation currentLocation = (GsmCellLocation) location;
+							currentCellID = currentLocation.getCid();
+						}
 					}
-				}
-			};
-		}
-			
-		private synchronized void registerReceiver() {
-			telephonyManager.listen(gsmListener,
-					PhoneStateListener.LISTEN_CELL_LOCATION
-							| PhoneStateListener.LISTEN_SIGNAL_STRENGTH);
-			receiverRegistered = true;
-		}
-
-		private synchronized void unregisterReceiver() {
-			if (receiverRegistered)
+				};
+			}
+				
+			private synchronized void registerReceiver() {
 				telephonyManager.listen(gsmListener,
-						PhoneStateListener.LISTEN_NONE);
-			receiverRegistered = false;
+						PhoneStateListener.LISTEN_CELL_LOCATION
+								| PhoneStateListener.LISTEN_SIGNAL_STRENGTH);
+				receiverRegistered = true;
+			}
+
+			private synchronized void unregisterReceiver() {
+				if (receiverRegistered)
+					telephonyManager.listen(gsmListener,
+							PhoneStateListener.LISTEN_NONE);
+				receiverRegistered = false;
+			}
 		}
 	}
 }

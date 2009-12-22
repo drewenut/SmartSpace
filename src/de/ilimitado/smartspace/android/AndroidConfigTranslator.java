@@ -3,7 +3,7 @@ package de.ilimitado.smartspace.android;
 import java.util.HashMap;
 
 import android.content.SharedPreferences;
-import de.ilimitado.smartspace.config.ConfigScannerNeigbhorCells;
+import de.ilimitado.smartspace.config.ConfigScannerGSMCell;
 import de.ilimitado.smartspace.config.ConfigSensorGSM;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
@@ -91,7 +91,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		String sensorGSMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorGSM");
 		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", true);
 		ConfigScannerActive GSMactiveCell = getScannerGSMActiveCellConfig();
-		ConfigScannerNeigbhorCells GSMNeighborCells = getScannerGSMNeighborCellsConfig();
+		ConfigScannerGSMCell GSMNeighborCells = getScannerGSMNeighborCellsConfig();
 		ConfigSensorGSM snsCfgGSM = new ConfigSensorGSM(sensorGSMname, sensorGSMisActive, GSMactiveCell);
 		return snsCfgGSM;
 	}
@@ -107,7 +107,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		return scnGSM;
 	}
 	
-	private ConfigScannerNeigbhorCells getScannerGSMNeighborCellsConfig() {
+	private ConfigScannerGSMCell getScannerGSMNeighborCellsConfig() {
 		String scnGSMName = androidPreferences.getString("scanner_config_gsm_neighbor_cells_scanner_name", "scannerGsmRss");
 		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_neighbor_cells_scanner_is_active", true);
 		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_neighbor_cells_scanner_synchronize", true);
@@ -115,7 +115,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		long scnGSMTimeout = androidPreferences.getLong("scanner_config_gsm_gsm_neighbor_cells_timeout", 1000);
 		int scnGSMRefreshInterval = androidPreferences.getInt("scanner_config_gsm_neighbor_cells_scanner_refresh_interval", 1000);
 		ConfigDataCommands scnGSMCommands = getGSM_DataProcessCommands();
-		ConfigScannerNeigbhorCells scnGSM = new ConfigScannerNeigbhorCells(scnGSMName, scnGSMisActive, scnGSMSynchronize, scnGSMThreshold, scnGSMTimeout, scnGSMCommands, scnGSMRefreshInterval);
+		ConfigScannerGSMCell scnGSM = new ConfigScannerGSMCell(scnGSMName, scnGSMisActive, scnGSMSynchronize, scnGSMThreshold, scnGSMTimeout, scnGSMCommands, scnGSMRefreshInterval);
 		//TODO
 		return scnGSM;
 	}
