@@ -87,7 +87,9 @@ public class EventSynchronizer implements Runnable{
 			//We just drop sensorData an invariants will be restored in next statement.
 			e.printStackTrace();
 		}
-		restoreInvariants();
+		finally {
+			restoreInvariants();
+		}
 	}
 
 	public void setStrategy(SynchronizerStrategy sStr) {

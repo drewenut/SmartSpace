@@ -1,12 +1,14 @@
 package de.ilimitado.smartspace.config;
 
 import java.util.HashMap;
+import java.util.List;
 
 import de.ilimitado.smartspace.sensing.DataProcessorsMap;
 
 public class ConfigSensorGSM extends AbstractSensorConfig{
 	private final static String SENSOR_ID = "SensorGSM";
-	private final HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
+	
+	private HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
 	
 	public final ConfigScannerActive scannerActiveCell;
 	public final ConfigScannerNeigbhorCells scannerNeigbhorCells;
@@ -36,7 +38,24 @@ public class ConfigSensorGSM extends AbstractSensorConfig{
 	}
 	
 	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessors(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
-		dPmap.put(SENSOR_ID, dataCommands.getDataProcessors());
+		for(AbstractScannerConfig scanner : scanners){
+			merge(scanner.getDataProcessors());
+		}
+		dPmap.put(SENSOR_ID, dataCommands);
 		return dPmap;
+	}
+	
+	private void merge(HashMap<String, Boolean> dataProcessors) {
+			for(String processorName : dataProcessors.keySet()) {
+				if(!dataCommands.containsKey(processorName))
+					dataCommands.put(processorName, dataProcessors.get(processorName));
+			}
+	}
+
+	ConstraintsMap<String, List<Number>> getSensorConstraints(ConstraintsMap<String, List<Number>> constraintMap){
+		for(AbstractScannerConfig scanner : scanners){
+			constraintMap.put(scanner.ID, scanner.getSensingConstraints());
+		}
+		return constraintMap;
 	}
 }

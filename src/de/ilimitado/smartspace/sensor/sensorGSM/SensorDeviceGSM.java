@@ -43,8 +43,8 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		ACTIVE_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerActiveCell.ID;
 		ACTIVE_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerActiveCell.NAME;
 		
-		NEIGHBOR_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerActiveCell.ID;
-		NEIGHBOR_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerActiveCell.NAME;
+		NEIGHBOR_CELL_SCAN_EVENT_ID = Configuration.getInstance().sensorGSM.scannerNeigbhorCells.ID;
+		NEIGHBOR_CELL_SCAN_EVENT_NAME = Configuration.getInstance().sensorGSM.scannerNeigbhorCells.NAME;
 		
 		this.provider = telephonyManager.getSimOperator();
 	}
@@ -82,7 +82,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	@Override
 	public void registerEvents(Dependencies dep) {
 		if(isActive()) {
-			dep.sensorDependencies.reactor.registerHandler(ACTIVE_CELL_SCAN_EVENT_ID, new EventHandlerGSM(ACTIVE_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			dep.sensorDependencies.reactor.registerHandler(getID(), new EventHandlerGSM(ACTIVE_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 	}
 	
@@ -96,14 +96,14 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	
 	public void registerScanSamples(ScanSampleProvider sSReg) {
 		if(isActive()) {
-			sSReg.putItem(ACTIVE_CELL_SCAN_EVENT_ID, ScanSampleGSM.class);
+			sSReg.putItem(getID(), ScanSampleGSM.class);
 		}
 	}
 	
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(isActive()) {
-			sSplDBPers.putItem(ACTIVE_CELL_SCAN_EVENT_ID, ScanSampleGSMDBPersistance.class);
+			sSplDBPers.putItem(getID(), ScanSampleGSMDBPersistance.class);
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			if(neighborCellScan.size() > 0 && activeCellScan != null) {
 				ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
 				cells.add(activeCellScan);
-				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(cells, getName()));
+				systemRawDataQueue.put(new SensorEvent<ScanResultGSM>(cells, getID()));
 				L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 			}
 		} catch (InterruptedException e) {
