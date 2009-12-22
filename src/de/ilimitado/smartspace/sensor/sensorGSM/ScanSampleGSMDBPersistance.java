@@ -15,7 +15,7 @@ public class ScanSampleGSMDBPersistance implements ScanSampleDBPersistance {
 
 	@Override
 	public String getTableName() {
-		return Configuration.getInstance().sensorGSM.scannerActiveCell.ID;
+		return Configuration.getInstance().sensorGSM.scannerGSMCells.ID;
 	}
 	
 	@Override
