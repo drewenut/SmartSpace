@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
+import android.os.Looper;
 import android.telephony.CellLocation;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneStateListener;
@@ -114,12 +115,13 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 
 	class ScannerGSM implements Runnable {
 
-		public AtomicBoolean isActive;
+		public AtomicBoolean isActive = new AtomicBoolean(false);
 		ActiveCellScan activeCells = new ActiveCellScan();
-		NeigbhorCellsScan neighbourCells = new NeigbhorCellsScan();;
+		NeigbhorCellsScan neighbourCells = new NeigbhorCellsScan();
 
 		@Override
 		public void run() {
+			isActive.set(true);
 			while (isActive.get()) {
 				if (Thread.currentThread().isInterrupted()) {
 					isActive.set(false);
@@ -156,16 +158,17 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		}
 		
 		private class NeigbhorCellsScan extends Thread {
-			private static final long SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL = 3000;
+			private static final long SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL = 1000;
 			
 			private String provider = telephonyManager.getSimOperator();
 			private ArrayList<ScanResultGSM> cellList = new ArrayList<ScanResultGSM>();
 			private List<ScanResultGSM> syncedCellList = Collections.synchronizedList(cellList);
 
-			public AtomicBoolean isActive;
+			public AtomicBoolean isActive = new AtomicBoolean(false);;
 
 			@Override
 			public void run() {
+				isActive.set(true);
 				while (isActive.get()) {
 					if (Thread.currentThread().isInterrupted()) {
 						isActive.set(false);
@@ -173,7 +176,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 					}
 					try {
 						startScan();
-						wait(SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL);
+						sleep(SENSOR_GSM_NEIGHBOR_CELL_SCAN_INTERVALL);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -199,10 +202,12 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			private boolean receiverRegistered;
 			private PhoneStateListener gsmListener;
 			private int currentCellID = SensorDeviceGSM.NO_CID;
-			public AtomicBoolean isActive;
+			public AtomicBoolean isActive = new AtomicBoolean(false);
 
 			@Override
 			public void run() {
+				Looper.prepare();
+				isActive.set(true);
 				initGSMListener();
 				while (isActive.get()) {
 					if (Thread.currentThread().isInterrupted()) {

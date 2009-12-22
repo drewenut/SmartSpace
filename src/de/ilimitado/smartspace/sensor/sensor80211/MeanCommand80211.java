@@ -11,12 +11,12 @@ import de.ilimitado.smartspace.sensing.MeanDataCommand;
 
 public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleList>{
 	HashMap<String, List<Integer>> meanValuesMap = new HashMap<String, List<Integer>>();
-	HashMap<String, ScanResultGSM> prototypeMap = new HashMap<String, ScanResultGSM>();
+	HashMap<String, ScanResult80211> prototypeMap = new HashMap<String, ScanResult80211>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void computeMean(Collection<?> scanResults80211) {
-		List<List<ScanResultGSM>> scanResults80211list = (List<List<ScanResultGSM>>) scanResults80211;
+		List<List<ScanResult80211>> scanResults80211list = (List<List<ScanResult80211>>) scanResults80211;
 		sortScanResults(scanResults80211list);
 		processScanResults();
 	}
@@ -24,8 +24,8 @@ public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleL
 	@Override
 	protected void writeToStdOut() {
 		for(String scnResID : prototypeMap.keySet()){
-			ScanResultGSM scnRes = prototypeMap.get(scnResID);
-			ScanSampleGSM sSpl = new ScanSampleGSM(scnRes.SSID, scnRes.BSSID, new RSS(scnRes.level), scnRes.frequency);
+			ScanResult80211 scnRes = prototypeMap.get(scnResID);
+			ScanSample80211 sSpl = new ScanSample80211(scnRes.SSID, scnRes.BSSID, new RSS(scnRes.level), scnRes.frequency);
 			if(!stdOut.contains(sSpl))
 				stdOut.add(sSpl);
 		}
@@ -38,9 +38,9 @@ public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleL
 	}
 
 	private void sortScanResults(
-			List<List<ScanResultGSM>> scanResults80211list) {
-		for (List<ScanResultGSM> result : scanResults80211list){
-			for (ScanResultGSM scanRes : result) {
+			List<List<ScanResult80211>> scanResults80211list) {
+		for (List<ScanResult80211> result : scanResults80211list){
+			for (ScanResult80211 scanRes : result) {
 				if(!addRSSLevel(scanRes)) {
 					createNewScnResEntries(scanRes);
 				}
@@ -59,7 +59,7 @@ public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleL
 		prototypeMap.get(scnResID).level = meanRSSlevel;
 	}
 
-	private void createNewScnResEntries(ScanResultGSM scanRes) {
+	private void createNewScnResEntries(ScanResult80211 scanRes) {
 		List<Integer> scnResValues = new ArrayList<Integer>();
 		scnResValues.add(scanRes.level);
 		String ID = scanRes.BSSID;
@@ -67,7 +67,7 @@ public class MeanCommand80211 extends MeanDataCommand<Collection<?>, ScanSampleL
 		prototypeMap.put(ID, scanRes);
 	}
 
-	private boolean addRSSLevel(ScanResultGSM scanRes) {
+	private boolean addRSSLevel(ScanResult80211 scanRes) {
 		if(meanValuesMap.containsKey(scanRes.BSSID)) {
 			List<Integer> scnResValues = meanValuesMap.get(scanRes.BSSID);
 			return scnResValues.add(scanRes.level);

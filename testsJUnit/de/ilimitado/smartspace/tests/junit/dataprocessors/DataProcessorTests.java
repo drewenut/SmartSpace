@@ -24,12 +24,12 @@ import de.ilimitado.smartspace.sensing.DataCommandChain;
 import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.sensing.DataProcessorResolver;
 import de.ilimitado.smartspace.sensor.sensor80211.MeanCommand80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanResultGSM;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanResult80211;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class DataProcessorTests extends TestCase{
-	private List<List<ScanResultGSM>> data = new ArrayList<List<ScanResultGSM>>();
+	private List<List<ScanResult80211>> data = new ArrayList<List<ScanResult80211>>();
 	private Registry reg;
 	
 	@Before()
@@ -39,17 +39,17 @@ public class DataProcessorTests extends TestCase{
 
 	@Test()
 	 public void test80211MeanDataCmd() {
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -61,10 +61,10 @@ public class DataProcessorTests extends TestCase{
 		mCmd80211.execute();
 		assertEquals(4, sSL.size());
 
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2410);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(10), 2420);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res3", "00:00:00:00:03", new RSS(10), 2430);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res4", "00:00:00:00:04", new RSS(10), 2440);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2410);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(10), 2420);
+		ScanSample80211 sSpl3 = new ScanSample80211("res3", "00:00:00:00:03", new RSS(10), 2430);
+		ScanSample80211 sSpl4 = new ScanSample80211("res4", "00:00:00:00:04", new RSS(10), 2440);
 		
 		assertEquals(true, sSL.contains(sSpl1));
 		assertEquals(true, sSL.contains(sSpl2));
@@ -72,24 +72,24 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(true, sSL.contains(sSpl4));
 		
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			assertEquals(10, scnSpl.rss.mean,0);
 		}
 	}
 	
 	@Test()
 	 public void test80211MeanDataCmd2() {
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", -10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", -10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 20, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", -30, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 40, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 20, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", -30, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 40, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -102,7 +102,7 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(4, sSL.size());
 
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			if(scnSpl.MAC.equals("00:00:00:00:01"))
 				assertEquals(10.0, scnSpl.rss.mean);
 			if(scnSpl.MAC.equals("00:00:00:00:02"))
@@ -116,16 +116,16 @@ public class DataProcessorTests extends TestCase{
 	
 	@Test()
 	 public void test80211MeanDataCmd3() {
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", -10, 2430));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", -10, 2430));
 		
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 20, 2420));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 20, 2420));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -138,7 +138,7 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(4, sSL.size());
 
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			if(scnSpl.MAC.equals("00:00:00:00:01"))
 				assertEquals(10.0, scnSpl.rss.mean);
 			if(scnSpl.MAC.equals("00:00:00:00:02"))
@@ -152,17 +152,17 @@ public class DataProcessorTests extends TestCase{
 	
 	@Test()
 	 public void testDataCmdChain() {
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -177,10 +177,10 @@ public class DataProcessorTests extends TestCase{
 		
 		assertEquals(4, sSL.size());
 
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2410);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(10), 2420);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res3", "00:00:00:00:03", new RSS(10), 2430);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res4", "00:00:00:00:04", new RSS(10), 2440);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2410);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(10), 2420);
+		ScanSample80211 sSpl3 = new ScanSample80211("res3", "00:00:00:00:03", new RSS(10), 2430);
+		ScanSample80211 sSpl4 = new ScanSample80211("res4", "00:00:00:00:04", new RSS(10), 2440);
 		
 		assertEquals(true, sSL.contains(sSpl1));
 		assertEquals(true, sSL.contains(sSpl2));
@@ -188,24 +188,24 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(true, sSL.contains(sSpl4));
 		
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			assertEquals(10.0, scnSpl.rss.mean);
 		}
 	}
 
 	@Test()
 	 public void testSensorDataProcessor() {
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -222,10 +222,10 @@ public class DataProcessorTests extends TestCase{
 		
 		assertEquals(4, sSL.size());
 
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2410);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(10), 2420);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res3", "00:00:00:00:03", new RSS(10), 2430);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res4", "00:00:00:00:04", new RSS(10), 2440);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2410);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(10), 2420);
+		ScanSample80211 sSpl3 = new ScanSample80211("res3", "00:00:00:00:03", new RSS(10), 2430);
+		ScanSample80211 sSpl4 = new ScanSample80211("res4", "00:00:00:00:04", new RSS(10), 2440);
 		
 		assertEquals(true, sSL.contains(sSpl1));
 		assertEquals(true, sSL.contains(sSpl2));
@@ -233,7 +233,7 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(true, sSL.contains(sSpl4));
 		
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			assertEquals(10.0, scnSpl.rss.mean);
 		}
 		
@@ -242,17 +242,17 @@ public class DataProcessorTests extends TestCase{
 	
 	@Test
 	public void testDataProcessorResolverMeanCommand80211(){
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -278,10 +278,10 @@ public class DataProcessorTests extends TestCase{
 		
 		assertEquals(4, sSL.size());
 
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2410);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(10), 2420);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res3", "00:00:00:00:03", new RSS(10), 2430);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res4", "00:00:00:00:04", new RSS(10), 2440);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2410);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(10), 2420);
+		ScanSample80211 sSpl3 = new ScanSample80211("res3", "00:00:00:00:03", new RSS(10), 2430);
+		ScanSample80211 sSpl4 = new ScanSample80211("res4", "00:00:00:00:04", new RSS(10), 2440);
 		
 		assertEquals(true, sSL.contains(sSpl1));
 		assertEquals(true, sSL.contains(sSpl2));
@@ -289,25 +289,25 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(true, sSL.contains(sSpl4));
 		
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			assertEquals(10.0, scnSpl.rss.mean);
 		}
 	}
 	
 	@Test
 	public void testMultithreadedCommandProcessingMeanCommand80211(){
-		List<List<ScanResultGSM>> data = new ArrayList<List<ScanResultGSM>>();
-		List<ScanResultGSM> set1 = new ArrayList<ScanResultGSM>();
-		set1.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set1.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set1.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set1.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<List<ScanResult80211>> data = new ArrayList<List<ScanResult80211>>();
+		List<ScanResult80211> set1 = new ArrayList<ScanResult80211>();
+		set1.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set1.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set1.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set1.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
-		List<ScanResultGSM> set2 = new ArrayList<ScanResultGSM>();
-		set2.add(new ScanResultGSM("res1", "00:00:00:00:01", "caps", 10, 2410));
-		set2.add(new ScanResultGSM("res2", "00:00:00:00:02", "caps", 10, 2420));
-		set2.add(new ScanResultGSM("res3", "00:00:00:00:03", "caps", 10, 2430));
-		set2.add(new ScanResultGSM("res4", "00:00:00:00:04", "caps", 10, 2440));
+		List<ScanResult80211> set2 = new ArrayList<ScanResult80211>();
+		set2.add(new ScanResult80211("res1", "00:00:00:00:01", "caps", 10, 2410));
+		set2.add(new ScanResult80211("res2", "00:00:00:00:02", "caps", 10, 2420));
+		set2.add(new ScanResult80211("res3", "00:00:00:00:03", "caps", 10, 2430));
+		set2.add(new ScanResult80211("res4", "00:00:00:00:04", "caps", 10, 2440));
 		
 		data.add(set1);
 		data.add(set2);
@@ -353,10 +353,10 @@ public class DataProcessorTests extends TestCase{
 	    assertNotNull(sSL);
 		assertEquals(4, sSL.size());
 
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2410);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(10), 2420);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res3", "00:00:00:00:03", new RSS(10), 2430);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res4", "00:00:00:00:04", new RSS(10), 2440);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2410);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(10), 2420);
+		ScanSample80211 sSpl3 = new ScanSample80211("res3", "00:00:00:00:03", new RSS(10), 2430);
+		ScanSample80211 sSpl4 = new ScanSample80211("res4", "00:00:00:00:04", new RSS(10), 2440);
 		
 		assertEquals(true, sSL.contains(sSpl1));
 		assertEquals(true, sSL.contains(sSpl2));
@@ -364,7 +364,7 @@ public class DataProcessorTests extends TestCase{
 		assertEquals(true, sSL.contains(sSpl4));
 		
 		for(ScanSample sampel : sSL){
-			ScanSampleGSM scnSpl = (ScanSampleGSM) sampel;
+			ScanSample80211 scnSpl = (ScanSample80211) sampel;
 			assertEquals(10.0, scnSpl.rss.mean);
 		};
 	}

@@ -10,7 +10,7 @@ import de.ilimitado.smartspace.android.LFPTDBPersistance;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
@@ -50,7 +50,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 	
 	public void testSaveWithScanSample() {
 		LFPT lfptToSave = new LFPT(123456789, 95, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(10,20,30,40), 1010);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnSpl1);
 		lfptToSave.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList);
@@ -68,7 +68,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		
 		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(1, sSList.size());
-		scnSpl1 = (ScanSampleGSM) sSList.get(0);
+		scnSpl1 = (ScanSample80211) sSList.get(0);
 		
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
@@ -81,8 +81,8 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 
 	public void testSaveWith2ScanSamples() {
 		LFPT lfptToSave = new LFPT(123456789, 95, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
-		ScanSampleGSM scnSpl2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
+		ScanSample80211 scnSpl2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
 		ScanSampleList sSList = new ScanSampleList();
 		sSList.add(scnSpl1);
 		sSList.add(scnSpl2);
@@ -102,7 +102,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList.size());
 		
-		scnSpl1 = (ScanSampleGSM) sSList.get(0);
+		scnSpl1 = (ScanSample80211) sSList.get(0);
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
 		assertEquals(1010, scnSpl1.meanFrequency);
@@ -111,7 +111,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(31.0, scnSpl1.rss.deviation);
 		assertEquals(41.0, scnSpl1.rss.ssd);
 		
-		scnSpl2 = (ScanSampleGSM) sSList.get(1);
+		scnSpl2 = (ScanSample80211) sSList.get(1);
 		assertEquals("spl2", scnSpl2.SSID);
 		assertEquals("00:00:00:00:02", scnSpl2.MAC);
 		assertEquals(2020, scnSpl2.meanFrequency);
@@ -147,16 +147,16 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 	
 	public void testSaveWith2LFPTsAnd2ScanSamples() {
 		LFPT lfptToSave1 = new LFPT(123456789, 95, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
-		ScanSampleGSM scnSpl2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
+		ScanSample80211 scnSpl2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
 		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(30,50));
-		ScanSampleGSM scnSpl3 = new ScanSampleGSM("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
-		ScanSampleGSM scnSpl4 = new ScanSampleGSM("spl4", "00:00:00:00:04", new RSS(14,24,34,44), 4040);
+		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
+		ScanSample80211 scnSpl4 = new ScanSample80211("spl4", "00:00:00:00:04", new RSS(14,24,34,44), 4040);
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
@@ -177,7 +177,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
-		scnSpl1 = (ScanSampleGSM) sSList1.get(0);
+		scnSpl1 = (ScanSample80211) sSList1.get(0);
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
 		assertEquals(1010, scnSpl1.meanFrequency);
@@ -186,7 +186,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(31.0, scnSpl1.rss.deviation);
 		assertEquals(41.0, scnSpl1.rss.ssd);
 		
-		scnSpl2 = (ScanSampleGSM) sSList1.get(1);
+		scnSpl2 = (ScanSample80211) sSList1.get(1);
 		assertEquals("spl2", scnSpl2.SSID);
 		assertEquals("00:00:00:00:02", scnSpl2.MAC);
 		assertEquals(2020, scnSpl2.meanFrequency);
@@ -205,7 +205,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList2.size());
 		
-		scnSpl3 = (ScanSampleGSM) sSList2.get(0);
+		scnSpl3 = (ScanSample80211) sSList2.get(0);
 		assertEquals("spl3", scnSpl3.SSID);
 		assertEquals("00:00:00:00:03", scnSpl3.MAC);
 		assertEquals(3030, scnSpl3.meanFrequency);
@@ -214,7 +214,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(33.0, scnSpl3.rss.deviation);
 		assertEquals(43.0, scnSpl3.rss.ssd);
 		
-		scnSpl4 = (ScanSampleGSM) sSList2.get(1);
+		scnSpl4 = (ScanSample80211) sSList2.get(1);
 		assertEquals("spl4", scnSpl4.SSID);
 		assertEquals("00:00:00:00:04", scnSpl4.MAC);
 		assertEquals(4040, scnSpl4.meanFrequency);
@@ -226,16 +226,16 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 	
 	public void testSaveWith2LFPTsAnd2ScanSamplesAndSaveTheLFPTsTwice() {
 		LFPT lfptToSave1 = new LFPT(123456789, 95, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
-		ScanSampleGSM scnSpl2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
+		ScanSample80211 scnSpl2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
 		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(30,50));
-		ScanSampleGSM scnSpl3 = new ScanSampleGSM("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
-		ScanSampleGSM scnSpl4 = new ScanSampleGSM("spl4", "00:00:00:00:04", new RSS(14,24,34,44), 4040);
+		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
+		ScanSample80211 scnSpl4 = new ScanSample80211("spl4", "00:00:00:00:04", new RSS(14,24,34,44), 4040);
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
@@ -258,7 +258,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
-		scnSpl1 = (ScanSampleGSM) sSList1.get(0);
+		scnSpl1 = (ScanSample80211) sSList1.get(0);
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
 		assertEquals(1010, scnSpl1.meanFrequency);
@@ -267,7 +267,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(31.0, scnSpl1.rss.deviation);
 		assertEquals(41.0, scnSpl1.rss.ssd);
 		
-		scnSpl2 = (ScanSampleGSM) sSList1.get(1);
+		scnSpl2 = (ScanSample80211) sSList1.get(1);
 		assertEquals("spl2", scnSpl2.SSID);
 		assertEquals("00:00:00:00:02", scnSpl2.MAC);
 		assertEquals(2020, scnSpl2.meanFrequency);
@@ -286,7 +286,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList2 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList2.size());
 		
-		scnSpl3 = (ScanSampleGSM) sSList2.get(0);
+		scnSpl3 = (ScanSample80211) sSList2.get(0);
 		assertEquals("spl3", scnSpl3.SSID);
 		assertEquals("00:00:00:00:03", scnSpl3.MAC);
 		assertEquals(3030, scnSpl3.meanFrequency);
@@ -295,7 +295,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(33.0, scnSpl3.rss.deviation);
 		assertEquals(43.0, scnSpl3.rss.ssd);
 		
-		scnSpl4 = (ScanSampleGSM) sSList2.get(1);
+		scnSpl4 = (ScanSample80211) sSList2.get(1);
 		assertEquals("spl4", scnSpl4.SSID);
 		assertEquals("00:00:00:00:04", scnSpl4.MAC);
 		assertEquals(4040, scnSpl4.meanFrequency);
@@ -307,16 +307,16 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 
 	public void testSaveWith2LFPTsForSamePositionAndSameAPs() {
 		LFPT lfptToSave1 = new LFPT(123456789, 195, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(11,11,11,11), 1111);
-		ScanSampleGSM scnSpl2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(12,12,12,12), 1212);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(11,11,11,11), 1111);
+		ScanSample80211 scnSpl2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(12,12,12,12), 1212);
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
 		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl3 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(22,22,22,22), 2222);
-		ScanSampleGSM scnSpl4 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(21,21,21,21), 2121);
+		ScanSample80211 scnSpl3 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(22,22,22,22), 2222);
+		ScanSample80211 scnSpl4 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(21,21,21,21), 2121);
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
@@ -337,7 +337,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(2, sSList1.size());
 		
-		scnSpl1 = (ScanSampleGSM) sSList1.get(0);
+		scnSpl1 = (ScanSample80211) sSList1.get(0);
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
 		assertEquals(1616, scnSpl1.meanFrequency);
@@ -346,7 +346,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(16.0, scnSpl1.rss.deviation);
 		assertEquals(16.0, scnSpl1.rss.ssd);
 		
-		scnSpl2 = (ScanSampleGSM) sSList1.get(1);
+		scnSpl2 = (ScanSample80211) sSList1.get(1);
 		assertEquals("spl2", scnSpl2.SSID);
 		assertEquals("00:00:00:00:02", scnSpl2.MAC);
 		assertEquals(1717, scnSpl2.meanFrequency);
@@ -359,16 +359,16 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 
 	public void testSaveWith2LFPTsForSamePositionAndOneDifferentAP() {
 		LFPT lfptToSave1 = new LFPT(123456789, 195, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl1 = new ScanSampleGSM("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
-		ScanSampleGSM scnSpl2 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
+		ScanSample80211 scnSpl1 = new ScanSample80211("spl1", "00:00:00:00:01", new RSS(11,21,31,41), 1010);
+		ScanSample80211 scnSpl2 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(12,22,32,42), 2020);
 		ScanSampleList sSList1 = new ScanSampleList();
 		sSList1.add(scnSpl1);
 		sSList1.add(scnSpl2);
 		lfptToSave1.add(Configuration.getInstance().sensor80211.scanner80211.ID, sSList1);
 		
 		LFPT lfptToSave2 = new LFPT(987654321, 185, new IGeoPoint(3,7));
-		ScanSampleGSM scnSpl3 = new ScanSampleGSM("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
-		ScanSampleGSM scnSpl4 = new ScanSampleGSM("spl2", "00:00:00:00:02", new RSS(14,24,34,44), 4040);
+		ScanSample80211 scnSpl3 = new ScanSample80211("spl3", "00:00:00:00:03", new RSS(13,23,33,43), 3030);
+		ScanSample80211 scnSpl4 = new ScanSample80211("spl2", "00:00:00:00:02", new RSS(14,24,34,44), 4040);
 		ScanSampleList sSList2 = new ScanSampleList();
 		sSList2.add(scnSpl3);
 		sSList2.add(scnSpl4);
@@ -389,7 +389,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		sSList1 = (ScanSampleList) lfpt.get(Configuration.getInstance().sensor80211.scanner80211.ID);
 		assertEquals(3, sSList1.size());
 		
-		scnSpl1 = (ScanSampleGSM) sSList1.get(0);
+		scnSpl1 = (ScanSample80211) sSList1.get(0);
 		assertEquals("spl1", scnSpl1.SSID);
 		assertEquals("00:00:00:00:01", scnSpl1.MAC);
 		assertEquals(1010, scnSpl1.meanFrequency);
@@ -398,7 +398,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(31.0, scnSpl1.rss.deviation);
 		assertEquals(41.0, scnSpl1.rss.ssd);
 		
-		scnSpl2 = (ScanSampleGSM) sSList1.get(1);
+		scnSpl2 = (ScanSample80211) sSList1.get(1);
 		assertEquals("spl2", scnSpl2.SSID);
 		assertEquals("00:00:00:00:02", scnSpl2.MAC);
 		assertEquals(3030, scnSpl2.meanFrequency);
@@ -407,7 +407,7 @@ public class AndroidLocalDBPersistanceStrategyTest extends AndroidTestCase{
 		assertEquals(33.0, scnSpl2.rss.deviation);
 		assertEquals(43.0, scnSpl2.rss.ssd);
 		
-		scnSpl3 = (ScanSampleGSM) sSList1.get(2);
+		scnSpl3 = (ScanSample80211) sSList1.get(2);
 		assertEquals("spl3", scnSpl3.SSID);
 		assertEquals("00:00:00:00:03", scnSpl3.MAC);
 		assertEquals(3030, scnSpl3.meanFrequency);

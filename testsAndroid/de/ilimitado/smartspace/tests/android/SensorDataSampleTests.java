@@ -9,7 +9,7 @@ import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSampleGSM;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
 import de.ilimitado.smartspace.tests.junit.MockSample;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
@@ -124,10 +124,10 @@ public class SensorDataSampleTests extends TestCase{
 		SensorDataSample sds1 = new SensorDataSample(123456789){};
 		SensorDataSample sds2 = new SensorDataSample(987654321){};
 		
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2460);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(60), 2410);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(20), 2420);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(20), 2420);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2460);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(60), 2410);
+		ScanSample80211 sSpl3 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(20), 2420);
+		ScanSample80211 sSpl4 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(20), 2420);
 
 		ScanSampleList sSplList1 = new ScanSampleList();
 		sSplList1.add(sSpl1);
@@ -147,14 +147,14 @@ public class SensorDataSampleTests extends TestCase{
 		sSplList1 = (ScanSampleList) sds1.get("ScanSample80211");
 		
 		assertEquals(2, sSplList1.size());
-		sSpl1 = (ScanSampleGSM) sSplList1.get(0);
+		sSpl1 = (ScanSample80211) sSplList1.get(0);
 		assertEquals("00:00:00:00:01", sSpl1.MAC);
 		assertEquals("res1", sSpl1.SSID);
 		assertEquals(2440, sSpl1.meanFrequency);
 		assertEquals(15.0, sSpl1.rss.mean);
 		assertEquals(0.0, sSpl1.rss.deviation);
 		
-		sSpl2 = (ScanSampleGSM) sSplList1.get(1);
+		sSpl2 = (ScanSample80211) sSplList1.get(1);
 		assertEquals("00:00:00:00:02", sSpl2.MAC);
 		assertEquals("res2", sSpl2.SSID);
 		assertEquals(2415, sSpl2.meanFrequency);
@@ -168,10 +168,10 @@ public class SensorDataSampleTests extends TestCase{
 		SensorDataSample sds1 = new SensorDataSample(123456789){};
 		SensorDataSample sds2 = new SensorDataSample(987654321){};
 		
-		ScanSampleGSM sSpl1 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(10), 2460);
-		ScanSampleGSM sSpl2 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(20), 2410);
-		ScanSampleGSM sSpl3 = new ScanSampleGSM("res2", "00:00:00:00:02", new RSS(30), 2420);
-		ScanSampleGSM sSpl4 = new ScanSampleGSM("res1", "00:00:00:00:01", new RSS(40), 2420);
+		ScanSample80211 sSpl1 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(10), 2460);
+		ScanSample80211 sSpl2 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(20), 2410);
+		ScanSample80211 sSpl3 = new ScanSample80211("res2", "00:00:00:00:02", new RSS(30), 2420);
+		ScanSample80211 sSpl4 = new ScanSample80211("res1", "00:00:00:00:01", new RSS(40), 2420);
 
 		ScanSampleList sSplList1 = new ScanSampleList();
 		sSplList1.add(sSpl1);
@@ -191,17 +191,17 @@ public class SensorDataSampleTests extends TestCase{
 		sSplList1 = (ScanSampleList) sds1.get("ScanSample80211");
 		assertEquals(2, sSplList1.size());
 		
-		sSpl1 = (ScanSampleGSM) sSplList1.get(0);
+		sSpl1 = (ScanSample80211) sSplList1.get(0);
 		assertEquals(10.0, sSpl1.rss.mean);
-		sSpl2 = (ScanSampleGSM) sSplList1.get(1);
+		sSpl2 = (ScanSample80211) sSplList1.get(1);
 		assertEquals(20.0, sSpl2.rss.mean);
 		
 		sSplList2 = (ScanSampleList) sds1.get("ScanSample80211Scanner2");
 		assertEquals(2, sSplList2.size());
 
-		sSpl3 = (ScanSampleGSM) sSplList2.get(0);
+		sSpl3 = (ScanSample80211) sSplList2.get(0);
 		assertEquals(30.0, sSpl3.rss.mean);		
-		sSpl4 = (ScanSampleGSM) sSplList2.get(1);
+		sSpl4 = (ScanSample80211) sSplList2.get(1);
 		assertEquals(40.0, sSpl4.rss.mean);
 	}
 }

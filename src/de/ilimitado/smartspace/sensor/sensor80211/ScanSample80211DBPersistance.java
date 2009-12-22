@@ -24,9 +24,9 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 		"( " +
 			SensorDataSample.VALUE_ID 			 + " STRING KEY, "  +
 			LFPT.VALUE_NAME 					 + " STRING, "  +
-			ScanSampleGSM.VALUE_SSID           + " STRING, "  +
-			ScanSampleGSM.VALUE_MAC            + " STRING, "  +
-			ScanSampleGSM.VALUE_MEAN_FREQUENCY + " INTEGER, " +
+			ScanSample80211.VALUE_SSID           + " STRING, "  +
+			ScanSample80211.VALUE_MAC            + " STRING, "  +
+			ScanSample80211.VALUE_MEAN_FREQUENCY + " INTEGER, " +
 			RSS.VALUE_RSS_MEAN                   + " DOUBLE, "  +
 			RSS.VALUE_RSS_VARIANCE               + " DOUBLE, "  +
 			RSS.VALUE_RSS_DEVIATION              + " DOUBLE, "  +
@@ -46,9 +46,9 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 								"( " +
 									SensorDataSample.VALUE_ID  + ", " +
 									LFPT.VALUE_NAME + ", " +	
-									ScanSampleGSM.VALUE_SSID + ", " +
-									ScanSampleGSM.VALUE_MAC + ", " +
-									ScanSampleGSM.VALUE_MEAN_FREQUENCY + ", " +
+									ScanSample80211.VALUE_SSID + ", " +
+									ScanSample80211.VALUE_MAC + ", " +
+									ScanSample80211.VALUE_MEAN_FREQUENCY + ", " +
 									RSS.VALUE_RSS_MEAN + ", " +
 									RSS.VALUE_RSS_VARIANCE + ", " +
 									RSS.VALUE_RSS_DEVIATION + ", " +
@@ -56,7 +56,7 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 								" ) VALUES ";
 		
 		for(ScanSample sSpl : sSPlList){
-			ScanSampleGSM sSpl80211 = (ScanSampleGSM) sSpl;
+			ScanSample80211 sSpl80211 = (ScanSample80211) sSpl;
 			 queryList.add(sqlInsertQueryPrefix + 
 					 			"( " +
 					 				"'" + sdSpl.getID() + "', " + 
@@ -82,28 +82,28 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 		if(sSPlList.isEmpty()) return queryList;
 		
 		for(ScanSample sSpl : sSPlList){
-			ScanSampleGSM sSpl80211 = (ScanSampleGSM) sSpl;
+			ScanSample80211 sSpl80211 = (ScanSample80211) sSpl;
 			if(sSpl.isMerged())
 				queryList.add(	
 					"UPDATE " + getTableName() + 
 					" SET " +
 						LFPT.VALUE_NAME						  + "='"  + ((LFPT)sdSpl).getIndoorGP().name  + "', " +
-						ScanSampleGSM.VALUE_SSID 			  + "='" + sSpl80211.SSID + "', " +
-						ScanSampleGSM.VALUE_MEAN_FREQUENCY  + "="  + sSpl80211.meanFrequency + ", " +
+						ScanSample80211.VALUE_SSID 			  + "='" + sSpl80211.SSID + "', " +
+						ScanSample80211.VALUE_MEAN_FREQUENCY  + "="  + sSpl80211.meanFrequency + ", " +
 						RSS.VALUE_RSS_MEAN 			+ "=" + sSpl80211.rss.mean + ", " +
 						RSS.VALUE_RSS_VARIANCE 		+ "=" + sSpl80211.rss.variance + ", " +
 						RSS.VALUE_RSS_DEVIATION 	+ "=" + sSpl80211.rss.deviation + ", " +
 						RSS.VALUE_RSS_SSD 			+ "=" + sSpl80211.rss.ssd + " " +
-					" WHERE " + SensorDataSample.VALUE_ID + "='" + sdSpl.getID() + "' AND " + ScanSampleGSM.VALUE_MAC + "='" + sSpl80211.MAC + "'");
+					" WHERE " + SensorDataSample.VALUE_ID + "='" + sdSpl.getID() + "' AND " + ScanSample80211.VALUE_MAC + "='" + sSpl80211.MAC + "'");
 			else
 				queryList.add(
 						"INSERT INTO " + getTableName() + 
 						"( " +
 							SensorDataSample.VALUE_ID  + ", " +	
 							LFPT.VALUE_NAME + ", " +	
-							ScanSampleGSM.VALUE_SSID + ", " +
-							ScanSampleGSM.VALUE_MAC + ", " +
-							ScanSampleGSM.VALUE_MEAN_FREQUENCY + ", " +
+							ScanSample80211.VALUE_SSID + ", " +
+							ScanSample80211.VALUE_MAC + ", " +
+							ScanSample80211.VALUE_MEAN_FREQUENCY + ", " +
 							RSS.VALUE_RSS_MEAN + ", " +
 							RSS.VALUE_RSS_VARIANCE + ", " +
 							RSS.VALUE_RSS_DEVIATION + ", " +
@@ -128,9 +128,9 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 	@Override
 	public String getSQLSelectQuery(String sdSplID) {
 		return "SELECT " +
-			ScanSampleGSM.VALUE_SSID + ", " +
-			ScanSampleGSM.VALUE_MAC + ", " +
-			ScanSampleGSM.VALUE_MEAN_FREQUENCY + ", " +
+			ScanSample80211.VALUE_SSID + ", " +
+			ScanSample80211.VALUE_MAC + ", " +
+			ScanSample80211.VALUE_MEAN_FREQUENCY + ", " +
 			RSS.VALUE_RSS_MEAN + ", " +
 			RSS.VALUE_RSS_VARIANCE + ", " +
 			RSS.VALUE_RSS_DEVIATION + ", " +
@@ -144,15 +144,15 @@ public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
 		ScanSampleList sSplList = new ScanSampleList();
 		if(cursor.moveToFirst()){
 			do {
-				String ssid = cursor.getString(cursor.getColumnIndex(ScanSampleGSM.VALUE_SSID));
-				String bssid = cursor.getString(cursor.getColumnIndex(ScanSampleGSM.VALUE_MAC));
-				int frequency = cursor.getInt(cursor.getColumnIndex(ScanSampleGSM.VALUE_MEAN_FREQUENCY));
+				String ssid = cursor.getString(cursor.getColumnIndex(ScanSample80211.VALUE_SSID));
+				String bssid = cursor.getString(cursor.getColumnIndex(ScanSample80211.VALUE_MAC));
+				int frequency = cursor.getInt(cursor.getColumnIndex(ScanSample80211.VALUE_MEAN_FREQUENCY));
 				double mean = cursor.getDouble(cursor.getColumnIndex(RSS.VALUE_RSS_MEAN));
 				double dev = cursor.getDouble(cursor.getColumnIndex(RSS.VALUE_RSS_DEVIATION));
 				double var = cursor.getDouble(cursor.getColumnIndex(RSS.VALUE_RSS_VARIANCE));
 				double ssd = cursor.getDouble(cursor.getColumnIndex(RSS.VALUE_RSS_SSD));
 				RSS rss = new RSS(mean, var, dev, ssd);
-				ScanSampleGSM sSpl = new ScanSampleGSM(ssid, bssid, rss, frequency);
+				ScanSample80211 sSpl = new ScanSample80211(ssid, bssid, rss, frequency);
 				sSplList.add(sSpl);
 			} while(cursor.moveToNext());
 			sdSpl.add(getTableName(), sSplList);
