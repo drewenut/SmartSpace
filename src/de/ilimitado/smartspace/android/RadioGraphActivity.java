@@ -2,12 +2,10 @@ package de.ilimitado.smartspace.android;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -36,58 +34,66 @@ public class RadioGraphActivity extends Activity {
 	public class JSCallback {
 
 		public String getGraphTitle() {
-			return "This is my graph, baby!";
+			return "PDF";
 		}  
 
 
-	        public void loadGraph() {
-			JSONArray dataArray = new JSONArray();
-
-			JSONObject data = new JSONObject();
-			
-			
-			try {
-//				{"label": p[x1(timestamp),y1(RSS)],[x2,y2],[x3,y3],[]....]}, 
-//				{"data": p[x1(timestamp),y1(RSS)],[x2,y2],[x3,y3],[]....]},
-//				{ "lines": { "show" : true }},
-//				{ "points": { "show" : true }}
-				data.put("data", getRawDataJSON().toString());
-				data.put("lines", "{ \"show\" : true }"); 
-				data.put("points", "{ \"show\" : true }");
-				
-				dataArray.put(data);
-				webView.loadUrl("javascript:GotGraph(" + dataArray.toString() + ")");
-			} catch (JSONException e) {
-				Log.e(LOG_TAG, e.getMessage());
-				Toast.makeText(RadioGraphActivity.this, "Error while building flot JSON configArray", Toast.LENGTH_SHORT);
-			}		
+        public void loadGraph() {
+//			JSON-Flot-Config-Format:
+//			[{
+//			"label": "Label",
+//			"lines": { "show" : true },
+//			"points": { "show" : true },...}
+//			"data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]
+//			},...]
+        	JSONArray flotConfig = getRawDataJSON();
+        	
+			webView.loadUrl("javascript:GotGraph(" + flotConfig.toString() + ")");
 		}
 
 
-			private JSONObject getRawDataJSON() {
-				try{
-					StringBuilder configString = new StringBuilder();
-					
-					String[] privateFiles = fileList();
-				    int fileCount = (privateFiles != null ? privateFiles.length : 0);
+		private JSONArray getRawDataJSON() {
+			JSONArray flotConfig = new JSONArray();
+			try{
+				String[] privateFiles = fileList();
+			    int fileCount = (privateFiles != null ? privateFiles.length : 0);
+			    
+			    for( int index = 0 ; index < fileCount; index++) {
+				    String fileName = privateFiles[index];
+				    StringBuilder plotValues = new StringBuilder();
+				    plotValues.append("[");
+			    	
+				    JSONObject flotData = new JSONObject();
+				    flotData.put("label", fileName);
+					flotData.put("lines", "{ \"show\" : true }"); 
+					flotData.put("points", "{ \"show\" : true }");
 				    
-				    for( int index = 0 ; index < fileCount; index++) {
-					    FileInputStream fStream = openFileInput(privateFiles[index]);
-					    DataInputStream inStream = new DataInputStream(fStream);
-					    BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
-					    String line;
-					    while ((line = br.readLine()) != null)   {
-					       String[] values = line.split(";");
-					    }
-					    //Close the input stream
-					    inStream.close();
+				    FileInputStream fStream = openFileInput(fileName);
+				    DataInputStream inStream = new DataInputStream(fStream);
+				    BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
+				    String line;
+				    //skip first Line
+				    int lineCount = 1;
+				    while ((line = br.readLine()) != null)   {
+				       String[] values = line.split(";");
+				       if(values.length >= 2 && lineCount > 1) {
+				    	   plotValues.append("[" + values[0]);
+				    	   plotValues.append(",");
+				    	   plotValues.append(values[1] + "],");
+				       }
 				    }
-					
-				    }catch (Exception e){//Catch exception if any
-				      System.err.println("Error: " + e.getMessage());
-				    }
-				  }
-				return null;
-			}
+				    //remove last seperator (,)...
+				    plotValues.replace(plotValues.length(), plotValues.length(), "]");
+				    flotData.put("data", plotValues.toString());
+				    flotConfig.put(flotData);
+				    inStream.close();
+			    }
+		    } catch (Exception e) {
+		    	Log.e(LOG_TAG, e.getMessage());
+				Toast.makeText(RadioGraphActivity.this, "Error while building flot JSON configArray", Toast.LENGTH_SHORT);
+		    	e.printStackTrace();
+		    }
+		    return flotConfig;
+	   	}
 	}
 }
