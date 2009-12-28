@@ -5,29 +5,41 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.Registry;
-import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice;
+import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 
 public class SensorLoader {
 
 	private Dependencies dep;
+	private ArrayList<AbstractSensorDevice> sensorList;
 
+	@Deprecated
 	public SensorLoader(Dependencies dep) {
 		this.dep = dep;
+		sensorList = new ArrayList<AbstractSensorDevice>();
+		sensorList.add(new SensorDevice80211(dep));
+	}
+	
+	public SensorLoader(Dependencies dep, ArrayList<AbstractSensorDevice> sensorDevs) {
+		this.dep = dep;
+		this.sensorList = sensorDevs;
 	}
 	
 	public void loadSensors(){
-		SensorDevice sensorInstance = new SensorDevice(dep);
-		if (sensorInstance.deviceAvailable()){
-			sensorInstance.initSensorID();
-			sensorInstance.initSensorName();
-			sensorInstance.registerEvents(dep);
-			sensorInstance.registerProcessorCommands((DataCommandProvider)dep.sensorDependencies.registry.get(Registry.SENSOR_DATA_CMD_PROVIDER));
-			sensorInstance.registerDBPersistance((ScanSampleDBPersistanceProvider)dep.sensorDependencies.registry.get(Registry.SENSOR_SCANSAMPLE_DBPERS_PROVIDER));
-			dep.sensorDependencies.sensorManager.addSensor(sensorInstance);
+		for(AbstractSensorDevice dev : sensorList) {
+			
+			if (dev.deviceAvailable()){
+				dev.initSensorID();
+				dev.initSensorName();
+				dev.registerEvents(dep);
+				dev.registerProcessorCommands((DataCommandProvider)dep.sensorDependencies.registry.get(Registry.SENSOR_DATA_CMD_PROVIDER));
+				dev.registerDBPersistance((ScanSampleDBPersistanceProvider)dep.sensorDependencies.registry.get(Registry.SENSOR_SCANSAMPLE_DBPERS_PROVIDER));
+				dep.sensorDependencies.sensorManager.addSensor(dev);
+			}
 		}
 	}
 

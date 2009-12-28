@@ -2,13 +2,14 @@ package de.ilimitado.smartspace.tests.junit.config;
 
 import java.util.HashMap;
 
+import de.ilimitado.smartspace.config.ConfigScanner80211Passive;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.config.ConfigDataCommands;
 import de.ilimitado.smartspace.config.ConfigSensing;
 import de.ilimitado.smartspace.config.ConfigPersistence;
 import de.ilimitado.smartspace.config.ConfigLocalization;
-import de.ilimitado.smartspace.config.ConfigScanner80211Passive;
+import de.ilimitado.smartspace.config.ConfigScannerGSMCell;
 import de.ilimitado.smartspace.config.ConfigSensor80211;
 
 public class MockConfigTranslator implements ConfigTranslator{

@@ -9,12 +9,12 @@ import de.ilimitado.smartspace.RTFPT;
 import de.ilimitado.smartspace.RadioMap;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
+import de.ilimitado.smartspace.SensorFusionator;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.SimpleEuclideanDistanceProvider;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 import de.ilimitado.smartspace.sensing.DataProcessor;
-import de.ilimitado.smartspace.sensorFusion.SensorDataSampleFusionator;
 import de.ilimitado.smartspace.utils.L;
 
 
@@ -33,7 +33,7 @@ public class RTFPTSyncStrategy extends SensingStrategy {
 	public SensorDataSample fusionate(HashMap<String, ScanSampleList>  resultSamples) {
 		double orientationTMP = 1; //TODO Orientation
 		RTFPT rtFPT = DataSampleFactory.getInstance().makeRTSample(orientationTMP);
-		SensorDataSampleFusionator rtFPTFusion = new SensorDataSampleFusionator(rtFPT);
+		SensorFusionator rtFPTFusion = new SensorFusionator(rtFPT);
 		rtFPTFusion.fusionate(resultSamples);
 		return rtFPTFusion.getResult();
 	}

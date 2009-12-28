@@ -13,7 +13,7 @@ import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBAdapter;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class PersistanceManagerTest extends AndroidTestCase{
@@ -26,7 +26,7 @@ public class PersistanceManagerTest extends AndroidTestCase{
 		super.setUp();
 		MockConfigTranslator.getInstance().translate();
 		ScanSampleDBPersistanceProvider sSplDBPersProvider = new ScanSampleDBPersistanceProvider();
-		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211.ID, ScanSample80211DBPersistance.class);
+		sSplDBPersProvider.putItem(Configuration.getInstance().sensor80211.scanner80211.ID, ScanSample80211DBAdapter.class);
 		sSplDBPersProvider.putItem(LFPT.VALUE_MAP_DEFAULT_DATA, LFPTDBPersistance.class);
 		AndroidLocalDBPersistanceStrategy persStrat = new AndroidLocalDBPersistanceStrategy(sSplDBPersProvider, getContext());
 		persMngr = new PersistanceManager(getContext());

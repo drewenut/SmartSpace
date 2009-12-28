@@ -1,4 +1,4 @@
-package de.ilimitado.smartspace.sensor.sensor80211;
+package de.ilimitado.smartspace.sensor.sensorGSM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,31 +10,29 @@ import de.ilimitado.smartspace.persistance.ValueMap;
 import de.ilimitado.smartspace.persistance.ValueMapContainer;
 import de.ilimitado.smartspace.utils.L;
 
-public class ScanSample80211 implements ScanSample{
+public class ScanSampleGSM implements ScanSample{
 	
-	public static final String VALUE_MEAN_FREQUENCY = "MeanFrequency";
-	public static final String VALUE_SSID = "SSID";
-	public static final String VALUE_MAC = "MAC";
-	private static final String LOG_TAG = "ScanSample80211";
+	public static final String VALUE_CID = "CID";
+	public static final String VALUE_PROVIDER = "PROVIDER";
+	private static final String LOG_TAG = "ScanSampleGSm";
 
-	public String SSID;
-	public String MAC;
+	public String CID;
+	public String PROVIDER;
 	public RSS rss;
 	public int meanFrequency;
 	private boolean isMerged = true;
 	
-	public ScanSample80211(String SSID, String BSSID, RSS rss, int frequency) {
-		this.SSID = SSID;
-		this.MAC = BSSID;
+	public ScanSampleGSM(String CID, String PROVIDER, RSS rss) {
+		this.CID = CID;
+		this.PROVIDER = PROVIDER;
 		this.rss = rss;
-		this.meanFrequency = frequency;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		if((o instanceof ScanSample80211)){
-			ScanSample80211 scanSample80211 = (ScanSample80211) o;
-			return (MAC.equals(scanSample80211.MAC) && SSID.equals(scanSample80211.SSID)) ? true : false;
+		if((o instanceof ScanSampleGSM)){
+			ScanSampleGSM scanSplGSM = (ScanSampleGSM) o;
+			return (CID.equals(scanSplGSM.CID)) ? true : false;
 		}
 		return false;
 	}
@@ -46,10 +44,12 @@ public class ScanSample80211 implements ScanSample{
 
 		
 		
-		sb.append("SSID: ").append(SSID == null ? none : SSID)
-				.append(", MAC: ").append(MAC == null ? none : MAC).append(
-						", RSS: ").append(rss.toString()).append(
-						", Mean frequency: ").append(meanFrequency);
+		sb.append("CID: ")
+		  .append(CID == null ? none : CID)
+		  .append(", PROVIDER: ")
+		  .append(PROVIDER == null ? none : PROVIDER)
+		  .append(", RSS: ")
+		  .append(rss.toString());
 
 		return sb.toString();
 	}
@@ -62,23 +62,21 @@ public class ScanSample80211 implements ScanSample{
 		ValueMap rssValues = (ValueMap) rss.toValue();
 		scanSampleValues.merge(rssValues);
 		
-		scanSampleValues.putInteger(VALUE_MEAN_FREQUENCY, meanFrequency);
-		scanSampleValues.putString(VALUE_SSID, SSID);
-		scanSampleValues.putString(VALUE_MAC, MAC);
+		scanSampleValues.putString(VALUE_CID, CID);
+		scanSampleValues.putString(VALUE_PROVIDER, PROVIDER);
 		return scanSampleValues;
 	}
 
 	@Override
 	public String getSampleID() {
-		return MAC+"-"+SSID;
+		return PROVIDER+"-"+CID;
 	}
 
 	@Override
 	public void fromValue(ValueMapContainer vmc) {
 		ValueMap values = (ValueMap) vmc;
-		meanFrequency = values.getAsInteger(VALUE_MEAN_FREQUENCY);
-		SSID = values.getAsString(VALUE_SSID);
-		MAC = values.getAsString(VALUE_MAC);
+		CID = values.getAsString(VALUE_CID);
+		PROVIDER = values.getAsString(VALUE_PROVIDER);
 		rss = new RSS();
 		rss.fromValue(values);
 	}
@@ -102,14 +100,13 @@ public class ScanSample80211 implements ScanSample{
 	
 	@Override
 	public void merge(ScanSample sSpl) {
-		ScanSample80211 sSpl80211 = (ScanSample80211) sSpl;
-		meanFrequency = (sSpl80211.meanFrequency + meanFrequency) / 2;
-		rss.mean = (sSpl80211.rss.mean + rss.mean) / 2;
-		rss.variance = (sSpl80211.rss.variance + rss.variance) / 2;
-		rss.deviation = (sSpl80211.rss.deviation + rss.deviation) / 2;
-		rss.ssd = (sSpl80211.rss.ssd + rss.ssd) / 2;
+		ScanSampleGSM sSplGSM = (ScanSampleGSM) sSpl;
+		rss.mean = (sSplGSM.rss.mean + rss.mean) / 2;
+		rss.variance = (sSplGSM.rss.variance + rss.variance) / 2;
+		rss.deviation = (sSplGSM.rss.deviation + rss.deviation) / 2;
+		rss.ssd = (sSplGSM.rss.ssd + rss.ssd) / 2;
 		//TODO Log until variance and deviation are computed and don't forget to remove LOG_TAG
-		L.d(LOG_TAG, "Merged " + SSID + " mean diff: " + (rss.mean - sSpl80211.rss.mean)); 
+		L.d(LOG_TAG, "Merged " + CID + " mean diff: " + (rss.mean - sSplGSM.rss.mean)); 
 	}
 
 	@Override
@@ -129,7 +126,6 @@ public class ScanSample80211 implements ScanSample{
 
 	@Override
 	public ScanSample getDefaultScanSample() {
-		return new ScanSample80211(SSID, MAC, new RSS(), meanFrequency);
+		return new ScanSampleGSM(CID, PROVIDER, new RSS());
 	}
-
 }
