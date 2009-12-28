@@ -25,6 +25,7 @@ import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
+import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 import de.ilimitado.smartspace.sensor.sensorGSM.SensorDeviceGSM;
 
 public final class SmartSpaceFramework extends Service{
