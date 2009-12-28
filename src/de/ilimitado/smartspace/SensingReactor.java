@@ -69,7 +69,7 @@ public class SensingReactor implements Runnable{
 		if (sensorHandlerRegistry.isRegistered(eventID))
 			return sensorHandlerRegistry.getSensorHandler(eventID);
 		else
-			throw new SensorEventHandlerDoesNotExitException();
+			throw new SensorEventHandlerDoesNotExitException(eventID + " not Registered");
 	}
 
 	@Override
