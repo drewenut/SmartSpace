@@ -90,7 +90,7 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sSplDBPers.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211DBPersistance.class);
+			sSplDBPers.putItem(SENSOR_80211_AP_SCAN_EVENT_ID, ScanSample80211DBAdapter.class);
 		}
 	}
 

@@ -101,7 +101,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	@Override
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {
 		if(isActive()) {
-			sSplDBPers.putItem(GSM_CELL_SCAN_EVENT_ID, ScanSampleGSMDBPersistance.class);
+			sSplDBPers.putItem(GSM_CELL_SCAN_EVENT_ID, GSMDBAdapter.class);
 		}
 	}
 	

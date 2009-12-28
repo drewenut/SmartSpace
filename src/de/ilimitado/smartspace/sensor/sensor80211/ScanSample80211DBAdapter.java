@@ -11,7 +11,7 @@ import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistance;
 
-public class ScanSample80211DBPersistance implements ScanSampleDBPersistance {
+public class ScanSample80211DBAdapter implements ScanSampleDBPersistance {
 
 	@Override
 	public String getTableName() {

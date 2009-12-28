@@ -13,16 +13,16 @@ import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBPersistance;
+import de.ilimitado.smartspace.sensor.sensor80211.ScanSample80211DBAdapter;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 
 public class ScanSample80211DBPersistanceTest {
 
-	private ScanSample80211DBPersistance dbPers;
+	private ScanSample80211DBAdapter dbPers;
 
 	@Before
 	public void setUp() throws Exception {
-		dbPers = new ScanSample80211DBPersistance();
+		dbPers = new ScanSample80211DBAdapter();
 		MockConfigTranslator.getInstance().translate();
 	}
 

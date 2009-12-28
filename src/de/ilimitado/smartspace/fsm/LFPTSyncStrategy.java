@@ -8,10 +8,10 @@ import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
+import de.ilimitado.smartspace.SensorFusionator;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.sensing.DataProcessor;
-import de.ilimitado.smartspace.sensorFusion.SensorDataSampleFusionator;
 import de.ilimitado.smartspace.utils.L;
 
 
@@ -31,7 +31,7 @@ public class LFPTSyncStrategy extends SensingStrategy {
 		IGeoPoint iGP = posMngr.getCurrentPosition();
 		double orientationTMP = 1; //TODO Orientation
 		LFPT lFpt = DataSampleFactory.getInstance().makeLFPT(iGP, orientationTMP);
-		SensorDataSampleFusionator lfptFusion = new SensorDataSampleFusionator(lFpt);
+		SensorFusionator lfptFusion = new SensorFusionator(lFpt);
 		lfptFusion.fusionate(resultSamples);
 		return lfptFusion.getResult();
 	}
