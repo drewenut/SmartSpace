@@ -175,6 +175,11 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 				e.printStackTrace();
 			}
 			L.d(LOG_TAG, "SensorEvent<ScanResult80211> added, current systemRawDataQueue Size "+systemRawDataQueue.size());
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				unregisterReceiver();
+			}
 			wifiManager.startScan();
 		}
 

@@ -132,7 +132,6 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 					else {
 						cellRssi = -113 + 2*asu;
 					}
-					postCellData();
 				}
 			}
 
@@ -142,6 +141,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 				if (location.getClass() == GsmCellLocation.class) {
 					GsmCellLocation currentLocation = (GsmCellLocation) location;
 					cellID = currentLocation.getCid();
+					postCellData();
 				}
 			}
 			
@@ -175,24 +175,26 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			activeCellisActive.set(true);
 			neighborCellisActive.set(true);
 			
-			(new ActiveCellScan("GSM-active-cell")).start();
-			(new NeigbhorCellsScan("GSM-neighbour-cells")).start();
+			try {
+				(new NeigbhorCellsScan("GSM-neighbour-cells")).start();
+				Thread.sleep(1000);
+				(new ActiveCellScan("GSM-active-cell")).start();
 			
-			while (isActive.get()) {
-				if (Thread.currentThread().isInterrupted()) {
-					isActive.set(false);
-					break;
-				}
-				try {
+				while (isActive.get()) {
+					if (Thread.currentThread().isInterrupted()) {
+						isActive.set(false);
+						break;
+					}
 					if(syncedNeighborCellList.size() > 0 && activeCellScan != null)
 						postSensorData();
 					Thread.sleep(500);
-				} catch (InterruptedException e) {
+					} 
+				}	
+			catch (InterruptedException e) {
 					isActive.set(false);
-				}
+					activeCellisActive.set(false);
+					neighborCellisActive.set(false);
 			}
-			activeCellisActive.set(false);
-			neighborCellisActive.set(false);
 		}
 		
 		public String getEventID(){
