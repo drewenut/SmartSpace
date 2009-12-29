@@ -22,7 +22,7 @@ import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
 import de.ilimitado.smartspace.sensor.sensor80211.RawDataHandler80211;
-import de.ilimitado.smartspace.sensor.sensor80211.SensorEventHandler80211;
+import de.ilimitado.smartspace.sensor.sensor80211.EventHandler80211;
 import de.ilimitado.smartspace.utils.L;
 
 public class SensorDeviceGSM extends AbstractSensorDevice {
@@ -85,10 +85,10 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	public void registerEvents(Dependencies dep) {
 		ArrayList<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>(); 
 		if(Configuration.getInstance().sensorGSM.scannerGSMCells.isActive) {
-			sensorHandlers.add(new SensorEventHandler80211(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			sensorHandlers.add(new EventHandlerGSM(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 		if(Configuration.getInstance().persistence.mode  == SmartSpaceFramework.SCIENCE_MODE) {
-			sensorHandlers.add(new RawDataHandler80211(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.persistanceManager));
+			sensorHandlers.add(new RawDataHandlerGSM(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.persistanceManager));
 		}
 		dep.sensorDependencies.reactor.registerHandler(GSM_CELL_SCAN_EVENT_ID, sensorHandlers);
 	}

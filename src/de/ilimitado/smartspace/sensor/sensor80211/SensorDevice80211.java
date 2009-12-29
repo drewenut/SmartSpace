@@ -72,7 +72,7 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 	public void registerEvents(Dependencies dep) {
 		ArrayList<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>(); 
 		if(Configuration.getInstance().sensor80211.scanner80211.isActive) {
-			sensorHandlers.add(new SensorEventHandler80211(SENSOR_ID, SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
+			sensorHandlers.add(new EventHandler80211(SENSOR_ID, SENSOR_80211_AP_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 		if(Configuration.getInstance().persistence.mode  == SmartSpaceFramework.SCIENCE_MODE) {
 			sensorHandlers.add(new RawDataHandler80211(SENSOR_ID, SENSOR_80211_AP_SCAN_EVENT_ID, dep.persistanceManager));

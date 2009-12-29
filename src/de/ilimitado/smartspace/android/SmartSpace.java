@@ -175,7 +175,8 @@ public class SmartSpace extends Activity {
 	}
 	
 	private void killService() {
-//		unbindService(ssfServiceConnection);
+		// TODO
+		// unbindService(ssfServiceConnection);
 	}
 	
 	private void ssfStart() {
