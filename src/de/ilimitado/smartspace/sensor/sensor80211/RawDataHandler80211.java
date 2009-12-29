@@ -71,7 +71,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 			for(ScanResult80211 scnRes : wifiAps) {
 				if (lasttime == 0)
 					lasttime = scnRes.timestamp;
-				double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC)/60;
+				double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC);
 				time  += deltaTime;
 				lasttime = scnRes.timestamp;
 				

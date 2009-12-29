@@ -71,7 +71,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	private ConfigScanner80211Passive getScanner80211PassiveConfig() {
 		String passive80211Name = androidPreferences.getString("scanner_config_80211_passive_scanner_name", "Sensor80211ScannerPassive");
 		boolean passive80211isActive = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_is_active", false);
-		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", true);
+		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", false);
 		int passive80211threshold = androidPreferences.getInt("scanner_config_80211_passive_threshold", 5);
 		long passive80211timeout = androidPreferences.getLong("scanner_config_80211_passive_timeout", 1000);
 		ConfigDataCommands passive80211dPCommands = getScanner80211DataProcessCommands();

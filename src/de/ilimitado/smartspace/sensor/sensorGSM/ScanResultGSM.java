@@ -9,11 +9,14 @@ public class ScanResultGSM {
     public int level;
     
     public int frequency;
+    
+    public long timestamp;
 
     public ScanResultGSM(int CID, String PROVIDER, int level) {
         this.CID = Integer.toString(CID);
         this.PROVIDER = PROVIDER;
         this.level = level;
+        this.timestamp = System.currentTimeMillis();
     }
 
     @Override

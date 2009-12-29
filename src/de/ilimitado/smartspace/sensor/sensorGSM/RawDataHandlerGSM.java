@@ -11,15 +11,14 @@ import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
-import de.ilimitado.smartspace.sensor.sensor80211.ScanResult80211;
 
 public class RawDataHandlerGSM extends AbstractSensorHandler {
 	
-	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
+	private HashMap<String, ArrayList<ScanResultGSM>> gsmEventCache = new HashMap<String, ArrayList<ScanResultGSM>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	//TODO put in Configuration Object...
-	//just take every 20th value from sensor data stream...
-	private static final int VALUE_COUNT_THRESHOLD = 20; 
+	//just take every 10th value from sensor data stream...
+	private static final int VALUE_COUNT_THRESHOLD = 10; 
 	
 	private final PersistanceManager persistanceMgr;
 	private int valueCount = 0;
@@ -32,15 +31,15 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 
 	@Override
 	public void handleEvent(SensorEvent<Collection> evt) {
-		List<ScanResult80211> wifiList =  (List<ScanResult80211>) evt.getEventHandle();
-		if(wifiList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
+		List<ScanResultGSM> cellList =  (List<ScanResultGSM>) evt.getEventHandle();
+		if(cellList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
 			Log.d(LOG_TAG, "Adding 80211 scan result to wifi event cache...");
-			for(ScanResult80211 scnRes : wifiList) {
-				String ap = scnRes.SSID;
-				if(!wifiEventCache.containsKey(ap)) {
-					wifiEventCache.put(ap, new ArrayList<ScanResult80211>());
+			for(ScanResultGSM scnRes : cellList) {
+				String cellID = scnRes.CID;
+				if(!gsmEventCache.containsKey(cellID)) {
+					gsmEventCache.put(cellID, new ArrayList<ScanResultGSM>());
 				}
-				wifiEventCache.get(ap).add(scnRes);
+				gsmEventCache.get(cellID).add(scnRes);
 			}
 			valueCount = 0;
 		}
@@ -57,22 +56,22 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	}
 	
 	private void postProcessWifiData() {
-		Set<String> activeAPs = wifiEventCache.keySet();
-		for(String ap : activeAPs) {
+		Set<String> cells = gsmEventCache.keySet();
+		for(String cellID : cells) {
 			StringBuffer eventDatabuffer = new StringBuffer();
 			long lasttime = 0;
 			double time = 0;
 			
 			eventDatabuffer.append("time;");
-			eventDatabuffer.append("802.11"+ ap + ";");
+			eventDatabuffer.append("GSM"+ cellID + ";");
 //				wifiBuffer.append("802.11;");
 			eventDatabuffer.append("\n");
 			
-			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(ap);
-			for(ScanResult80211 scnRes : wifiAps) {
+			ArrayList<ScanResultGSM> cellsList = gsmEventCache.get(cellID);
+			for(ScanResultGSM scnRes : cellsList) {
 				if (lasttime == 0)
 					lasttime = scnRes.timestamp;
-				double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC)/60;
+				double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC);
 				time  += deltaTime;
 				lasttime = scnRes.timestamp;
 				
@@ -82,7 +81,7 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 			}
 			
 			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
-			fileGW.save("wifi-log-"+ ap, eventDatabuffer);
+			fileGW.save("gsm-log-"+ cellID, eventDatabuffer);
 		}
 	}
 }
