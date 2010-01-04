@@ -3,6 +3,7 @@
     <string name="app_name">SmartSpace</string>
 	<!-- Menu -->
 	<string name="menu_preferences">Preferences</string>
+	<string name="menu_radio_graph">Radio Graph</string>
     
     <!-- Preferences -->
    	<string name="save">Save</string>

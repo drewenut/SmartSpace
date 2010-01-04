@@ -50,6 +50,7 @@ public class SmartSpace extends Activity {
 	protected static final int MSG_HTTP = 0x0001;
 	protected static final int MSG_SSF_LOC = 0x0002;
 	private static final int MENU_PREFERENCES = 0x0010;
+	private static final int MENU_RADIO_GRAPH = 0;
 	
 	private SSFLocationManager locationMngr;
 	private CharSequence NO_POSITION = "no position available";
@@ -130,6 +131,7 @@ public class SmartSpace extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_PREFERENCES, 0, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(0, MENU_RADIO_GRAPH, 1, R.string.menu_radio_graph).setIcon(android.R.drawable.ic_menu_recent_history);
 		return true;
 	}
 	
@@ -139,6 +141,9 @@ public class SmartSpace extends Activity {
 		switch (item.getItemId()) {
 			case MENU_PREFERENCES:
 				openPreferencesScreen();
+				break;
+			case MENU_RADIO_GRAPH:
+				startActivity(new Intent(this, RadioGraphActivity.class));
 				break;
 			default:
 				break;

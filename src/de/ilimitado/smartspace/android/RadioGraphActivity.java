@@ -28,7 +28,7 @@ public class RadioGraphActivity extends Activity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(myhandler, "testhandler");
-        webView.loadUrl("file:///android_asset/flot/html/dynamic.html");
+        webView.loadUrl("file:///android_asset/flot/html/graphPlotter.html");
 	}
 	
 	public class JSCallback {
@@ -48,7 +48,7 @@ public class RadioGraphActivity extends Activity {
 //			},...]
         	JSONArray flotConfig = getRawDataJSON();
         	
-			webView.loadUrl("javascript:GotGraph(" + flotConfig.toString() + ")");
+			webView.loadUrl("javascript:plotGraph(" + flotConfig.toString() + ")");
 		}
 
 
