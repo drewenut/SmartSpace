@@ -28,7 +28,7 @@ public class RadioGraphActivity extends Activity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(myhandler, "testhandler");
-        webView.loadUrl("file:///android_asset/flot/html/graphPlotter.html");
+        webView.loadUrl("file:///android_asset/flot/graphPlotter.html");
 	}
 	
 	public class JSCallback {
