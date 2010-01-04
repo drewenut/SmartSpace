@@ -86,7 +86,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			sensorHandlers.add(new EventHandlerGSM(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.sensorDependencies.eventSnychronizer));
 		}
 		if(Configuration.getInstance().persistence.mode  == SmartSpaceFramework.SCIENCE_MODE) {
-			sensorHandlers.add(new RawDataHandlerGSM(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.persistanceManager));
+			sensorHandlers.add(new RawDataHandlerGSM(SENSOR_ID, GSM_CELL_SCAN_EVENT_ID, dep.persistanceManager, dep.positionManager));
 		}
 		dep.sensorDependencies.reactor.registerHandler(GSM_CELL_SCAN_EVENT_ID, sensorHandlers);
 	}
@@ -163,11 +163,12 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		try {
 			long commitTime = System.currentTimeMillis();
 			ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
-			cells.add(activeCellScan);
 			
 			for(ScanResultGSM cell : cells) {
 				cell.timestamp = commitTime;
 			}
+			activeCellScan.timestamp = commitTime;
+			cells.add(activeCellScan);
 			
 			systemRawDataQueue.put(new SensorEvent<List<ScanResultGSM>>(cells, GSM_CELL_SCAN_EVENT_ID, SENSOR_ID));
 			L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());

@@ -39,7 +39,9 @@ public class ScanResultGSM {
             append(", PROVIDER: ").
             append(PROVIDER == null ? NONE : PROVIDER).
             append(", level: ").
-            append(level);
+            append(level).
+        	append(", timestamp: ").
+        	append(timestamp);
 
         return sb.toString();
     }

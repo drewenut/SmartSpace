@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
+import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
@@ -20,13 +21,15 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	//just take every 10th value from sensor data stream...
 	private static final int VALUE_COUNT_THRESHOLD = 10; 
 	
-	private final PersistanceManager persistanceMgr;
+	private final PersistanceManager persMgr;
+	private IndoorLocationManager locMngr;
 	private int valueCount = 0;
 	
 
-	public RawDataHandlerGSM(String associatedSensorID, String associatedEventID, PersistanceManager persMgr) {
+	public RawDataHandlerGSM(String associatedSensorID, String associatedEventID, PersistanceManager persMgr, IndoorLocationManager locMngr) {
 		super(associatedSensorID, associatedEventID);
-		this.persistanceMgr = persMgr;
+		this.persMgr = persMgr;
+		this.locMngr = locMngr;
 	}
 
 	@Override
@@ -57,30 +60,32 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	
 	private void postProcessWifiData() {
 		Set<String> cells = gsmEventCache.keySet();
-		for(String cellID : cells) {
-			StringBuffer eventDatabuffer = new StringBuffer();
-			long lasttime = 0;
-			double time = 0;
-			
-			eventDatabuffer.append("time;");
-			eventDatabuffer.append("cell"+ cellID + ";");
-			eventDatabuffer.append("\n");
-			
-			ArrayList<ScanResultGSM> cellsList = gsmEventCache.get(cellID);
-			for(ScanResultGSM scnRes : cellsList) {
-				if (lasttime == 0)
-					lasttime = scnRes.timestamp;
-				double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC);
-				time  += deltaTime;
-				lasttime = scnRes.timestamp;
+		if(!cells.isEmpty()) {
+			for(String cellID : cells) {
+				StringBuffer eventDatabuffer = new StringBuffer();
+				long lasttime = 0;
+				double time = 0;
 				
-				eventDatabuffer.append(time + ";");
-				eventDatabuffer.append(Integer.toString(scnRes.level) + ";");
+				eventDatabuffer.append("time;");
+				eventDatabuffer.append("cell"+ cellID + ";");
 				eventDatabuffer.append("\n");
+				
+				ArrayList<ScanResultGSM> cellsList = gsmEventCache.get(cellID);
+				for(ScanResultGSM scnRes : cellsList) {
+					if (lasttime == 0)
+						lasttime = scnRes.timestamp;
+					double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC);
+					time  += deltaTime;
+					lasttime = scnRes.timestamp;
+					
+					eventDatabuffer.append(time + ";");
+					eventDatabuffer.append(Integer.toString(scnRes.level) + ";");
+					eventDatabuffer.append("\n");
+				}
+				
+				FileGateway fileGW = (FileGateway) persMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
+				fileGW.save((locMngr.getCurrentPosition()).name + "-gsm-"+ cellID, eventDatabuffer);
 			}
-			
-			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
-			fileGW.save("gsm-log-"+ cellID, eventDatabuffer);
 		}
 	}
 }
