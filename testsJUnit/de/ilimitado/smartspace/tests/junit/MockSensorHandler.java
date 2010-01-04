@@ -1,6 +1,7 @@
 package de.ilimitado.smartspace.tests.junit;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.ilimitado.smartspace.AbstractSyncableSensorHandler;
@@ -35,5 +36,11 @@ public class MockSensorHandler extends AbstractSyncableSensorHandler {
 		List<List<?>> eventData = translateEvents();
 		eventSynchronizer.receiveSensorData(associatedEventID, eventData);
 		sensorEventThresholdQueue = new ArrayList<SensorEvent>();
+	}
+
+	@Override
+	public void onShutdown() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -63,8 +63,7 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 			double time = 0;
 			
 			eventDatabuffer.append("time;");
-			eventDatabuffer.append("GSM"+ cellID + ";");
-//				wifiBuffer.append("802.11;");
+			eventDatabuffer.append("cell"+ cellID + ";");
 			eventDatabuffer.append("\n");
 			
 			ArrayList<ScanResultGSM> cellsList = gsmEventCache.get(cellID);

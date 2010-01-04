@@ -31,7 +31,7 @@ public abstract class AbstractSensorHandler{
 		return this.associatedEventID;
 	}
 	
-	public void onShutdown() { }
+	public abstract void onShutdown();
 
 	public abstract void handleEvent(SensorEvent<Collection> evt);
 

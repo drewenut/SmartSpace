@@ -1,7 +1,8 @@
 package de.ilimitado.smartspace.sensor.sensorGSM;
 
 public class ScanResultGSM {
-    /** The Cell ID. */
+    private static final long EMPTY = 0;
+	/** The Cell ID. */
     public String CID;
     /** Mobile Carrier. */
     public String PROVIDER;
@@ -16,7 +17,7 @@ public class ScanResultGSM {
         this.CID = Integer.toString(CID);
         this.PROVIDER = PROVIDER;
         this.level = level;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = EMPTY;
     }
 
     @Override

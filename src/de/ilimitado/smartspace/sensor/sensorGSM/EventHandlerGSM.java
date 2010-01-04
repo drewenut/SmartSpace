@@ -9,4 +9,7 @@ public class EventHandlerGSM extends AbstractSyncableSensorHandler{
 	public EventHandlerGSM(String associatedSensorID, String associatedEventID, EventSynchronizer evtSync) {
 		super(associatedSensorID, associatedEventID, evtSync);
 	}
+
+	@Override
+	public void onShutdown() { }
 }

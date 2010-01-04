@@ -21,8 +21,6 @@ import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensor80211.RawDataHandler80211;
-import de.ilimitado.smartspace.sensor.sensor80211.EventHandler80211;
 import de.ilimitado.smartspace.utils.L;
 
 public class SensorDeviceGSM extends AbstractSensorDevice {
@@ -135,7 +133,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 				super.onSignalStrengthChanged(asu);
 				Log.d(LOG_TAG, "GSM Current Cell RSS changed: " + Integer.toString(asu));
 				
-				if(asu != -1 && cellID != SensorDeviceGSM.NO_CID) {
+				if(asu != -1) {
 					if(asu == 0) cellRssi = SensorDeviceGSM.NO_SIGNAL;
 					else if (asu == 31) cellRssi = SensorDeviceGSM.VERY_GOOD_SIGNAL;
 					else {
@@ -150,7 +148,8 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 				if (location.getClass() == GsmCellLocation.class) {
 					GsmCellLocation currentLocation = (GsmCellLocation) location;
 					cellID = currentLocation.getCid();
-					postCellData();
+					if(cellID != SensorDeviceGSM.NO_CID)
+						postCellData();
 				}
 			}
 			
@@ -162,8 +161,14 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 	
 	private synchronized void postSensorData() {
 		try {
+			long commitTime = System.currentTimeMillis();
 			ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
 			cells.add(activeCellScan);
+			
+			for(ScanResultGSM cell : cells) {
+				cell.timestamp = commitTime;
+			}
+			
 			systemRawDataQueue.put(new SensorEvent<List<ScanResultGSM>>(cells, GSM_CELL_SCAN_EVENT_ID, SENSOR_ID));
 			L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 		} catch (InterruptedException e) {

@@ -8,4 +8,7 @@ public class EventHandler80211 extends AbstractSyncableSensorHandler{
 public EventHandler80211(String associatedSensorID, String associatedEventID, EventSynchronizer evtSync) {
 		super(associatedSensorID, associatedEventID, evtSync);
 	}
+	
+	@Override
+	public void onShutdown() { }
 }

@@ -50,7 +50,6 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	 * Any Data that you Cache in handlers must be saved here!
 	 */
 
-	@Override
 	public void onShutdown() {
 		postProcessWifiData();
 	}
