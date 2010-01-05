@@ -1,0 +1,60 @@
+@CHARSET "ISO-8859-1";
+* {
+  margin:0;
+  padding: 0;
+  text-decoration: none;
+}
+
+* html body * {
+  overflow:visible;
+}
+
+* html iframe, * html frame {
+  overflow:auto;
+}
+
+* html frameset {
+  overflow:hidden;
+}
+
+body {
+  min-height: 101%;
+  font-size: 62.5%; /* Resets 1em to 10px */
+  font-family: Tahoma,Geneva,Kalimati,sans-serif;
+  text-align: left;
+  color: #000;
+  background-color: #fff;
+}
+fieldset, img {
+    border: 0 solid;
+}
+
+.hidden {
+  position: absolute;
+  top: -500px;
+  left: -500px;
+  height: 1px;
+  width: 1px;
+}
+
+div#rootPanel{
+  margin: 1px auto; /*centers and makes top and bottom margin*/
+  width: 1006px;
+  height: auto;
+  background-color: #fff;
+  color: #000;
+}
+
+a:link, a:visited {
+  color:#000;
+  text-decoration: none;
+}
+     
+a:hover, a:focus {
+  color: #172982;
+  text-decoration: underline;
+}
+
+a:active {
+  color:#000;
+}

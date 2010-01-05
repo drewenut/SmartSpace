@@ -3,6 +3,7 @@
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 		<title>Graph Plotter</title>
+		<link rel='stylesheet' type='text/css' href='layout.css' media='all' />
 		<script language="javascript" type="text/javascript" src="../jquery.js"></script>
 	    <script language="javascript" type="text/javascript" src="../jquery.flot.js"></script>
 		<script id="source" language="javascript" type="text/javascript">
@@ -11,13 +12,14 @@
 				window.testhandler.loadGraph();
 			}
 
-			function plot(gdata) {
-				console.log(var_dump(gdata));
-				plotGraph(gdata);
+			function plot(gdata, areaName) {
+				console.log(areaName);
+				$("#rootPanel").append($("<div id='" + areaName + "'></div>").style);
+				plotGraph(gdata, areaName);
 			}
 			
-			function plotGraph(gdata) {
-				$.plot($("#plotarea"), gdata, {
+			function plotGraph(gdata, areaName) {
+				$.plot($("#"+areaName), gdata, {
 					series: {
 		            lines: { show: true },
 		            points: { show: true }
@@ -28,6 +30,8 @@
 	</head>  
 	<body onload="load()">  
 		<h1 id="graphtitle">Title</h1>
-		<div id="plotarea" style="width:600px;height:300px;"></div>
+		<div id="rootPanel">
+			<div id="plotarea" style="width:600px;height:300px;"></div>
+		</div>
 	</body>
 </html>
