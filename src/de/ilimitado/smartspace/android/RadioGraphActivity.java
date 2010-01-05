@@ -28,7 +28,7 @@ public class RadioGraphActivity extends Activity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(myhandler, "testhandler");
-        webView.loadUrl("file:///android_asset/flot/graphPlotter.html");
+        webView.loadUrl("file:///android_asset/flot/html/graphPlotter.html");
 	}
 	
 	public class JSCallback {
@@ -42,13 +42,17 @@ public class RadioGraphActivity extends Activity {
 //			JSON-Flot-Config-Format:
 //			[{
 //			"label": "Label",
-//			"lines": { "show" : true },
-//			"points": { "show" : true },...}
 //			"data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]
-//			},...]
+//			},
+//        	{
+//    			"label": "Label",
+//    			"data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]
+//    			},{...}]
+        	 
         	JSONArray flotConfig = getRawDataJSON();
         	
-			webView.loadUrl("javascript:plotGraph(" + flotConfig.toString() + ")");
+			String floatContents = flotConfig.toString();
+			webView.loadUrl("javascript:plot(" + floatContents + ")");
 		}
 
 
@@ -60,13 +64,10 @@ public class RadioGraphActivity extends Activity {
 			    
 			    for( int index = 0 ; index < fileCount; index++) {
 				    String fileName = privateFiles[index];
-				    StringBuilder plotValues = new StringBuilder();
-				    plotValues.append("[");
-			    	
+				    JSONArray plotValues = new JSONArray();
+				    
 				    JSONObject flotData = new JSONObject();
 				    flotData.put("label", fileName);
-					flotData.put("lines", "{ \"show\" : true }"); 
-					flotData.put("points", "{ \"show\" : true }");
 				    
 				    FileInputStream fStream = openFileInput(fileName);
 				    DataInputStream inStream = new DataInputStream(fStream);
@@ -77,14 +78,14 @@ public class RadioGraphActivity extends Activity {
 				    while ((line = br.readLine()) != null)   {
 				       String[] values = line.split(";");
 				       if(values.length >= 2 && lineCount > 1) {
-				    	   plotValues.append("[" + values[0]);
-				    	   plotValues.append(",");
-				    	   plotValues.append(values[1] + "],");
+				    	   JSONArray lineValues = new JSONArray();
+				    	   lineValues.put(values[0]);
+				    	   lineValues.put(values[1]);
+				    	   plotValues.put(lineValues);
 				       }
+				       lineCount++;
 				    }
-				    //remove last seperator (,)...
-				    plotValues.replace(plotValues.length(), plotValues.length(), "]");
-				    flotData.put("data", plotValues.toString());
+				    flotData.put("data", plotValues);
 				    flotConfig.put(flotData);
 				    inStream.close();
 			    }
