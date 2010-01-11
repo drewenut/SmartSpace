@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class RadioGraphActivity extends Activity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(myhandler, "testhandler");
         webView.loadUrl("file:///android_asset/flot/html/graphPlotter.html");
+        webView.getSettings().setBuiltInZoomControls(true);
 	}
 	
 	public class JSCallback {
@@ -47,13 +49,12 @@ public class RadioGraphActivity extends Activity {
         	String[] privateFiles = fileList(); 
         	JSONTranslator jsonTransl = new JSONTranslator(privateFiles);
         	jsonTransl.sortFiles();
-        	int count = 0;
         	for(ArrayList<String> files : jsonTransl.getFiles()) {
         		JSONArray flotConfig;
 				try {
 					flotConfig = JSONTranslator.getJSON(files, RadioGraphActivity.this);
 					String floatContents = flotConfig.toString();
-	    			webView.loadUrl("javascript:plot(" + floatContents + ", plot"+ count++ +")");
+	    			webView.loadUrl("javascript:plot(" + floatContents + ")");
 				} catch (Exception e) {
 					Log.e(LOG_TAG, e.getMessage());
 					Toast.makeText(RadioGraphActivity.this, "Error while building flot JSON configArray", Toast.LENGTH_SHORT);

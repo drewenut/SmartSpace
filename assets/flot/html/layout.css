@@ -38,7 +38,6 @@ fieldset, img {
 }
 
 div#rootPanel{
-  margin: 1px auto; /*centers and makes top and bottom margin*/
   width: 1006px;
   height: auto;
   background-color: #fff;
@@ -57,4 +56,9 @@ a:hover, a:focus {
 
 a:active {
   color:#000;
+}
+
+.plot {
+  width: 600px;
+  height: 300px;
 }

@@ -62,7 +62,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 
 	private ConfigSensor80211 getSensorConfig80211() {
 		String sensor80211name = androidPreferences.getString("sensor_config_80211_sensor_name", "Sensor80211");
-		boolean sensor80211isActive = androidPreferences.getBoolean("sensor_config_80211_sensor_is_active", false);
+		boolean sensor80211isActive = androidPreferences.getBoolean("sensor_config_80211_sensor_is_active", true);
 		ConfigScanner80211Passive scn80211passive = getScanner80211PassiveConfig();
 		ConfigSensor80211 snsCfg80211 = new ConfigSensor80211(sensor80211name, sensor80211isActive, scn80211passive);
 		return snsCfg80211;
@@ -70,8 +70,8 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 
 	private ConfigScanner80211Passive getScanner80211PassiveConfig() {
 		String passive80211Name = androidPreferences.getString("scanner_config_80211_passive_scanner_name", "Sensor80211ScannerPassive");
-		boolean passive80211isActive = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_is_active", false);
-		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", false);
+		boolean passive80211isActive = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_is_active", true);
+		boolean passive80211synchronize = androidPreferences.getBoolean("scanner_config_80211_passive_scanner_synchronize", true);
 		int passive80211threshold = androidPreferences.getInt("scanner_config_80211_passive_threshold", 5);
 		long passive80211timeout = androidPreferences.getLong("scanner_config_80211_passive_timeout", 1000);
 		ConfigDataCommands passive80211dPCommands = getScanner80211DataProcessCommands();
@@ -89,7 +89,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	
 	private ConfigSensorGSM getSensorConfig_GSM() {
 		String sensorGSMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorGSM");
-		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", true);
+		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", false);
 		ConfigScannerGSMCell scannerGSMCell = getScannerGSMCellConfig();
 		ConfigSensorGSM snsCfgGSM = new ConfigSensorGSM(sensorGSMname, sensorGSMisActive, scannerGSMCell);
 		return snsCfgGSM;
@@ -97,8 +97,8 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 
 	private ConfigScannerGSMCell getScannerGSMCellConfig() {
 		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell__scanner_name", "scannerGsmRss");
-		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_is_active", true);
-		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_synchronize", true);
+		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_is_active", false);
+		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_synchronize", false);
 		int scnGSMThreshold = androidPreferences.getInt("scanner_config_gsm_cell_threshold", 10);
 		long scnGSMTimeout = androidPreferences.getLong("scanner_config_gsm_cell__timeout", 1000);
 		int scnGSMRefreshInterval = androidPreferences.getInt("scanner_config_gsm_cell__scanner_refresh_interval", 1000);

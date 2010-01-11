@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
+import de.ilimitado.smartspace.IndoorLocationManager;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
@@ -22,11 +23,13 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private final PersistanceManager persistanceMgr;
 	private int valueCount = 0;
+	private final IndoorLocationManager locMngr;
 	
 
-	public RawDataHandler80211(String associatedSensorID, String associatedEventID, PersistanceManager persMgr) {
+	public RawDataHandler80211(String associatedSensorID, String associatedEventID, PersistanceManager persMgr, IndoorLocationManager locMngr) {
 		super(associatedSensorID, associatedEventID);
 		this.persistanceMgr = persMgr;
+		this.locMngr = locMngr;
 	}
 
 	@Override
@@ -80,7 +83,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 			}
 			
 			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
-			fileGW.save("wifi-log-"+ ap, eventDatabuffer);
+			fileGW.save((locMngr.getCurrentPosition()).name + "-wifi-"+ ap, eventDatabuffer);
 		}
 	}
 }
