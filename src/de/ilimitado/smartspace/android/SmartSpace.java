@@ -183,7 +183,7 @@ public class SmartSpace extends Activity {
 				openPreferencesScreen();
 				break;
 			case MENU_RADIO_GRAPH:
-				item.setIntent(new Intent(this, RadioGraphActivity.class));
+				startActivity(new Intent(this, RadioGraphActivity.class));
 				break;
 			case MENU_LEARN:
 				toogleLearn(item);
@@ -463,7 +463,6 @@ public class SmartSpace extends Activity {
 	}
 	
 	private void appendConsoleText(String text) {
-		String text1 = getString(R.string.prompt);
 		if(text.equals(getString(R.string.prompt)))
 			text = "";
 		

@@ -25,6 +25,7 @@ body {
   color: #000;
   background-color: #fff;
 }
+
 fieldset, img {
     border: 0 solid;
 }
@@ -38,27 +39,17 @@ fieldset, img {
 }
 
 div#rootPanel{
-  width: 1006px;
+  width: 600px;
   height: auto;
   background-color: #fff;
   color: #000;
 }
 
-a:link, a:visited {
-  color:#000;
-  text-decoration: none;
-}
-     
-a:hover, a:focus {
-  color: #172982;
-  text-decoration: underline;
+h1 {
+	margin: 10px 0 10px 10px;
 }
 
-a:active {
-  color:#000;
-}
-
-.plot {
+div.plot {
   width: 600px;
   height: 300px;
 }

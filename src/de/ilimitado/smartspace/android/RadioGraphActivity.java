@@ -3,11 +3,12 @@ package de.ilimitado.smartspace.android;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -21,20 +22,15 @@ public class RadioGraphActivity extends Activity {
         setContentView(R.layout.graphview);        
         webView = (WebView) findViewById(R.id.graphwebview);
         
-        JSCallback myhandler = new JSCallback ();
+        JSCallback handler = new JSCallback ();
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(myhandler, "testhandler");
+        webView.addJavascriptInterface(handler, "graphPlotter");
         webView.loadUrl("file:///android_asset/flot/html/graphPlotter.html");
         webView.getSettings().setBuiltInZoomControls(true);
 	}
 	
 	public class JSCallback {
-
-		public String getGraphTitle() {
-			return "PDF";
-		}  
-
 
         public void loadGraph() {
 //			JSON-Flot-Config-Format:
@@ -49,15 +45,22 @@ public class RadioGraphActivity extends Activity {
         	String[] privateFiles = fileList(); 
         	JSONTranslator jsonTransl = new JSONTranslator(privateFiles);
         	jsonTransl.sortFiles();
-        	for(ArrayList<String> files : jsonTransl.getFiles()) {
+        	for(ArrayList<String> sortedFileList : jsonTransl.getFiles()) {
         		JSONArray flotConfig;
+        		JSONObject graphMeta = new JSONObject();
+        		String[] fileMeta = sortedFileList.get(0).split("-");
+    		    String title = fileMeta[0];
+    		    String sensor = fileMeta[1];
+    		   
 				try {
-					flotConfig = JSONTranslator.getJSON(files, RadioGraphActivity.this);
-					String floatContents = flotConfig.toString();
-	    			webView.loadUrl("javascript:plot(" + floatContents + ")");
+					graphMeta.put("graphtitle", title);
+					graphMeta.put("sensor", sensor);
+					flotConfig = JSONTranslator.getJSON(sortedFileList, RadioGraphActivity.this);
+	    			webView.loadUrl("javascript:plot(" + flotConfig.toString() + ", " + graphMeta.toString() + ")");
 				} catch (Exception e) {
-					Log.e(LOG_TAG, e.getMessage());
-					Toast.makeText(RadioGraphActivity.this, "Error while building flot JSON configArray", Toast.LENGTH_SHORT);
+					String message = "Error while building flot JSON. Here is what i know: " + e.getMessage();
+					Log.e(LOG_TAG, message);
+					Toast.makeText(RadioGraphActivity.this, message, Toast.LENGTH_SHORT);
 			    	e.printStackTrace();
 				}
         	}
