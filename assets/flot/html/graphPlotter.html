@@ -16,10 +16,6 @@
 		function plot(data, meta) {
 			var plotName = "plot-" + chartID;		
 			
-			console.log("GraphTitle: " + meta.graphtitle);
-			console.log("Sensor: " + meta.sensor);
-			console.log(plotName);
-			
 			$("#rootPanel").append($("<h1 class='graphTitle'>" + meta.graphtitle + " (" + meta.sensor + ")</h1>")).append($("<div id='" + plotName + "' class='plot'></div>"));
 			plotGraph(data, plotName);
 			chartID++;
@@ -37,7 +33,7 @@
 	</script>
 	</head>  
 	<body onload="load()">  
-		<h1>Raw radio graphs!</h1>
+		<h1>Raw radio graphs:</h1>
 		<div id="rootPanel">
 		</div>
 	</body>

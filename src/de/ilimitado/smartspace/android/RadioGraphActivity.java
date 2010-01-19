@@ -3,7 +3,6 @@ package de.ilimitado.smartspace.android;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -32,16 +31,17 @@ public class RadioGraphActivity extends Activity {
 	
 	public class JSCallback {
 
-        public void loadGraph() {
-//			JSON-Flot-Config-Format:
-//			[{
-//			"label": "Label",
-//			"data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]
-//			},
-//        	{
-//    			"label": "Label",
-//    			"data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]
-//    			},{...}]
+        /**
+         * JSON-Flot-Config-Format:
+			[{
+			 "label": "Label",
+			 "data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]},
+		     {
+			 "label": "Label",
+			 "data": [[x1,y1],[timestamp,rss],[x3,y3],[]....]},
+			 {...}]
+         */
+		public void loadGraph() {
         	String[] privateFiles = fileList(); 
         	JSONTranslator jsonTransl = new JSONTranslator(privateFiles);
         	jsonTransl.sortFiles();
