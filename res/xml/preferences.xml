@@ -3,6 +3,16 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:title="Settings" 
 >
+	<ListPreference
+		android:key="input_method"
+	 	android:title="@string/input_method"
+	 	android:summary="@string/input_method_summary"
+		android:dialogTitle="@string/input_method_title"
+		android:entries="@array/input_method_selection"
+		android:entryValues="@array/input_method_selection_codes"
+		android:defaultValue="@string/input_method_default_value_dialog"
+	/>
+	
 	<PreferenceScreen
 	android:title="@string/position_algorithms">
 		<CheckBoxPreference

@@ -57,7 +57,7 @@ public final class SmartSpaceFramework extends Service{
 	}
 	
 	private void bootstrap() {
-		SharedPreferences androidPreferences = this.getSharedPreferences("smartSpace", 1);
+		SharedPreferences androidPreferences = this.getSharedPreferences("smartSpace", Context.MODE_WORLD_WRITEABLE);
 		AndroidConfigTranslator.getInstance(androidPreferences).translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		MotionDetector mtnDet = new MotionDetector();

@@ -18,22 +18,26 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -47,24 +51,30 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 public class SmartSpace extends Activity {
 
 	private static final String LOG_TAG = "SmartSpaceFramework";
-	protected static final int MSG_HTTP = 0x0001;
-	protected static final int MSG_SSF_LOC = 0x0002;
+	
+	private static final String INPUT_METHOD_QR = "0x0000";
+	private static final String INPUT_METHOD_DIALOG = "0x0001";
+	private static final int DIALOG_INPUT_METHOD = 0x0002;
+	
 	private static final int MENU_PREFERENCES = 0x0010;
-	private static final int MENU_RADIO_GRAPH = 0;
+	private static final int MENU_RADIO_GRAPH = 0x0011;
+	private static final int MENU_SERVER_PUSH = 0x0012;
+	private static final int MENU_FLUSH = 0x0013;
+	private static final int MENU_TRACK = 0x0014;
+	private static final int MENU_LEARN = 0x0015;
+
+	protected static final int MSG_HTTP = 0x0100;
+	protected static final int MSG_SSF_LOC = 0x0101;
 	
 	private SSFLocationManager locationMngr;
-	private CharSequence NO_POSITION = "no position available";
-	private Button learnButton;
 	private ScrollView consoleWrapper;
 	private TextView console;
 	private boolean learningActive = false;
 	private boolean rtActive = false;
-	private Button realTimeButton;
-	private Button sendGeoPoint;
-	private Button flushDatabase;
 	private SmartSpaceFramework.SSFBinder ssfBinder;
 	private SmartSpaceFramework ssf;
-	private IGeoPoint currentPosition = new IGeoPoint("na", 0, 0, 0);
+	private IGeoPoint currentLocation = new IGeoPoint("default", 0, 0, 0);
+	private SharedPreferences sharedPreferences;
 	private Handler handler = new Handler() { 
 		
 		@Override
@@ -74,15 +84,11 @@ public class SmartSpace extends Activity {
 				HttpResponse response = (HttpResponse) msg.obj;
 				StatusLine status = response.getStatusLine();
 				String result = Integer.toString(status.getStatusCode());
-				console.append("> STATUS_CODE: ");
-				console.append(result);
-				console.append("\n");
+				appendConsoleText(getString(R.string.html_request_status_code) + result);
 				break;
 			case MSG_SSF_LOC:
 				IGeoPoint currentlocation =  (IGeoPoint) msg.obj;
-				console.append("> ");
-				console.append("We got new position: " + currentlocation.toString());
-				console.append("\n");
+				appendConsoleText(getString(R.string.new_location) + currentlocation.toString());
 				break;
 			default:
 				break;
@@ -96,9 +102,9 @@ public class SmartSpace extends Activity {
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
 			handler.sendMessage(handler.obtainMessage(MSG_SSF_LOC, location));
 			
-			if(!currentPosition.equals(location)) {
+			if(!currentLocation.equals(location)) {
 				performHTTPRequest(location);
-				currentPosition = location;
+				currentLocation = location;
 			}
 			Log.d(LOG_TAG, "We got new position: " + location.toString());
 		}
@@ -117,6 +123,7 @@ public class SmartSpace extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		createService();
 		setupView();
 	}
@@ -130,8 +137,41 @@ public class SmartSpace extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_PREFERENCES, 0, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_RADIO_GRAPH, 1, R.string.menu_radio_graph).setIcon(android.R.drawable.ic_menu_recent_history);
+		menu.add(0, MENU_LEARN, 0, R.string.menu_learn);
+		menu.add(0, MENU_TRACK, 1, R.string.menu_track);
+		menu.add(0, MENU_FLUSH, 2, R.string.menu_flush);
+		menu.add(1, MENU_RADIO_GRAPH, 0, R.string.menu_radio_graph).setIcon(android.R.drawable.ic_menu_recent_history);
+		menu.add(1, MENU_PREFERENCES, 1, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(1, MENU_SERVER_PUSH, 2, R.string.menu_server_push);
+		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		if(learningActive) {
+			(menu.findItem(MENU_TRACK)).setEnabled(false);
+			(menu.findItem(MENU_FLUSH)).setEnabled(false);
+			(menu.findItem(MENU_RADIO_GRAPH)).setEnabled(false);
+			(menu.findItem(MENU_PREFERENCES)).setEnabled(false);
+			(menu.findItem(MENU_SERVER_PUSH)).setEnabled(false);
+		}
+		else if(rtActive) {
+			(menu.findItem(MENU_LEARN)).setEnabled(false);
+			(menu.findItem(MENU_FLUSH)).setEnabled(false);
+			(menu.findItem(MENU_RADIO_GRAPH)).setEnabled(false);
+			(menu.findItem(MENU_PREFERENCES)).setEnabled(false);
+			(menu.findItem(MENU_SERVER_PUSH)).setEnabled(false);
+		}
+		else
+		{
+			(menu.findItem(MENU_LEARN)).setEnabled(true);
+			(menu.findItem(MENU_TRACK)).setEnabled(true);
+			(menu.findItem(MENU_FLUSH)).setEnabled(true);
+			(menu.findItem(MENU_RADIO_GRAPH)).setEnabled(true);
+			(menu.findItem(MENU_PREFERENCES)).setEnabled(true);
+			(menu.findItem(MENU_SERVER_PUSH)).setEnabled(true);
+		}
 		return true;
 	}
 	
@@ -143,7 +183,19 @@ public class SmartSpace extends Activity {
 				openPreferencesScreen();
 				break;
 			case MENU_RADIO_GRAPH:
-				startActivity(new Intent(this, RadioGraphActivity.class));
+				item.setIntent(new Intent(this, RadioGraphActivity.class));
+				break;
+			case MENU_LEARN:
+				toogleLearn(item);
+				break;
+			case MENU_TRACK:
+				toogleTrack(item);
+				break;
+			case MENU_FLUSH:
+				flushDB();
+				break;
+			case MENU_SERVER_PUSH:
+				performHTTPRequest(currentLocation);
 				break;
 			default:
 				break;
@@ -151,9 +203,191 @@ public class SmartSpace extends Activity {
 		return true;
 	}
 	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+	    Dialog dialog;
+	    switch(id) {
+	    case DIALOG_INPUT_METHOD:
+	        return createInputDialog();
+	    default:
+	        dialog = null;
+	    }
+	    return dialog;
+	}
+	
+	private void flushDB() {
+		new AlertDialog.Builder(SmartSpace.this)
+        .setTitle(R.string.flush_db_warning)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setMessage(R.string.flush_db_confirm)
+        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                	AndroidConfigTranslator.getInstance(getSharedPreferences("smartSpace", 1)).translate();
+    				boolean flushed = deleteDatabase(Configuration.getInstance().persistence.dbName);
+    				if(flushed)
+    					appendConsoleText(R.string.flush_db_success);
+    				else
+    					appendConsoleText(R.string.flush_db_fail);
+                }
+        })
+        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    showMessage(getString(R.string.flush_db_cancel));
+                }
+        }).create().show();
+	}
+
+	private void toogleTrack(MenuItem item) {
+		if(!rtActive) {
+			ssfStart();
+			locationMngr.registerListener(indoorLocList);
+			appendConsoleText(R.string.start_track);
+			item.setTitle(R.string.menu_stop_track);
+			rtActive = true;
+		}
+		else if(rtActive){
+			locationMngr.unregisterListener(indoorLocList);
+			ssfKill();	
+			rtActive = false;
+			appendConsoleText(R.string.stop_track);
+			item.setTitle(R.string.menu_track);
+		}
+	}
+
+	private void toogleLearn(MenuItem item) {
+		if(!learningActive) {
+			String inputMethod = chooseInputMethod();
+			
+			if(inputMethod.equals(SmartSpace.INPUT_METHOD_DIALOG)) {
+				showDialog(DIALOG_INPUT_METHOD);
+			}
+			else if (inputMethod.equals(SmartSpace.INPUT_METHOD_QR)) {
+				startQRReader();
+			}
+            item.setTitle(R.string.menu_stop_learn);
+    	}
+    	else if(learningActive) {
+    		ssfKill();
+    		learningActive = false;
+    		item.setTitle(R.string.menu_learn);
+    		appendConsoleText(R.string.stop_recording);
+    	}
+	}
+	
+	
+
+	private void startQRReader() {
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+		startActivityForResult(intent, 0);
+	}
+
+	private Dialog createInputDialog() {
+		final Dialog dialog = new Dialog(this);
+		
+		dialog.setContentView(R.layout.dialog_location_input);
+		dialog.setTitle(R.string.input_method_dialog_title);
+		
+		TextView labelName = (TextView) dialog.findViewById(R.id.label_symbolic_loc_name);
+		labelName.setText(R.string.input_method_dialog_name);
+		
+		final EditText symName = (EditText) dialog.findViewById(R.id.symbolic_loc_name);
+		symName.setText(currentLocation.name);
+		
+		TextView labelXCord = (TextView) dialog.findViewById(R.id.label_loc_xCoord);
+		labelXCord.setText(R.string.input_method_dialog_xCoord);
+		
+		final EditText xCoord = (EditText) dialog.findViewById(R.id.loc_xCoord);
+		xCoord.setText(Integer.toString(currentLocation.position_x));
+		
+		TextView labelYCord = (TextView) dialog.findViewById(R.id.label_loc_yCoord);
+		labelYCord.setText(R.string.input_method_dialog_yCoord);
+		
+		final EditText yCoord = (EditText) dialog.findViewById(R.id.loc_yCoord);
+		yCoord.setText(Integer.toString(currentLocation.position_y));
+		
+		TextView labelZCord = (TextView) dialog.findViewById(R.id.label_loc_zCoord);
+		labelZCord.setText(R.string.input_method_dialog_zCoord);
+		
+		final EditText zCoord = (EditText) dialog.findViewById(R.id.loc_zCoord);
+		zCoord.setText(Integer.toString(currentLocation.floor));
+		
+		final Button learn = (Button) dialog.findViewById(R.id.learn_button);
+		
+		learn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				IGeoPoint iGP = new IGeoPoint(symName.getText().toString(), 
+										  Integer.parseInt(xCoord.getText().toString()),
+										  Integer.parseInt(yCoord.getText().toString()),
+										  Integer.parseInt(zCoord.getText().toString()));
+				Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
+            	startScan(iGP, acc);
+            	dialog.dismiss();
+            	appendConsoleText(getString(R.string.input_method_dialog_success) + iGP.toString());
+            	learningActive = true;
+                appendConsoleText(R.string.start_recording);
+			}
+		});
+		
+		return dialog;
+	}
+
+	private String chooseInputMethod() {
+		return sharedPreferences.getString("input_method", SmartSpace.INPUT_METHOD_DIALOG);
+	}
+
 	private void openPreferencesScreen() {
 		Intent intent = new Intent(this, EditPreferences.class);
 		startActivity(intent);
+	}
+	
+	//Push IGEOPoint to server
+	public void performHTTPRequest(final IGeoPoint iGP) {
+		
+		final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+		
+			public String handleResponse(HttpResponse response) {
+				handler.sendMessage(handler.obtainMessage(MSG_HTTP, response));
+				return "";
+			}
+		};
+		
+		new Thread("HTTPRequest") { 
+			@Override
+			public void run() {
+				try {
+					DefaultHttpClient client = new DefaultHttpClient();
+					client.getParams().setParameter("http.useragent","Smart Space Framework");
+					
+					URL serverUri = new URL("http://www.ilimitado.de/labs/SmartSpaceServer/de/ilimitado/smartspace/commit.php");
+					
+					List<BasicNameValuePair> formparams = new ArrayList<BasicNameValuePair>(1);
+					formparams.add(new BasicNameValuePair("position", iGP.toJSON()));
+					UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
+					
+					HttpPost postReq = new HttpPost(serverUri.toURI());
+					postReq.setEntity(entity);
+					
+					client.execute(postReq, responseHandler);
+				} catch (ClientProtocolException e) {
+					Log.e(LOG_TAG, "ClientProtocolException..., here is what i know:  ", e);
+					e.printStackTrace();
+				} catch (IOException e) {
+					Log.e(LOG_TAG, "IOException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+				catch (URISyntaxException e) {
+					Log.e(LOG_TAG, "URISyntaxException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+				catch (JSONException e) {
+					Log.e(LOG_TAG, "JSONException..., here is what i know:  ", e);
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 
 	
@@ -210,110 +444,30 @@ public class SmartSpace extends Activity {
 		consoleWrapper = new ScrollView(this);
 		console = new TextView(this);
 		console.setTextColor(Color.GREEN);
-		console.append("> ");
-		console.append(NO_POSITION);
-		console.append("\n");
+		appendConsoleText(R.string.welcome);
+		appendConsoleText(R.string.have_fun);
+		appendConsoleText(R.string.options_howto);
+		appendConsoleText(R.string.no_location);
+		appendConsoleText(R.string.prompt);
 		consoleWrapper.addView(console);
-		
-		final TextView stateChangedView = new TextView(this);
-		stateChangedView.setText("");
-			
-        final String defaultLBText = "Learn Some!";
-		learnButton = new Button(this);
-        learnButton.setText(defaultLBText);
-        learnButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-            	if(!learningActive) {
-            		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                    startActivityForResult(intent, 0);
-                    learningActive = true;
-                    learnButton.setText("Stop Learning...");
-            	}
-            	else if(learningActive) {
-            		ssfKill();
-            		learningActive = false;
-                    learnButton.setText(defaultLBText);
-            	}
-            }
-        });
-        
-        realTimeButton = new Button(this);
-		realTimeButton.setText("Go Real Time...");
-		realTimeButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				if(!rtActive) {
-					ssfStart();
-					locationMngr.registerListener(indoorLocList);
-					realTimeButton.setText("Tracking now...click to Stop!");
-					rtActive = true;
-				}
-				else if(rtActive){
-					locationMngr.unregisterListener(indoorLocList);
-					ssfKill();	
-					rtActive = false;
-					realTimeButton.setText("RT Positioning");
-				}
-			}
-		});	
-		
-		sendGeoPoint = new Button(this);
-		sendGeoPoint.setText("Push iGeoPoint to server");
-		sendGeoPoint.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				performHTTPRequest(currentPosition);
-			}
-			
-		});	
-		
-		flushDatabase = new Button(this);
-		flushDatabase.setText("Flush Database");
-		flushDatabase.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-                new AlertDialog.Builder(SmartSpace.this)
-                .setTitle("Warning!")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage("Do you realy want to flush the whole database? All Fingerprints will be lost!")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                        	AndroidConfigTranslator.getInstance(getSharedPreferences("smartSpace", 1)).translate();
-            				boolean flushed = deleteDatabase(Configuration.getInstance().persistence.dbName);
-            				if(flushed)
-            					showMessage("Database flushed successfully.");
-            				else
-            					showMessage("Error while flushing database.");
-                        }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            showMessage("Cancelled flushing database");
-                        }
-                }).create().show();
-				
-			}
-			
-		});	
-		
-		LinearLayout learnAndRealtimeButtons = new LinearLayout(this);
-		learnAndRealtimeButtons.setWeightSum(1.0f);
-		learnAndRealtimeButtons.setOrientation(LinearLayout.HORIZONTAL);
-		learnAndRealtimeButtons.addView(learnButton);
-		learnAndRealtimeButtons.addView(realTimeButton);
-		
-		LinearLayout pushAndFlushButtons = new LinearLayout(this);
-		pushAndFlushButtons.setOrientation(LinearLayout.HORIZONTAL);
-		pushAndFlushButtons.addView(sendGeoPoint);
-		pushAndFlushButtons.addView(flushDatabase);
-		
-		mainLayout.addView(learnAndRealtimeButtons);
-		mainLayout.addView(pushAndFlushButtons);
 		mainLayout.addView(consoleWrapper);
+	}
+	
+	private void showMessage(String message) {
+		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
+				.show();
+	}
+	
+	private void appendConsoleText(int resID) {
+		appendConsoleText(getString(resID));
+	}
+	
+	private void appendConsoleText(String text) {
+		String text1 = getString(R.string.prompt);
+		if(text.equals(getString(R.string.prompt)))
+			text = "";
+		
+		console.append("> " + text + "\n");
 	}
 	
 	//Called by ZXing QR-Code Scanner
@@ -322,74 +476,27 @@ public class SmartSpace extends Activity {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 try {
-                	ssfStart();
                 	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
                     Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
-                	locationMngr.setCurrentPosition(iGP, acc);
-                	showMessage(iGP.toString());
-                	showMessage("Starting Recording...");
+                	startScan(iGP, acc);
+                	appendConsoleText(getString(R.string.zxing_success) + ": "+ iGP.toString());
+        			learningActive = true;
+                    appendConsoleText(R.string.start_recording);
 				} catch (Exception e) {
-					showMessage("Fail " + e.getMessage());
+					appendConsoleText(getString(R.string.zxing_fail) + ": " + e.getMessage());
 					e.printStackTrace();
 				}
             } else if (resultCode == RESULT_CANCELED) {
-            	showMessage("Fail");
+            	appendConsoleText(R.string.zxing_fail);
             }
         }
     }
-	
-	private void showMessage(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
-				.show();
-	}
-		
-	//Push IGEOPoint to server
-	public void performHTTPRequest(final IGeoPoint iGP) {
-		
-		final ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-		
-			public String handleResponse(HttpResponse response) {
-				handler.sendMessage(handler.obtainMessage(MSG_HTTP, response));
-				return "";
-			}
-		};
-		
-		new Thread("HTTPRequest") { 
-			@Override
-			public void run() {
-				try {
-					DefaultHttpClient client = new DefaultHttpClient();
-					client.getParams().setParameter("http.useragent","Smart Space Framework");
-					
-					URL serverUri = new URL("http://www.ilimitado.de/labs/SmartSpaceServer/de/ilimitado/smartspace/commit.php");
-					
-					List<BasicNameValuePair> formparams = new ArrayList<BasicNameValuePair>(1);
-					formparams.add(new BasicNameValuePair("position", iGP.toJSON()));
-					UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
-					
-					HttpPost postReq = new HttpPost(serverUri.toURI());
-					postReq.setEntity(entity);
-					
-					client.execute(postReq, responseHandler);
-				} catch (ClientProtocolException e) {
-					Log.e(LOG_TAG, "ClientProtocolException..., here is what i know:  ", e);
-					e.printStackTrace();
-				} catch (IOException e) {
-					Log.e(LOG_TAG, "IOException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-				catch (URISyntaxException e) {
-					Log.e(LOG_TAG, "URISyntaxException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-				catch (JSONException e) {
-					Log.e(LOG_TAG, "JSONException..., here is what i know:  ", e);
-					e.printStackTrace();
-				}
-			}
-		}.start();
-	}
 
+	private void startScan(IGeoPoint iGP, Accuracy acc) {
+		ssfStart();
+		locationMngr.setCurrentPosition(iGP, acc);
+	}
+	
 	public TextView getDebugConsole() {
 		return console;
 	}
