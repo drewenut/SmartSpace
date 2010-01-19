@@ -14,21 +14,42 @@
 		}
 
 		function plot(data, meta) {
-			var plotName = "plot-" + chartID;		
+			var plotChartID = "plot-" + chartID;
+			var plotWrapID = "plotWrap-" + chartID;				
+
+			$("#rootPanel").append($("<div class='plotContainer'></div>"));
+			$(".plotContainer").append($("<canvas id='yLabel"+ plotChartID + "' class='yLabel' width='25' height='330'></canvas>"))
+			                   .append($("<div id='" + plotWrapID + "' class='plotWrap'></div>"));
 			
-			$("#rootPanel").append($("<h1 class='graphTitle'>" + meta.graphtitle + " (" + meta.sensor + ")</h1>")).append($("<div id='" + plotName + "' class='plot'></div>"));
-			plotGraph(data, plotName);
+			$("#"+plotWrapID).append($("<h2 class='graphTitle'>" + meta.graphtitle + " (" + meta.sensor + ")</h2>"))
+							 .append($("<div id='" + plotChartID + "' class='plot'></div>"))
+						     .append($("<canvas id='xLabel"+ plotChartID + "'class='xLabel' width='600' height='50'></canvas>"));
+				
+			var yCtx = getCanvasContext("yLabel"+ plotChartID);
+			var xCtx = getCanvasContext("xLabel"+ plotChartID);
+							
+		        if (xCtx && yCtx) {
+			    yCtx.translate(15, 420/2 );
+			    yCtx.rotate(270 * Math.PI / 180);
+			    yCtx.fillText('Signal Strength [dBM]', 0, 0);
+			    xCtx.textBaseline = 'middle';
+			    xCtx.fillText  ('time [sec]', 275, 15);
+		        }
+
+			$.plot($("#"+plotChartID), data, {
+				series: {
+	            			lines: { show: true },
+	            			points: { show: true }
+	        			}
+	    			}
+				
+			);
 			chartID++;
 		}
-		
-		function plotGraph(data, plotName) {
 
-			$.plot($("#"+plotName), data, {
-				series: {
-	            lines: { show: true },
-	            points: { show: true }
-	        	}
-	    });
+		function getCanvasContext(canvasID) {
+			var canvas = document.getElementById(canvasID);
+			return canvas.getContext("2d");
 		}
 	</script>
 	</head>  

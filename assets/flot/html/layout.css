@@ -39,17 +39,30 @@ fieldset, img {
 }
 
 div#rootPanel{
-  width: 600px;
+  width: 625px;
   height: auto;
   background-color: #fff;
   color: #000;
 }
 
 h1 {
-	margin: 10px 0 10px 10px;
+	margin: 10px 0 40px 50px;
+}
+
+h2.graphTitle {
+  height: 20px;
+  padding: 0 0 0 25px;
 }
 
 div.plot {
   width: 600px;
   height: 300px;
+}
+
+canvas.xLabel {
+  clear: left;
+}
+
+canvas.yLabel, div.plotWrap { 
+   float: left;
 }
