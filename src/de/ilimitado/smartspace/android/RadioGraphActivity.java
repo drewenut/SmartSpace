@@ -42,27 +42,32 @@ public class RadioGraphActivity extends Activity {
 			 {...}]
          */
 		public void loadGraph() {
-        	String[] privateFiles = fileList(); 
-        	JSONTranslator jsonTransl = new JSONTranslator(privateFiles);
-        	jsonTransl.sortFiles();
-        	for(ArrayList<String> sortedFileList : jsonTransl.getFiles()) {
-        		JSONArray flotConfig;
-        		JSONObject graphMeta = new JSONObject();
-        		String[] fileMeta = sortedFileList.get(0).split("-");
-    		    String title = fileMeta[0];
-    		    String sensor = fileMeta[1];
-    		   
-				try {
-					graphMeta.put("graphtitle", title);
-					graphMeta.put("sensor", sensor);
-					flotConfig = JSONTranslator.getJSON(sortedFileList, RadioGraphActivity.this);
-	    			webView.loadUrl("javascript:plot(" + flotConfig.toString() + ", " + graphMeta.toString() + ")");
-				} catch (Exception e) {
-					String message = "Error while building flot JSON. Here is what i know: " + e.getMessage();
-					Log.e(LOG_TAG, message);
-					Toast.makeText(RadioGraphActivity.this, message, Toast.LENGTH_SHORT);
-			    	e.printStackTrace();
-				}
+        	String[] privateFiles = fileList();
+        	if(privateFiles.length <= 0) {
+        		webView.loadUrl("javascript:plot()");
+        	}
+        	else {
+	        	JSONTranslator jsonTransl = new JSONTranslator(privateFiles);
+	        	jsonTransl.sortFiles();
+	        	for(ArrayList<String> sortedFileList : jsonTransl.getFiles()) {
+	        		JSONArray flotConfig;
+	        		JSONObject graphMeta = new JSONObject();
+	        		String[] fileMeta = sortedFileList.get(0).split("-");
+	    		    String title = fileMeta[0];
+	    		    String sensor = fileMeta[1];
+	    		   
+					try {
+						graphMeta.put("graphtitle", title);
+						graphMeta.put("sensor", sensor);
+						flotConfig = JSONTranslator.getJSON(sortedFileList, RadioGraphActivity.this);
+		    			webView.loadUrl("javascript:plot(" + flotConfig.toString() + ", " + graphMeta.toString() + ")");
+					} catch (Exception e) {
+						String message = "Error while building flot JSON. Here is what i know: " + e.getMessage();
+						Log.e(LOG_TAG, message);
+						Toast.makeText(RadioGraphActivity.this, message, Toast.LENGTH_SHORT);
+				    	e.printStackTrace();
+					}
+	        	}
         	}
         }
 	}

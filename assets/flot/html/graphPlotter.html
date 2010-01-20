@@ -14,6 +14,16 @@
 		}
 
 		function plot(data, meta) {
+			if(data) {
+				console.log(">0");
+				$("#status").text("Raw radio graphs: ");
+			}
+			else {
+				console.log("else");
+				$("#status").text("No data available :-(");
+			}
+				
+				
 			var plotChartID = "plot-" + chartID;
 			var plotWrapID = "plotWrap-" + chartID;				
 
@@ -54,7 +64,7 @@
 	</script>
 	</head>  
 	<body onload="load()">  
-		<h1>Raw radio graphs:</h1>
+		<h1 id="status"></h1>
 		<div id="rootPanel">
 		</div>
 	</body>

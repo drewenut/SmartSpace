@@ -241,30 +241,32 @@ public class SmartSpace extends Activity {
 	}
 	
 	private void flushFiles() {
-		new AlertDialog.Builder(SmartSpace.this)
-        .setTitle(R.string.flush_file_warning)
-        .setIcon(android.R.drawable.ic_dialog_alert)
-        .setMessage(R.string.flush_file_confirm)
-        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	String[] privateFiles = fileList();
-                	boolean allFilesDeleted = true;
-                	for(String file : privateFiles) {
-                		allFilesDeleted &= deleteFile(file);
-                	}
-    				if(allFilesDeleted)
-    					appendConsoleText(R.string.flush_file_success);
-    				else
-    					appendConsoleText(R.string.flush_file_fail 
-    									 + "The following files could not be deleted: " 
-    									 + privateFiles.toString());
-                }
-        })
-        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	appendConsoleText(getString(R.string.flush_file_cancel));
-                }
-        }).create().show();
+		final String[] privateFiles = fileList();
+		if(privateFiles.length > 0) {
+			new AlertDialog.Builder(SmartSpace.this)
+	        .setTitle(R.string.flush_file_warning)
+	        .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setMessage(R.string.flush_file_confirm)
+	        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                	boolean allFilesDeleted = true;
+	                	for(String file : privateFiles) {
+	                		allFilesDeleted &= deleteFile(file);
+	                	}
+	    				if(allFilesDeleted)
+	    					appendConsoleText(R.string.flush_file_success);
+	    				else
+	    					appendConsoleText(R.string.flush_file_fail 
+	    									 + "The following files could not be deleted: " 
+	    									 + privateFiles.toString());
+	                }
+	        })
+	        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                	appendConsoleText(getString(R.string.flush_file_cancel));
+	                }
+	        }).create().show();
+		}
 	}
 	
 	private void toogleTrack(MenuItem item) {
