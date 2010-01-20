@@ -20,8 +20,14 @@
 	<string name="flush_db_success">Database flushed successfully</string>
 	<string name="flush_db_fail">Error while flushing database</string>
 	<string name="flush_db_warning">Warning!</string>
-	<string name="flush_db_confirm">Do you really want to flush the whole database? All Fingerprints will be lost!</string>
+	<string name="flush_db_confirm">Do you really want to flush the whole database? All fingerprints will be lost!</string>
 	<string name="flush_db_cancel">Canceled flushing database</string>
+	
+	<string name="flush_file_success">Files deleted successfully</string>
+	<string name="flush_file_fail">Error while deleting files</string>
+	<string name="flush_file_warning">Warning!</string>
+	<string name="flush_file_confirm">Do you really want to delete all files? All raw data will be lost!</string>
+	<string name="flush_file_cancel">Delete files canceled</string>
 	
 	<string name="input_method_dialog_title">Enter location</string>
 	<string name="input_method_dialog_desc">You need to specify some coordinates and a symbolic location name!</string>
@@ -46,7 +52,7 @@
 	<string name="menu_stop_learn">Chill...</string>
 	<string name="menu_track">Go Real-Time...</string>
 	<string name="menu_stop_track">Back to static :-)</string>
-	<string name="menu_flush">Flush Radio Map</string>
+	<string name="menu_flush">Flush Storage</string>
 	<string name="menu_server_push">Push Location</string>
     
     <!-- Preferences -->
