@@ -2,6 +2,8 @@ package de.ilimitado.smartspace.sensor.sensorIMU;
 
 import java.util.ArrayList;
 
+import de.ilimitado.smartspace.sensor.sensorIMU.SensorDeviceIMU.ScannerMotion;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,11 +16,9 @@ public class MotionListener implements SensorEventListener {
 	
 	private final double NANO_SEC_TO_SEC = 1e-9;
 	
-	private ArrayList<InertialEvent> imuEventCache = new ArrayList<InertialEvent>();
-	private Handler shakeHandler;
+	private ArrayList<ScanResultIMU> imuEventCache = new ArrayList<ScanResultIMU>();
 	
-	public MotionListener(Handler shakeHandler) {
-		this.shakeHandler = shakeHandler;
+	public MotionListener(ScannerMotion scannerMotion) {
 	}
 	
 	@Override
@@ -28,12 +28,11 @@ public class MotionListener implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-			Log.d(LOG_TAG, "OnSensor changed...");
 			Sensor sensor = event.sensor;
             int type = sensor.getType();
             if(type == Sensor.TYPE_ACCELEROMETER || type == Sensor.TYPE_MAGNETIC_FIELD){
             	if(imuEventCache.size() <= ShakeDetector.EVENT_THRESHOLD )
-            		imuEventCache.add(new InertialEvent(event));
+            		imuEventCache.add(new ScanResultIMU(event));
             	else
             		detectShake();
             		imuEventCache.clear();
@@ -48,14 +47,14 @@ public class MotionListener implements SensorEventListener {
 		long lasttime = 0;
 		double time = 0;
 		
-		ArrayList<InertialEvent> sensorEvents = (ArrayList<InertialEvent>) imuEventCache.clone();
+		ArrayList<ScanResultIMU> sensorEvents = (ArrayList<ScanResultIMU>) imuEventCache.clone();
 		
 		float[] accelerometerSensorData = null;
 		float[] magneticFieldSensorData = null;
 		
 		double currentAcc = 0d;
 		
-		for (InertialEvent event : sensorEvents) {
+		for (ScanResultIMU event : sensorEvents) {
 
 			if(event.sensorType == Sensor.TYPE_ACCELEROMETER)
 				accelerometerSensorData = event.values;
