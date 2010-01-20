@@ -1,32 +1,19 @@
 package de.ilimitado.smartspace.sensor.sensorIMU;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.telephony.CellLocation;
-import android.telephony.NeighboringCellInfo;
-import android.telephony.PhoneStateListener;
-import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
-import de.ilimitado.ShakeDetector.IMUListener;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.SensorEvent;
-import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
-import de.ilimitado.smartspace.sensor.sensorGSM.GSMDBAdapter;
-import de.ilimitado.smartspace.sensor.sensorGSM.MeanCommandGSM;
-import de.ilimitado.smartspace.sensor.sensorGSM.RawDataHandlerGSM;
-import de.ilimitado.smartspace.sensor.sensorGSM.ScanResultGSM;
-import de.ilimitado.smartspace.sensor.sensorGSM.ScanSampleGSM;
 import de.ilimitado.smartspace.utils.L;
 
 public class SensorDeviceIMU extends AbstractSensorDevice {
@@ -102,25 +89,6 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 		return "sensor_imu";
 	}
 	
-	public synchronized void postSensorData() {
-		try {
-			long commitTime = System.currentTimeMillis();
-			ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
-			
-			for(ScanResultGSM cell : cells) {
-				cell.timestamp = commitTime;
-			}
-			activeCellScan.timestamp = commitTime;
-			cells.add(activeCellScan);
-			
-			systemRawDataQueue.put(new SensorEvent<List<ScanResultGSM>>(cells, GSM_CELL_SCAN_EVENT_ID, SENSOR_ID));
-			L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-
 	class ScannerMotion implements Runnable {
 
 		public AtomicBoolean isActive = new AtomicBoolean(false);
@@ -165,8 +133,10 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 			listenerRegistered = false;
 		}
 		
-		private void postMotionEvent() {
-			postSensorData();
+		public void postMotionEvent(android.hardware.SensorEvent event) {
+			SensorEvent<ScanResultIMU> sEvt = new SensorEvent<ScanResultIMU>(handle, eventType, eventSensor)
+			systemRawDataQueue.put(event);
+			L.d(LOG_TAG, "SensorEvent<ScanResultIMU> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 		}
 	}
 }
