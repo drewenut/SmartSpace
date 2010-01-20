@@ -15,12 +15,19 @@ import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.sensor.sensorGSM.ScanResultGSM;
 
 public class IMUMotionHandler extends AbstractSensorHandler {
 	
 	private final MotionDetector motDet;
+	private ArrayList<ScanResultGSM> motionEventBuffer = new ArrayList<ScanResultGSM>();
 	private final double NANO_SEC_TO_SEC = 1e-9;
 	
+	//TODO put in Configuration Object...
+	//just take every 10th value from sensor data stream...
+	private static final int VALUE_COUNT_THRESHOLD = 10; 
+	
+	private int valueCount = 0;
 
 	public IMUMotionHandler(String associatedSensorID, String associatedEventID, MotionDetector motDet) {
 		super(associatedSensorID, associatedEventID);
@@ -29,11 +36,9 @@ public class IMUMotionHandler extends AbstractSensorHandler {
 
 	@Override
 	public void handleEvent(SensorEvent<Collection> evt) {
-		List<ScanResultGSM> cellList =  (List<ScanResultGSM>) evt.getEventHandle();
-		if(cellList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
-			Log.d(LOG_TAG, "Adding 80211 scan result to wifi event cache...");
-			for(ScanResultGSM scnRes : cellList) {
-				String cellID = scnRes.CID;
+		ScanResultGSM mtnEvt =  (ScanResultGSM) evt.getEventHandle();
+		if(imuEvt != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
+			Log.d(LOG_TAG, "Adding Motion Event to motion event cache...");
 				if(!gsmEventCache.containsKey(cellID)) {
 					gsmEventCache.put(cellID, new ArrayList<ScanResultGSM>());
 				}

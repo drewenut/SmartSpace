@@ -134,8 +134,13 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 		}
 		
 		public void postMotionEvent(android.hardware.SensorEvent event) {
-			SensorEvent<ScanResultIMU> sEvt = new SensorEvent<ScanResultIMU>(handle, eventType, eventSensor)
-			systemRawDataQueue.put(event);
+			try {
+				ScanResultIMU scnResIMU = new ScanResultIMU(event);
+				SensorEvent<ScanResultIMU> sEvt = new SensorEvent<ScanResultIMU>(scnResIMU, IMU_SCAN_EVENT_MOTION_ID, SENSOR_ID);
+				systemRawDataQueue.put(sEvt);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			L.d(LOG_TAG, "SensorEvent<ScanResultIMU> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 		}
 	}

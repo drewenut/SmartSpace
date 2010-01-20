@@ -2,7 +2,6 @@ package de.ilimitado.smartspace.sensor.sensorIMU;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import de.ilimitado.smartspace.sensor.;*;;
 import android.hardware.SensorEventListener;
 import android.util.Log;
 import de.ilimitado.smartspace.sensor.sensorIMU.SensorDeviceIMU.ScannerMotion;
