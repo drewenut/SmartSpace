@@ -525,7 +525,7 @@ public class SmartSpace extends Activity {
 
 	private void startScan(IGeoPoint iGP, Accuracy acc) {
 		ssfStart();
-		locationMngr.setCurrentPosition(iGP, acc);
+//		locationMngr.setCurrentPosition(iGP, acc);
 	}
 	
 	public TextView getDebugConsole() {

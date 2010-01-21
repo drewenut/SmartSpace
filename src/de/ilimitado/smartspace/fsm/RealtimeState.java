@@ -10,8 +10,6 @@ import de.ilimitado.smartspace.utils.L;
 
 public class RealtimeState extends SensingState {
 	
-	private static final String LOG_TAG = "RealtimeState";
-	
 	private RTFPTSyncStrategy syncStrategy;
 	private LFPTPersistanceStrategy persGWStrategy;
 

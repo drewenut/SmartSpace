@@ -26,6 +26,7 @@ import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
+import de.ilimitado.smartspace.sensor.sensorIMU.SensorDeviceIMU;
 
 public final class SmartSpaceFramework extends Service{
 	
@@ -72,8 +73,9 @@ public final class SmartSpaceFramework extends Service{
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
-		sensorDevices.add(new SensorDevice80211(appDep));
+//		sensorDevices.add(new SensorDevice80211(appDep));
 //		sensorDevices.add(new SensorDeviceGSM(appDep));
+		sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();

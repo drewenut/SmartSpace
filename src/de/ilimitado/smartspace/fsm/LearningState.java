@@ -10,8 +10,6 @@ import de.ilimitado.smartspace.utils.L;
 
 public class LearningState extends SensingState {
 	
-	private static final String LOG_TAG = "LearningState";
-	
 	private LFPTSyncStrategy syncStrategy;
 	private AndroidLocalDBPersistanceStrategy persGWStrategy;
 

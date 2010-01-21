@@ -22,7 +22,7 @@ import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.sensing.DataProcessorResolver;
 
 public abstract class SensingState implements State {
-
+	protected static final String LOG_TAG = "SensingState";
 	protected SensorManager sMngr;
 	protected PersistanceManager persMngr;
 	protected EventSynchronizer evtSync;
