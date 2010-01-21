@@ -45,7 +45,7 @@ public class MotionDetector implements Runnable{
 		    	 ArrayList<ScanResultIMU> mtnEvts = mtnDataQueue.take();
 		    	 processMotionData(mtnEvts);
 		    	 enqueueMotionEvent(translateMotion());
-		    	 detectMotion();
+		    	 notifyMotionDetected(detectMotion());
 		    	 L.d(LOG_TAG, "Motion Queue item processed");
 		     } catch (InterruptedException e) {
 		    	 L.d(LOG_TAG, "Received interrupt for " + LOG_TAG + ", shutting down");
@@ -91,16 +91,13 @@ public class MotionDetector implements Runnable{
 		return currentAcc >= MTN_SENSITIVITY ? true : false;
 	}
 	
-	private void detectMotion() {
+	private boolean detectMotion() {
 		byte mtnDetects = 0;
 		for(Boolean mtn : mtnStream) {
 			if(mtn == true)
 				++mtnDetects;
 		}
-		if(mtnDetects >= QUEUE_CAPACITY/2)
-			notifyMotionDetected(true);
-		else
-			notifyMotionDetected(false);
+		return mtnDetects >= QUEUE_CAPACITY/2 ? true : false;
 	}
 
 	private void enqueueMotionEvent(Boolean mtn) {
@@ -127,5 +124,13 @@ public class MotionDetector implements Runnable{
 		for(MotionListener listener : mtnListeners){
 			listener.onMotionDetected(mtn);
 		}
+	}
+	
+	public void startMotionDetection() {
+		isAlive.set(true);		
+	}
+	
+	public void stopMotionDetection() {
+		isAlive.set(false);
 	}
 }

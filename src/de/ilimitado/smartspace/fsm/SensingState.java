@@ -8,6 +8,7 @@ import java.util.List;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
+import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorManager;
@@ -26,10 +27,12 @@ public abstract class SensingState implements State {
 	protected PersistanceManager persMngr;
 	protected EventSynchronizer evtSync;
 	protected SensingReactor sReactor;
+	private MotionDetector mtnDetector;
 	protected DataCommandProvider dCP;
 	protected List<String> syncSet;
 	protected HashMap<String, DataProcessor<ScanSampleList>> dataProcessors;
 	protected Collection<ArrayList<AbstractSensorHandler>> registeredEventHandlers;
+	protected Thread mtnDetectorWorker;
 	protected Thread syncWorker = null;
 	protected Thread sReactorWorker = null;
 	protected SensorHandlerProvider sHdlProv;
@@ -42,6 +45,7 @@ public abstract class SensingState implements State {
 		persMngr = dep.persistanceManager;
 		evtSync = dep.sensorDependencies.eventSnychronizer;
 		sReactor = dep.sensorDependencies.reactor;
+		mtnDetector = dep.motionDetector;
 		sHdlProv = (SensorHandlerProvider) dep.sensorDependencies.registry.get(Registry.SENSOR_HANDLER_PROVIDER);
 		//TODO Refactored, but now Methods on sReactor.getActiveEventHandlers() needs to be removed
 		registeredEventHandlers = sHdlProv.getValues();
@@ -63,9 +67,13 @@ public abstract class SensingState implements State {
 	
 	@Override
 	public void doActivity() {
+		mtnDetector.startMotionDetection();
 		evtSync.startSync(); 
 		sReactor.startDispatching(); 
 		persMngr.startPersistance(PersistanceManager.GATEWAY_LFPT);
+		
+		mtnDetectorWorker = new Thread(mtnDetector, "Motion Detector");
+		mtnDetectorWorker.start();
 		
 		syncWorker = new Thread(evtSync, "EventSynchronizer");
 		syncWorker.start();
@@ -80,15 +88,19 @@ public abstract class SensingState implements State {
 
 	@Override
 	public void exitState() {
+		mtnDetector.stopMotionDetection();
 		evtSync.stopSync();
 		sReactor.stopDispatching();
 		persMngr.stopPersistance(PersistanceManager.GATEWAY_LFPT);
 		
+		if (mtnDetector != null)
+			mtnDetectorWorker.interrupt();
 		if (syncWorker != null)
 			syncWorker.interrupt();
 		if (sReactorWorker != null)
 			sReactorWorker.interrupt();
 		
+		mtnDetector = null;
 		syncWorker = null;
 		sReactorWorker = null;
 
