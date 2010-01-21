@@ -47,6 +47,7 @@ import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
+import de.ilimitado.smartspace.utils.LogListener;
 
 public class SmartSpace extends Activity {
 
@@ -65,6 +66,7 @@ public class SmartSpace extends Activity {
 
 	protected static final int MSG_HTTP = 0x0100;
 	protected static final int MSG_SSF_LOC = 0x0101;
+	protected static final int MSG_LOG = 0x0102;
 	
 	private SSFLocationManager locationMngr;
 	private ScrollView consoleWrapper;
@@ -77,6 +79,7 @@ public class SmartSpace extends Activity {
 	private SharedPreferences sharedPreferences;
 	private Handler handler = new Handler() { 
 		
+
 		@Override
 		public void handleMessage(final Message msg) {
 			switch (msg.what) {
@@ -90,13 +93,16 @@ public class SmartSpace extends Activity {
 				IGeoPoint currentlocation =  (IGeoPoint) msg.obj;
 				appendConsoleText(getString(R.string.new_location) + currentlocation.toString());
 				break;
+			case MSG_LOG:
+				appendConsoleText(getString(R.string.log_msg) + ((String) msg.obj));
+				break;
 			default:
 				break;
 			}
 		}
 	};
 	
-	private iLocationListener indoorLocList = new iLocationListener(){
+	private iLocationListener iLocL = new iLocationListener(){
 
 		@Override
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
@@ -115,6 +121,15 @@ public class SmartSpace extends Activity {
 		@Override
 		public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) { }
 		
+	};
+	
+	private LogListener logL = new LogListener() {
+		
+		@Override
+		public void onLogMessage(String tag, String msg) {
+			String logMsg = tag + " " + msg;
+			handler.sendMessage(handler.obtainMessage(MSG_LOG, logMsg));
+		}
 	};
 	
 	
@@ -272,13 +287,13 @@ public class SmartSpace extends Activity {
 	private void toogleTrack(MenuItem item) {
 		if(!rtActive) {
 			ssfStart();
-			locationMngr.registerListener(indoorLocList);
+			locationMngr.registerListener(iLocL);
 			appendConsoleText(R.string.start_track);
 			item.setTitle(R.string.menu_stop_track);
 			rtActive = true;
 		}
 		else if(rtActive){
-			locationMngr.unregisterListener(indoorLocList);
+			locationMngr.unregisterListener(iLocL);
 			ssfKill();	
 			rtActive = false;
 			appendConsoleText(R.string.stop_track);
@@ -452,6 +467,7 @@ public class SmartSpace extends Activity {
 	
 	private void ssfStart() {
 		try {
+			ssf.registerLogListener(logL);
 			ssf.start();
 			locationMngr = ssf.getLocationManager(SmartSpaceFramework.INDOOR_POSITION_PROVIDER);
 		}
@@ -463,6 +479,7 @@ public class SmartSpace extends Activity {
 	}
 	
 	private void ssfKill() {
+		ssf.unregisterLogListener(logL);
 		ssf.kill();
 		try {
 			Thread.sleep(1000);

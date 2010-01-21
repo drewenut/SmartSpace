@@ -27,6 +27,8 @@ import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 import de.ilimitado.smartspace.sensor.sensorIMU.SensorDeviceIMU;
+import de.ilimitado.smartspace.utils.L;
+import de.ilimitado.smartspace.utils.LogListener;
 
 public final class SmartSpaceFramework extends Service{
 	
@@ -92,6 +94,14 @@ public final class SmartSpaceFramework extends Service{
 		default:
 			return null;
 		}
+	}
+	
+	public void registerLogListener(LogListener logL) {
+		L.registerListener(logL);
+	}
+	
+	public void unregisterLogListener(LogListener logL) {
+		L.unregisterListener(logL);
 	}
 
 	public void start() {

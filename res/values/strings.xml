@@ -16,6 +16,7 @@
 	<string name="stop_track">Tracking stopped...</string>
 	<string name="new_location">We got a new position: </string>
 	<string name="html_request_status_code">STATUS CODE</string>
+	<string name="log_msg">log: </string>
 	
 	<string name="flush_db_success">Database flushed successfully</string>
 	<string name="flush_db_fail">Error while flushing database</string>
