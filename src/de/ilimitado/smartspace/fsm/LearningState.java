@@ -36,17 +36,6 @@ public class LearningState extends SensingState {
 	
 	@Override
 	public State switchNextState(boolean pos, boolean mtn) {
-		//TODO 
-//		if(mtn){ }
-//		 switch off for now, Motion just used in RT State
-//			return new InertialState();
-//		else if(!pos && !mtn) {
-//			L.sd(LOG_TAG, "Switching to Realtime state...");
-//			return new RealtimeState();
-//		}
-		
-		//if(pos && !mtn) 
-		
 		L.sd(LOG_TAG, "Self Transition Realtime state...");
 		return this;
 	}
