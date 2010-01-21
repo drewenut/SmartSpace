@@ -63,10 +63,41 @@ public final class L {
      * notifies screen log listeners
      */
     public static int s(String tag, String msg) {
-        
-    	return Log.e(tag, msg);
+    	notifyListeners(tag, msg);
+    	return 1;
     }
     
+    /**
+     * notifies screen log listeners and writes to specified debug log
+     */
+    public static int sd(String tag, String msg) {
+    	notifyListeners(tag, msg);
+    	return Log.d(tag, msg);
+    }
+    
+    /**
+     * notifies screen log listeners and writes to specified info log
+     */
+    public static int si(String tag, String msg) {
+    	notifyListeners(tag, msg);
+    	return Log.i(tag, msg);
+    }
+    
+    /**
+     * notifies screen log listeners and writes to specified warning log
+     */
+    public static int sw(String tag, String msg) {
+    	notifyListeners(tag, msg);
+    	return Log.w(tag, msg);
+    }
+    
+    /**
+     * notifies screen log listeners and writes to specified error log
+     */
+    public static int se(String tag, String msg) {
+    	notifyListeners(tag, msg);
+    	return Log.e(tag, msg);
+    }
 
     public static void println(String tag, String msg) {
     	System.out.println("Log: "+ tag + ", " +msg);
@@ -127,17 +158,22 @@ public final class L {
 	}
 	
 	public static void registerListener(LogListener logL){
-		logListeners.add(mL);
+		logListeners.add(logL);
 	}
 	
-	public static void unregisterListener(LogListener mL){
-		if(logListeners.contains(mL))
-			logListeners.remove(mL);
+	public static void unregisterListener(LogListener logL){
+		if(logListeners.contains(logL))
+			logListeners.remove(logL);
 	}
 	
 	public static boolean listenersEmpty(){
 		return logListeners.isEmpty();
 	}
 	
+	private static void notifyListeners(String tag, String msg){
+		for(LogListener listener : logListeners){
+			listener.onLogMessage(tag, msg);
+		}
+	}
 }
 
