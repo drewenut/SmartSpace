@@ -15,7 +15,7 @@ public class IMUMotionHandler extends AbstractSensorHandler {
 	
 	//TODO put in Configuration Object...
 	//just take every 10th value from sensor data stream...
-	private static final int VALUE_COUNT_THRESHOLD = 10; 
+	private static final int VALUE_COUNT_THRESHOLD = 3; 
 	
 	private int valueCount = 0;
 

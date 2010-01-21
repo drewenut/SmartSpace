@@ -20,7 +20,7 @@ public final class L {
 
     public static final int ERROR = 6;
 
-    private static ArrayList<LogListener> logListeners;
+    private static ArrayList<LogListener> logListeners = new ArrayList<LogListener>();
     private static HashMap<String, Long> startTimes = new HashMap<String, Long>();
 	private static HashMap<String, Integer> counters = new HashMap<String, Integer>();
 

@@ -64,12 +64,13 @@ public class iLocationManager {
 	}
 
 	public void enqueueEstimatedPosition(List<WeightedIGeoPoint> positionRanking, Accuracy acc) {
-		//TODO handle empty list (example if database is empty...)
-		setPosition(positionRanking.get(0).igp, acc);
-		iGPRankedList = new ArrayList<IGeoPoint>(positionRanking.size()); 
-		for (WeightedIGeoPoint wGP : positionRanking) {
-			iGPRankedList.add(wGP.igp);
+		if(positionRanking.size() > 0) {
+			setPosition(positionRanking.get(0).igp, acc);
+			iGPRankedList = new ArrayList<IGeoPoint>(positionRanking.size()); 
+			for (WeightedIGeoPoint wGP : positionRanking) {
+				iGPRankedList.add(wGP.igp);
+			}
+			notifyLocationChanged(iGPRankedList, acc);
 		}
-		notifyLocationChanged(iGPRankedList, acc);
 	}
 }

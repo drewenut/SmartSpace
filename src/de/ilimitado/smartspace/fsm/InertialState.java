@@ -73,7 +73,6 @@ public class InertialState implements State {
 		}
 		//if(mtn) 
 		return this;
-		
 	}
 
 }

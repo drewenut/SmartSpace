@@ -107,15 +107,15 @@ public class FSM implements iLocationListener, MotionListener{
 	}
 	
 	public void doActivity(){
-		this.currentState.doActivity();
+		currentState.doActivity();
 	}
 	
 	private void enterState(){
-		this.currentState.enterState(dependencies);
+		currentState.enterState(dependencies);
 	}
 	
 	private void exitState(){
-		this.currentState.exitState();
+		currentState.exitState();
 	}
 
 	public State getCurrentState() {

@@ -516,6 +516,7 @@ public class SmartSpace extends Activity {
 			text = "";
 		
 		console.append("> " + text + "\n");
+		consoleWrapper.scrollTo(0, console.getHeight());
 	}
 	
 	//Called by ZXing QR-Code Scanner

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Looper;
@@ -17,8 +16,8 @@ public class MotionDetector implements Runnable{
 	private static final String LOG_TAG = "MotionDetector";
 
 	//TODO add to configurations
-	private static final double MTN_SENSITIVITY = 0.5d;
-	private static final int QUEUE_CAPACITY = 10;
+	private static final double MTN_SENSITIVITY = 0.3d;
+	private static final int QUEUE_CAPACITY = 4;
 	
 	private AtomicBoolean isAlive = new AtomicBoolean(false);
 	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> mtnDataQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();
@@ -118,7 +117,8 @@ public class MotionDetector implements Runnable{
 	}
 	
 	private void notifyMotionDetected(boolean mtn){
-		L.sd(LOG_TAG, "motion detected: " + Boolean.toString(mtn));
+		if(mtn)
+			L.sd(LOG_TAG, "motion detected");
 		for(MotionListener listener : mtnListeners){
 			listener.onMotionDetected(mtn);
 		}
