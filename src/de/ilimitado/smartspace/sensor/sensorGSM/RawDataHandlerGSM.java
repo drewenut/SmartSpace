@@ -8,7 +8,7 @@ import java.util.Set;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
-import de.ilimitado.smartspace.IndoorLocationManager;
+import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
@@ -22,11 +22,11 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	private static final int VALUE_COUNT_THRESHOLD = 10; 
 	
 	private final PersistanceManager persMgr;
-	private IndoorLocationManager locMngr;
+	private iLocationManager locMngr;
 	private int valueCount = 0;
 	
 
-	public RawDataHandlerGSM(String associatedSensorID, String associatedEventID, PersistanceManager persMgr, IndoorLocationManager locMngr) {
+	public RawDataHandlerGSM(String associatedSensorID, String associatedEventID, PersistanceManager persMgr, iLocationManager locMngr) {
 		super(associatedSensorID, associatedEventID);
 		this.persMgr = persMgr;
 		this.locMngr = locMngr;

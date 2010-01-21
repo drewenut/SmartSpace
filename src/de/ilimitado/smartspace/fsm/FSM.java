@@ -52,6 +52,8 @@ public class FSM implements iLocationListener, MotionListener{
 		enterState();
 		if(checkForTransition())
 			doTransition();
+		else
+			selfTransition();
 	}
 	
 	public void fixedPositionAction(boolean fpos){
@@ -91,6 +93,10 @@ public class FSM implements iLocationListener, MotionListener{
 		exitState();
 		nextState.enterState(dependencies);
 		currentState = nextState;
+		currentState.doActivity();
+	}
+	
+	private void selfTransition(){
 		currentState.doActivity();
 	}
 	

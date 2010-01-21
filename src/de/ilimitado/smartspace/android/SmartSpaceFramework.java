@@ -13,7 +13,7 @@ import android.os.PowerManager;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
-import de.ilimitado.smartspace.IndoorLocationManager;
+import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.SensingReactor;
@@ -65,7 +65,7 @@ public final class SmartSpaceFramework extends Service{
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
-		IndoorLocationManager indrLocMngr = new IndoorLocationManager();
+		iLocationManager indrLocMngr = new iLocationManager();
 		locationManager = new SSFLocationManager(indrLocMngr);
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);

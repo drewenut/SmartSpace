@@ -4,8 +4,8 @@ import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.utils.L;
 
 public class InitialState extends InertialState {
-
-	private static final String LOG_TAG = "InitialState";
+	//@Override
+	protected final String LOG_TAG = "InitialState";
 	
 	@Override
 	public void enterState(Dependencies dep) {
@@ -34,9 +34,9 @@ public class InitialState extends InertialState {
 			return new InertialState();
 		}
 		else {
-			L.d(LOG_TAG, "Switching to Realtime state...");
+			L.d(LOG_TAG, "Self Transition Initial State...");
 			// !pos && !mtn
-			return new RealtimeState();
+			return this;
 		}
 	}
 }

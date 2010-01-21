@@ -6,9 +6,9 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public class SSFLocationManager {
 
-	private final IndoorLocationManager indrLocMngr;
+	private final iLocationManager indrLocMngr;
 	
-	public SSFLocationManager(IndoorLocationManager posMngr) {
+	public SSFLocationManager(iLocationManager posMngr) {
 		this.indrLocMngr = posMngr;
 	}
 	

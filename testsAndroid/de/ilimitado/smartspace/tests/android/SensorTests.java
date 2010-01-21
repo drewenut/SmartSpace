@@ -13,7 +13,7 @@ import android.test.AndroidTestCase;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
-import de.ilimitado.smartspace.IndoorLocationManager;
+import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorDependencies;
@@ -45,7 +45,7 @@ public class SensorTests extends AndroidTestCase{
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(getContext());
 		sMng = new SensorManager();
-		IndoorLocationManager posMngr = new IndoorLocationManager();
+		iLocationManager posMngr = new iLocationManager();
 		EventSynchronizer sSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, sSync, sMng, systemRawDataQueue, reg);

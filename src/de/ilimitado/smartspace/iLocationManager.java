@@ -7,14 +7,14 @@ import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 
-public class IndoorLocationManager {
+public class iLocationManager {
 	
 	private ArrayList<iLocationListener> listeners = new ArrayList<iLocationListener>();
 	private IGeoPoint currPos = new IGeoPoint(0, 0);
 	private Accuracy currAcc = new Accuracy(Accuracy.DEFAULT_ACCURACY);
 	private ArrayList<IGeoPoint> iGPRankedList = new ArrayList<IGeoPoint>(0);
 	
-	public IndoorLocationManager() { }
+	public iLocationManager() { }
 	
 	public IGeoPoint getCurrentPosition() {
 		return currPos;

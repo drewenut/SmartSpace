@@ -9,7 +9,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.MotionDetector;
-import de.ilimitado.smartspace.IndoorLocationManager;
+import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorDependencies;
 import de.ilimitado.smartspace.SensorEvent;
@@ -38,7 +38,7 @@ public class FSMTest extends AndroidTestCase{
 		SensorManager sMng = new SensorManager();
 		final PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
 		sMng.setPowerManager(pm);
-		IndoorLocationManager posMngr = new IndoorLocationManager();
+		iLocationManager posMngr = new iLocationManager();
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);

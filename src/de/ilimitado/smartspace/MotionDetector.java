@@ -24,7 +24,7 @@ public class MotionDetector implements Runnable{
 	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> mtnDataQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();
 	private final LinkedList<Boolean> mtnStream = new LinkedList<Boolean>();
 	
-	private ArrayList<MotionListener> mtnListeners;
+	private ArrayList<MotionListener> mtnListeners = new ArrayList<MotionListener>();
 	double currentAcc = 0d;
 	private SensorManager sensorManager;
 

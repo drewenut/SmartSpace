@@ -93,14 +93,14 @@ public abstract class SensingState implements State {
 		sReactor.stopDispatching();
 		persMngr.stopPersistance(PersistanceManager.GATEWAY_LFPT);
 		
-		if (mtnDetector != null)
+		if (mtnDetectorWorker != null)
 			mtnDetectorWorker.interrupt();
 		if (syncWorker != null)
 			syncWorker.interrupt();
 		if (sReactorWorker != null)
 			sReactorWorker.interrupt();
 		
-		mtnDetector = null;
+		mtnDetectorWorker = null;
 		syncWorker = null;
 		sReactorWorker = null;
 
