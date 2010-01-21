@@ -54,7 +54,7 @@ public class SensorManager {
 		}
 		sensorsStarted = true;
 	}
-
+	
 	public void stopSensors() {
 		try {
 			for (ThreadGroup runningSensor : runningSensorsList) {
@@ -69,7 +69,20 @@ public class SensorManager {
 			sensorsStarted = false;
 		}
 	}
-
+	
+	public void startSensor(String sensorID) {
+		acquireWakeLock();
+		AbstractSensorDevice sensor = sensorDeviceList.get(sensorID);
+		
+			List<Runnable> sensorRunnables = sensor.getSensorRunnables();
+			ThreadGroup sensorDeviceRunnables = new ThreadGroup(sensor.getName());
+			for (Runnable sensorRunnable : sensorRunnables) {
+				new Thread(sensorDeviceRunnables, sensorRunnable, sensor.getName()).start();
+			}
+			runningSensorsList.add(sensorDeviceRunnables);
+			sensorsStarted = true;
+	}
+	
 	public SensorManager initSensors() {
 		for (AbstractSensorDevice sensor : sensorDeviceList.values()) {
 			sensor.initDevice();

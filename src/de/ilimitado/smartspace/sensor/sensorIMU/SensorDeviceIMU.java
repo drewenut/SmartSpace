@@ -55,7 +55,7 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 	
 	@Override
 	public void initSensorID() {
-		//TODO add to Configuration Object
+		//TODO add to Configuration Object, when add update!!! reference in InertialState.enterState()...
 		SENSOR_ID = "IMU";
 	}
 

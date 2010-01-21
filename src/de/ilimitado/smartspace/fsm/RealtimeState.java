@@ -6,8 +6,11 @@ import de.ilimitado.smartspace.persistance.LFPTPersistanceStrategy;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.Registry;
+import de.ilimitado.smartspace.utils.L;
 
 public class RealtimeState extends SensingState {
+	
+	private static final String LOG_TAG = "RealtimeState";
 	
 	private RTFPTSyncStrategy syncStrategy;
 	private LFPTPersistanceStrategy persGWStrategy;
@@ -15,6 +18,7 @@ public class RealtimeState extends SensingState {
 
 	@Override
 	public void enterState(Dependencies dep) {
+		L.d(LOG_TAG, "Entering Realtime state...");
 		super.enterState(dep);
 		syncStrategy = new RTFPTSyncStrategy(dep,  syncSet, dataProcessors);
 		persGWStrategy = new AndroidLocalDBPersistanceStrategy((ScanSampleDBPersistanceProvider) dep.sensorDependencies.registry.get(Registry.SENSOR_SCANSAMPLE_DBPERS_PROVIDER), dep.androidDependencies);
@@ -26,14 +30,24 @@ public class RealtimeState extends SensingState {
 		persMngr.setStrategy(PersistanceManager.GATEWAY_LFPT, persGWStrategy);
 		super.doActivity();
 	}
+	
+	@Override
+	public void exitState() {
+		super.exitState();
+		L.d(LOG_TAG, "Exiting Realtime state...");
+	}
 
 	@Override
 	public State switchNextState(boolean pos, boolean mtn) {
 	 
-		if(mtn)
+		if(mtn) {
+			L.d(LOG_TAG, "Switching to Realtime state...");
 			return new InertialState();
-		else if(pos && !mtn)
+		}
+		else if(pos && !mtn) {
+			L.d(LOG_TAG, "Switching to Realtime state...");
 			return new LearningState();
+		}
 		
 		//if(!pos && !mtn) 
 		return this;
