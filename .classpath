@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="dep/easymock-2.5.1/easymock-2.5.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="dep/easymock-2.5.1/easymock-2.5.1-sources.jar"/>
+	<classpathentry kind="lib" path="/home/otw/Programming/Android/External Libs/commons-io-1.4/commons-io-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

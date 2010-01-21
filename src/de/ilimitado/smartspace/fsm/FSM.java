@@ -44,6 +44,7 @@ public class FSM {
 		this.currentState = initialState;
 		this.nextState = null;
 		dep.positionManager.registerListener(iPL);
+		dep.motionDetector.registerListener(iPL);
 		enterState();
 		if(checkForTransition())
 			doTransition();

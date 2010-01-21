@@ -59,7 +59,6 @@ public final class SmartSpaceFramework extends Service{
 		SharedPreferences androidPreferences = this.getSharedPreferences("smartSpace", Context.MODE_WORLD_WRITEABLE);
 		AndroidConfigTranslator.getInstance(androidPreferences).translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
-		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(this);
 		SensorManager sMng = new SensorManager();
@@ -69,6 +68,7 @@ public final class SmartSpaceFramework extends Service{
 		locationManager = new SSFLocationManager(indrLocMngr);
 		EventSynchronizer evtSync = new EventSynchronizer();
 		SensingReactor sReact = new SensingReactor(reg, systemRawDataQueue);
+		MotionDetector mtnDet = new MotionDetector();
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();

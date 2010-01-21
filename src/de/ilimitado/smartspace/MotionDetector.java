@@ -1,69 +1,111 @@
 package de.ilimitado.smartspace;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Looper;
+import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.sensor.sensorIMU.ScanResultIMU;
+import de.ilimitado.smartspace.utils.L;
 
-public class MotionDetector {
+public class MotionDetector implements Runnable{
 	
+	private static final String LOG_TAG = "MotionDetector";
+
+	//TODO add to configurations
+	private static final double MTN_SENSITIVITY = 0d;
+	private static final int QUEUE_CAPACITY = 10;
+	
+	private AtomicBoolean isAlive = new AtomicBoolean(false);
+	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> mtnDataQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();
+	private final LinkedList<Boolean> mtnStream = new LinkedList<Boolean>();
+	double currentAcc = 0d;
 	private SensorManager sensorManager;
+	private final FSM fsm;
 
-	public MotionDetector(Context ctx) {
-		sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE); 
+	public MotionDetector(Context ctx, FSM fsm) {
+		sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
+		this.fsm = fsm;
 	}
 	
-	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> motionEventsQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();
-
 	public LinkedBlockingQueue<ArrayList<ScanResultIMU>> getQueue() {
-		return motionEventsQueue;
+		return mtnDataQueue;
 	}
 	
-private void detectShake() {
-		
+	@Override
+	public void run() {
+		Looper.prepare();
+		while(isAlive.get()){
+		     try {
+		    	 ArrayList<ScanResultIMU> mtnEvts = mtnDataQueue.take();
+		    	 processMotionData(mtnEvts);
+		    	 enqueueMotionEvent(translateMotion());
+		    	 detectMotion();
+		    	 L.d(LOG_TAG, "Motion Queue item processed");
+		     } catch (InterruptedException e) {
+		    	 L.d(LOG_TAG, "Received interrupt for " + LOG_TAG + ", shutting down");
+		    	 break;
+		     }
+		}
+	}
+	
+	private void processMotionData(ArrayList<ScanResultIMU> motionEvents) {
+			
         float[] R = new float[16];
         float[] I = new float[16];
 		
-		long lasttime = 0;
-		double time = 0;
+		float[] accData = null;
+		float[] magnFieldData = null;
 		
-		ArrayList<ScanResultIMU> sensorEvents = (ArrayList<ScanResultIMU>) imuEventCache.clone();
-		
-		float[] accelerometerSensorData = null;
-		float[] magneticFieldSensorData = null;
-		
-		double currentAcc = 0d;
-		
-		for (ScanResultIMU event : sensorEvents) {
+		for (ScanResultIMU event : motionEvents) {
 
 			if(event.sensorType == Sensor.TYPE_ACCELEROMETER)
-				accelerometerSensorData = event.values;
+				accData = event.values;
 			else if(event.sensorType == Sensor.TYPE_MAGNETIC_FIELD)
-				magneticFieldSensorData = event.values;
+				magnFieldData = event.values;
 			
-			if(accelerometerSensorData != null && magneticFieldSensorData != null){
+			if(accData != null && magnFieldData != null){
 			
-				if (lasttime == 0)
-					lasttime = event.timestamp;
-				double deltaTime = (event.timestamp - lasttime) * NANO_SEC_TO_SEC;
-				time  += deltaTime;
-				lasttime = event.timestamp;
-	        	
-				SensorManager.getRotationMatrix(R, I, accelerometerSensorData, magneticFieldSensorData);
+				SensorManager.getRotationMatrix(R, I, accData, magnFieldData);
 				
 	        	//Substract gravity from every axis
-				float xAccWithoutG = accelerometerSensorData[0] - R[8] * SensorManager.GRAVITY_EARTH;
-				float yAccWithoutG = accelerometerSensorData[1] - R[9] * SensorManager.GRAVITY_EARTH;
-				float zAccWithoutG = accelerometerSensorData[2] - R[10] * SensorManager.GRAVITY_EARTH;
+				float xAccWithoutG = accData[0] - R[8] * SensorManager.GRAVITY_EARTH;
+				float yAccWithoutG = accData[1] - R[9] * SensorManager.GRAVITY_EARTH;
+				float zAccWithoutG = accData[2] - R[10] * SensorManager.GRAVITY_EARTH;
 
 				//Vector Product to get acceleration sqrt(x² + y² + z²)
 				double accWithoutG = Math.sqrt(xAccWithoutG * xAccWithoutG + yAccWithoutG * yAccWithoutG + zAccWithoutG * zAccWithoutG);
-
+				
+				//Acceleration on all axis
 				currentAcc = (currentAcc + accWithoutG)/2; 
 			}
 		}
+	}
+
+	private Boolean translateMotion() {
+		return currentAcc >= MTN_SENSITIVITY ? true : false;
+	}
+	
+	private void detectMotion() {
+		byte mtnDetects = 0;
+		for(Boolean mtn : mtnStream) {
+			if(mtn == true)
+				++mtnDetects;
+		}
+		if(mtnDetects >= QUEUE_CAPACITY/2) {
+			fsm.motionAction(true);
+		}
+	}
+
+	private void enqueueMotionEvent(Boolean mtn) {
+		if(mtnStream.size() >= QUEUE_CAPACITY) {
+			mtnStream.poll();
+		}
+		mtnStream.offer(mtn);
 	}
 }
