@@ -7,8 +7,11 @@ import de.ilimitado.smartspace.MotionListener;
 import de.ilimitado.smartspace.iLocationListener;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
+import de.ilimitado.smartspace.utils.L;
 
 public class FSM implements iLocationListener, MotionListener{
+	
+	private static final String LOG_TAG = "FSM";
 	
 	boolean fPos = false;
 	boolean mtn = false;
@@ -19,6 +22,7 @@ public class FSM implements iLocationListener, MotionListener{
 
 	@Override
 	public void onLocationChanged(IGeoPoint location, Accuracy acc) {
+		L.d(LOG_TAG, "location changed");
 		if(acc.accuracy == Accuracy.HIGH_ACCURACY)		
 			fixedPositionAction(true);
 		else
@@ -27,6 +31,7 @@ public class FSM implements iLocationListener, MotionListener{
 
 	@Override
 	public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) {
+		L.d(LOG_TAG, "location changed");
 		if(acc.accuracy == Accuracy.HIGH_ACCURACY && !list.isEmpty())		
 			fixedPositionAction(true);
 		else
@@ -38,6 +43,7 @@ public class FSM implements iLocationListener, MotionListener{
 	
 	@Override
 	public void onMotionDetected(boolean mtn) {
+		L.d(LOG_TAG, "motion detected");
 		motionAction(mtn);
 	}
 		

@@ -17,7 +17,7 @@ public class MotionDetector implements Runnable{
 	private static final String LOG_TAG = "MotionDetector";
 
 	//TODO add to configurations
-	private static final double MTN_SENSITIVITY = 0d;
+	private static final double MTN_SENSITIVITY = 0.5d;
 	private static final int QUEUE_CAPACITY = 10;
 	
 	private AtomicBoolean isAlive = new AtomicBoolean(false);
@@ -82,7 +82,8 @@ public class MotionDetector implements Runnable{
 				double accWithoutG = Math.sqrt(xAccWithoutG * xAccWithoutG + yAccWithoutG * yAccWithoutG + zAccWithoutG * zAccWithoutG);
 				
 				//Acceleration on all axis
-				currentAcc = (currentAcc + accWithoutG)/2; 
+				currentAcc = (currentAcc + accWithoutG)/2;
+				L.d(LOG_TAG, "Current total acceleration: " + currentAcc);
 			}
 		}
 	}
@@ -94,6 +95,7 @@ public class MotionDetector implements Runnable{
 	private boolean detectMotion() {
 		byte mtnDetects = 0;
 		for(Boolean mtn : mtnStream) {
+			L.d(LOG_TAG, "Motion Stream array Value " + mtnDetects + " : " + Boolean.toString(mtn));
 			if(mtn == true)
 				++mtnDetects;
 		}
@@ -101,6 +103,7 @@ public class MotionDetector implements Runnable{
 	}
 
 	private void enqueueMotionEvent(Boolean mtn) {
+		L.d(LOG_TAG, "Motion Stream size: " + mtnStream.size());
 		if(mtnStream.size() >= QUEUE_CAPACITY) {
 			mtnStream.poll();
 		}
@@ -121,6 +124,7 @@ public class MotionDetector implements Runnable{
 	}
 	
 	private void notifyMotionDetected(boolean mtn){
+		L.d(LOG_TAG, "motion detected: " + Boolean.toString(mtn));
 		for(MotionListener listener : mtnListeners){
 			listener.onMotionDetected(mtn);
 		}

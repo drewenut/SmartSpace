@@ -123,6 +123,8 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 			motionListener = new MotionListener(this); 
 			Sensor acc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
 			sensorManager.registerListener(motionListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+			Sensor mField = sensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD).get(0);
+			sensorManager.registerListener(motionListener, mField, SensorManager.SENSOR_DELAY_NORMAL);
 			listenerRegistered = true;
 		}
 

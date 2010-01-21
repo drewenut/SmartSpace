@@ -2,7 +2,10 @@ package de.ilimitado.smartspace.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.ilimitado.smartspace.MotionListener;
 
 import android.util.Log;
 
@@ -16,7 +19,8 @@ public final class L {
 
     public static final int ERROR = 6;
 
-	private static HashMap<String, Long> startTimes = new HashMap<String, Long>();
+    private static ArrayList<LogListener> logListeners;
+    private static HashMap<String, Long> startTimes = new HashMap<String, Long>();
 	private static HashMap<String, Integer> counters = new HashMap<String, Integer>();
 
 	//TODO Implement logic for debug log (debug messages are just written in debug mode)
@@ -54,6 +58,15 @@ public final class L {
     public static int e(String tag, String msg, Throwable tr) {
         return Log.e(tag, msg, tr);
     }
+    
+    /**
+     * notifies screen log listeners
+     */
+    public static int s(String tag, String msg) {
+        
+    	return Log.e(tag, msg);
+    }
+    
 
     public static void println(String tag, String msg) {
     	System.out.println("Log: "+ tag + ", " +msg);
@@ -111,6 +124,19 @@ public final class L {
 		int incrementedCount = counters.get(LOG_TAG)+1;
 		counters.put(LOG_TAG, incrementedCount);
 		L.d(LOG_TAG, msg + incrementedCount);
+	}
+	
+	public static void registerListener(LogListener logL){
+		logListeners.add(mL);
+	}
+	
+	public static void unregisterListener(LogListener mL){
+		if(logListeners.contains(mL))
+			logListeners.remove(mL);
+	}
+	
+	public static boolean listenersEmpty(){
+		return logListeners.isEmpty();
 	}
 	
 }
