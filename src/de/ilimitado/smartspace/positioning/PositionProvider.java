@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface PositionProvider {
 	
-	public void calculatePosition(Object data);
-	public List<?> getEstimatedPositions();
+	public void calculateLocation(Object data);
+	public List<?> getEstimatedLocations();
 }

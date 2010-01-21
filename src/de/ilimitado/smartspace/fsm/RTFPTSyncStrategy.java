@@ -44,13 +44,10 @@ public class RTFPTSyncStrategy extends SensingStrategy {
 		perMngr.load(PersistanceManager.GATEWAY_LFPT, "");
 		RadioMap rM = (RadioMap) perMngr.get(PersistanceManager.GATEWAY_LFPT);
 		SimpleEuclideanDistanceProvider pProv = new SimpleEuclideanDistanceProvider(rM);
-		pProv.calculatePosition(sDSpl);
+		pProv.calculateLocation(sDSpl);
 		L.stopT(LOG_TAG, "TIME calculatePosition(): ");
-		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
-		posMngr.enqueueEstimatedPosition(weightedPositions, new Accuracy(Accuracy.LOW_ACCURACY));
-		
-		WeightedIGeoPoint estPos = weightedPositions.get(0);
-		L.sd(LOG_TAG, "eEstPos():" + estPos.toString() + "\n");
+		List<WeightedIGeoPoint> weightedLocations = pProv.getEstimatedLocations();
+		posMngr.enqueueEstimatedLocation(weightedLocations, new Accuracy(Accuracy.LOW_ACCURACY));
 		L.stopT(LOG_TAG, "TIME deploySampleDataSample(): ");
 	}
 }

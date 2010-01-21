@@ -47,8 +47,8 @@ public class PositionProviderTests extends TestCase {
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
 		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211.ID, RTsSL1);
-		pProv.calculatePosition(rtSample1);
-		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
+		pProv.calculateLocation(rtSample1);
+		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedLocations();
 		
 		assertEquals(new IGeoPoint(1, 1), weightedPositions.get(0).igp);
 	}
@@ -72,8 +72,8 @@ public class PositionProviderTests extends TestCase {
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
 		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211.ID, RTsSL1);
-		pProv.calculatePosition(rtSample1);
-		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
+		pProv.calculateLocation(rtSample1);
+		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedLocations();
 		
 		assertEquals(new IGeoPoint(1, 2), weightedPositions.get(0).igp);
 	}
@@ -91,8 +91,8 @@ public class PositionProviderTests extends TestCase {
 		
 		RTFPT rtSample1 = new RTFPT(System.currentTimeMillis(), 270.0);
 		rtSample1.add(Configuration.getInstance().sensor80211.scanner80211.ID, RTsSL1);
-		pProv.calculatePosition(rtSample1);
-		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
+		pProv.calculateLocation(rtSample1);
+		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedLocations();
 		
 		assertEquals(new IGeoPoint(2, 2), weightedPositions.get(0).igp);
 	}

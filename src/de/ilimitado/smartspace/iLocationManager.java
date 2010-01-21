@@ -6,6 +6,7 @@ import java.util.List;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
+import de.ilimitado.smartspace.utils.L;
 
 public class iLocationManager {
 	
@@ -63,11 +64,15 @@ public class iLocationManager {
 		}
 	}
 
-	public void enqueueEstimatedPosition(List<WeightedIGeoPoint> positionRanking, Accuracy acc) {
-		if(positionRanking.size() > 0) {
-			setPosition(positionRanking.get(0).igp, acc);
-			iGPRankedList = new ArrayList<IGeoPoint>(positionRanking.size()); 
-			for (WeightedIGeoPoint wGP : positionRanking) {
+	public void enqueueEstimatedLocation(List<WeightedIGeoPoint> locationRanking, Accuracy acc) {
+		if(locationRanking.size() > 0) {
+			L.sd("iLocationManager", "Location Ranking:");
+			for(WeightedIGeoPoint iGP : locationRanking) {
+				L.sd("", iGP.toString());
+			}
+			setPosition(locationRanking.get(0).igp, acc);
+			iGPRankedList = new ArrayList<IGeoPoint>(locationRanking.size()); 
+			for (WeightedIGeoPoint wGP : locationRanking) {
 				iGPRankedList.add(wGP.igp);
 			}
 			notifyLocationChanged(iGPRankedList, acc);

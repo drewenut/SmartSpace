@@ -37,7 +37,7 @@ public class LFPTGateway implements Gateway{
 		strategy.loadRadioMap();
 		long currTime = System.currentTimeMillis();
 		nextLoadTime = currTime + REFRESH_INTERVAL;
-		L.sd(LOG_TAG, "(Re-)Loaded radio map from DB");
+		L.d(LOG_TAG, "(Re-)Loaded radio map from DB");
 	}
 	
 	public boolean isLoaded(){

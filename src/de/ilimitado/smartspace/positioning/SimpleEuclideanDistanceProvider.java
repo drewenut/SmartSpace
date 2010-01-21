@@ -21,7 +21,7 @@ public class SimpleEuclideanDistanceProvider implements PositionProvider{
 		this.radioMap = rm;
 	}
 
-	public void calculatePosition(Object rtfpt) {
+	public void calculateLocation(Object rtfpt) {
 		RTFPT rtFPT = (RTFPT) rtfpt;
 		positionRanking = new ArrayList<WeightedIGeoPoint>(radioMap.size());
 		for (LFPT rmLFPT : radioMap) {
@@ -36,7 +36,7 @@ public class SimpleEuclideanDistanceProvider implements PositionProvider{
 		Collections.sort(positionRanking);
 	}
 	
-	public List<WeightedIGeoPoint> getEstimatedPositions() {
+	public List<WeightedIGeoPoint> getEstimatedLocations() {
 		return positionRanking;
 	}
 	

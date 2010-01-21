@@ -17,7 +17,7 @@ public class WeightedIGeoPoint implements Comparable<WeightedIGeoPoint> {
 	
 	@Override
 	public String toString() {
-		return "Score: " + score + "iGP: " + igp.name;
+		return "iGP: " + igp.name + " Score: " + score;
 	}
 	
 }
