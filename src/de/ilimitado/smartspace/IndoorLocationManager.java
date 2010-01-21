@@ -9,7 +9,7 @@ import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 
 public class IndoorLocationManager {
 	
-	private ArrayList<IndoorLocationListener> listeners = new ArrayList<IndoorLocationListener>();
+	private ArrayList<iLocationListener> listeners = new ArrayList<iLocationListener>();
 	private IGeoPoint currPos = new IGeoPoint(0, 0);
 	private Accuracy currAcc = new Accuracy(Accuracy.DEFAULT_ACCURACY);
 	private ArrayList<IGeoPoint> iGPRankedList = new ArrayList<IGeoPoint>(0);
@@ -24,11 +24,11 @@ public class IndoorLocationManager {
 		return iGPRankedList;
 	}
 	
-	public void registerListener(IndoorLocationListener iPP){
+	public void registerListener(iLocationListener iPP){
 		listeners.add(iPP);
 	}
 	
-	public void unregisterListener(IndoorLocationListener iPP){
+	public void unregisterListener(iLocationListener iPP){
 		if(listeners.contains(iPP))
 			listeners.remove(iPP);
 	}
@@ -38,19 +38,19 @@ public class IndoorLocationManager {
 	}
 	
 	private void notifyLocationChanged(List<IGeoPoint> iGPList, Accuracy acc){
-		for(IndoorLocationListener listener : listeners){
+		for(iLocationListener listener : listeners){
 			listener.onLocationChanged(iGPList, acc);
 		}
 	}
 	
 	private void notifyLocationChanged(IGeoPoint iGP, Accuracy acc){
-		for(IndoorLocationListener listener : listeners){
+		for(iLocationListener listener : listeners){
 			listener.onLocationChanged(iGP, acc);
 		}
 	}
 	
 	private void notifyStateChanged(int state){
-		for(IndoorLocationListener listener : listeners){
+		for(iLocationListener listener : listeners){
 			listener.onStateChanged(state);
 		}
 	}

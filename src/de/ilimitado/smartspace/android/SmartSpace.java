@@ -42,7 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.ilimitado.smartspace.IndoorLocationListener;
+import de.ilimitado.smartspace.iLocationListener;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.Accuracy;
@@ -96,7 +96,7 @@ public class SmartSpace extends Activity {
 		}
 	};
 	
-	private IndoorLocationListener indoorLocList = new IndoorLocationListener(){
+	private iLocationListener indoorLocList = new iLocationListener(){
 
 		@Override
 		public void onLocationChanged(IGeoPoint location, Accuracy acc) {

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Looper;
-import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.sensor.sensorIMU.ScanResultIMU;
 import de.ilimitado.smartspace.utils.L;
 
@@ -24,13 +23,14 @@ public class MotionDetector implements Runnable{
 	private AtomicBoolean isAlive = new AtomicBoolean(false);
 	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> mtnDataQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();
 	private final LinkedList<Boolean> mtnStream = new LinkedList<Boolean>();
+	
+	private ArrayList<MotionListener> mtnListeners;
 	double currentAcc = 0d;
 	private SensorManager sensorManager;
-	private final FSM fsm;
 
-	public MotionDetector(Context ctx, FSM fsm) {
+
+	public MotionDetector(Context ctx) {
 		sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-		this.fsm = fsm;
 	}
 	
 	public LinkedBlockingQueue<ArrayList<ScanResultIMU>> getQueue() {
@@ -97,9 +97,10 @@ public class MotionDetector implements Runnable{
 			if(mtn == true)
 				++mtnDetects;
 		}
-		if(mtnDetects >= QUEUE_CAPACITY/2) {
-			fsm.motionAction(true);
-		}
+		if(mtnDetects >= QUEUE_CAPACITY/2)
+			notifyMotionDetected(true);
+		else
+			notifyMotionDetected(false);
 	}
 
 	private void enqueueMotionEvent(Boolean mtn) {
@@ -107,5 +108,24 @@ public class MotionDetector implements Runnable{
 			mtnStream.poll();
 		}
 		mtnStream.offer(mtn);
+	}
+	
+	public void registerListener(MotionListener mL){
+		mtnListeners.add(mL);
+	}
+	
+	public void unregisterListener(MotionListener mL){
+		if(mtnListeners.contains(mL))
+			mtnListeners.remove(mL);
+	}
+	
+	public boolean listenersEmpty(){
+		return mtnListeners.isEmpty();
+	}
+	
+	private void notifyMotionDetected(boolean mtn){
+		for(MotionListener listener : mtnListeners){
+			listener.onMotionDetected(mtn);
+		}
 	}
 }

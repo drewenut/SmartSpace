@@ -3,11 +3,12 @@ package de.ilimitado.smartspace.fsm;
 import java.util.List;
 
 import de.ilimitado.smartspace.Dependencies;
-import de.ilimitado.smartspace.IndoorLocationListener;
+import de.ilimitado.smartspace.MotionListener;
+import de.ilimitado.smartspace.iLocationListener;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 
-public class FSM {
+public class FSM implements iLocationListener, MotionListener{
 	
 	boolean fPos = false;
 	boolean mtn = false;
@@ -15,36 +16,39 @@ public class FSM {
 	private State nextState;
 	private Dependencies dependencies;
 	
-	private IndoorLocationListener iPL = new IndoorLocationListener(){
 
-		@Override
-		public void onLocationChanged(IGeoPoint location, Accuracy acc) {
-			if(acc.accuracy == Accuracy.HIGH_ACCURACY)		
-				fixedPositionAction(true);
-			else
-				fixedPositionAction(false);
-		}
+	@Override
+	public void onLocationChanged(IGeoPoint location, Accuracy acc) {
+		if(acc.accuracy == Accuracy.HIGH_ACCURACY)		
+			fixedPositionAction(true);
+		else
+			fixedPositionAction(false);
+	}
 
-		@Override
-		public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) {
-			if(acc.accuracy == Accuracy.HIGH_ACCURACY && !list.isEmpty())		
-				fixedPositionAction(true);
-			else
-				fixedPositionAction(false);
-		}
+	@Override
+	public void onLocationChanged(List<IGeoPoint> list, Accuracy acc) {
+		if(acc.accuracy == Accuracy.HIGH_ACCURACY && !list.isEmpty())		
+			fixedPositionAction(true);
+		else
+			fixedPositionAction(false);
+	}
 
-		@Override
-		public void onStateChanged(int state) {	}
+	@Override
+	public void onStateChanged(int state) {	}
+	
+	@Override
+	public void onMotionDetected(boolean mtn) {
+		motionAction(mtn);
+	}
 		
-	};
 
 	
 	public FSM(State initialState, Dependencies dep){
 		this.dependencies = dep;
 		this.currentState = initialState;
 		this.nextState = null;
-		dep.positionManager.registerListener(iPL);
-		dep.motionDetector.registerListener(iPL);
+		dep.positionManager.registerListener(this);
+		dep.motionDetector.registerListener(this);
 		enterState();
 		if(checkForTransition())
 			doTransition();

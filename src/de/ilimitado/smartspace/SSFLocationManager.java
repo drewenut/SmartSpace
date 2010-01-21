@@ -20,11 +20,11 @@ public class SSFLocationManager {
 		indrLocMngr.setPosition(iGP, acc);
 	}
 	
-	public void registerListener(IndoorLocationListener iPP){
+	public void registerListener(iLocationListener iPP){
 		indrLocMngr.registerListener(iPP);
 	}
 	
-	public void unregisterListener(IndoorLocationListener iPP){
+	public void unregisterListener(iLocationListener iPP){
 		indrLocMngr.unregisterListener(iPP);
 	}
 }

@@ -28,7 +28,7 @@ public class LearningStateTests extends AndroidTestCase{
 	public void setUp() {
 		MockConfigTranslator.getInstance().translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
-		MotionDetector mtnDet = new MotionDetector();
+		MotionDetector mtnDet = new MotionDetector(getContext());
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(getContext());
 		SensorManager sMng = new SensorManager();

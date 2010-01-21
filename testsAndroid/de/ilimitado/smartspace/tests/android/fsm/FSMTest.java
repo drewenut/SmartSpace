@@ -32,7 +32,7 @@ public class FSMTest extends AndroidTestCase{
 	public void setUp() throws Exception {
 		MockConfigTranslator.getInstance().translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
-		MotionDetector mtnDet = new MotionDetector();
+		MotionDetector mtnDet = new MotionDetector(getContext());
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(getContext());
 		SensorManager sMng = new SensorManager();

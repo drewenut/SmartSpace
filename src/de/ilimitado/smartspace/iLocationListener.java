@@ -5,7 +5,7 @@ import java.util.List;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
 
-public interface IndoorLocationListener {
+public interface iLocationListener {
 
     void onLocationChanged(IGeoPoint location, Accuracy acc);
     
