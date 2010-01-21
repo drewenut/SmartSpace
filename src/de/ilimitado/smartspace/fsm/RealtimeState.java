@@ -42,14 +42,10 @@ public class RealtimeState extends SensingState {
 			L.sd(LOG_TAG, "Switching to Inertial state...");
 			return new InertialState();
 		}
-		else if(pos && !mtn) {
-			L.sd(LOG_TAG, "Switching to Learning state...");
-			return new LearningState();
+		else {
+			L.sd(LOG_TAG, "Self Transition Realtime state...");
+			return this;
 		}
-		
-		//if(!pos && !mtn) 
-		return this;
-		
 	}
 
 }

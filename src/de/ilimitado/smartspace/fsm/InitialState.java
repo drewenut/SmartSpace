@@ -21,11 +21,7 @@ public class InitialState extends InertialState {
 
 	@Override
 	public State switchNextState(boolean pos, boolean mtn) {
-		if (pos && mtn) {
-			L.sd(LOG_TAG, "Switching to Inertial state...");
-			return new InertialState();
-		}
-		else if (pos && !mtn) {
+		if (pos && mtn || pos && !mtn) {
 			L.sd(LOG_TAG, "Switching to Learning state...");
 			return new LearningState();
 		}
