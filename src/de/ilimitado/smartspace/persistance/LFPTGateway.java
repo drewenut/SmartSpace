@@ -90,6 +90,7 @@ public class LFPTGateway implements Gateway{
 	public void stopGateway() {
 		isAlive.set(false);
 		thread.interrupt();
+		nextLoadTime = 0;
 	}
 
 }

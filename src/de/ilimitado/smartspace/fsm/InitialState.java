@@ -30,9 +30,9 @@ public class InitialState extends InertialState {
 			return new InertialState();
 		}
 		else {
-			L.sd(LOG_TAG, "Self Transition Initial State...");
+			L.sd(LOG_TAG, "Switching to Realtime State...");
 			// !pos && !mtn
-			return this;
+			return new RealtimeState();
 		}
 	}
 }

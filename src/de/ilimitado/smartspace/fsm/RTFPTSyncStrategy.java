@@ -48,6 +48,9 @@ public class RTFPTSyncStrategy extends SensingStrategy {
 		L.stopT(LOG_TAG, "TIME calculatePosition(): ");
 		List<WeightedIGeoPoint> weightedPositions = pProv.getEstimatedPositions();
 		posMngr.enqueueEstimatedPosition(weightedPositions, new Accuracy(Accuracy.LOW_ACCURACY));
+		
+		WeightedIGeoPoint estPos = weightedPositions.get(0);
+		L.sd(LOG_TAG, "eEstPos():" + estPos.toString() + "\n");
 		L.stopT(LOG_TAG, "TIME deploySampleDataSample(): ");
 	}
 }
