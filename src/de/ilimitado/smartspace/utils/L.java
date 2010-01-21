@@ -8,6 +8,7 @@ import java.util.HashMap;
 import de.ilimitado.smartspace.MotionListener;
 
 import android.util.Log;
+import android.widget.SlidingDrawer;
 
 public final class L {
 
@@ -152,6 +153,17 @@ public final class L {
 	 * @param msg
 	 */
 	public static void incC(String LOG_TAG, String msg) {
+		int incrementedCount = counters.get(LOG_TAG)+1;
+		counters.put(LOG_TAG, incrementedCount);
+		L.sd(LOG_TAG,  msg + incrementedCount);
+	}
+	
+	/**
+	 * Increment counter for given LOG_TAG and write LogListeners and debug log
+	 * @param LOG_TAG
+	 * @param msg
+	 */
+	public static void sincC(String LOG_TAG, String msg) {
 		int incrementedCount = counters.get(LOG_TAG)+1;
 		counters.put(LOG_TAG, incrementedCount);
 		L.d(LOG_TAG, msg + incrementedCount);

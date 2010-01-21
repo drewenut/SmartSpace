@@ -76,7 +76,7 @@ public class LFPTGateway implements Gateway{
 							lfpt.merge(lfptToMerge);
 						}
 						strategy.save(lfpt);
-						L.incC(LOG_TAG, "Saved LFPT to DB: ");
+						L.sincC(LOG_TAG, "Saved LFPT to DB: ");
 					} catch (InterruptedException e) {
 						L.d(LOG_TAG, "Received interrupt for LFPTGateway, shutting down");
 						break;

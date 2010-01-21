@@ -41,7 +41,7 @@ public class LearningState extends SensingState {
 		//TODO switch off for now, Motion just used in RT State
 //			return new InertialState();
 		else if(!pos && !mtn) {
-			L.d(LOG_TAG, "Switching to Realtime state...");
+			L.sd(LOG_TAG, "Switching to Realtime state...");
 			return new RealtimeState();
 		}
 		

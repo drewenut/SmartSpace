@@ -39,11 +39,11 @@ public class RealtimeState extends SensingState {
 	public State switchNextState(boolean pos, boolean mtn) {
 	 
 		if(mtn) {
-			L.d(LOG_TAG, "Switching to Realtime state...");
+			L.sd(LOG_TAG, "Switching to Inertial state...");
 			return new InertialState();
 		}
 		else if(pos && !mtn) {
-			L.d(LOG_TAG, "Switching to Realtime state...");
+			L.sd(LOG_TAG, "Switching to Learning state...");
 			return new LearningState();
 		}
 		

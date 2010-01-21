@@ -30,7 +30,7 @@ public class SensorLoaderTests extends AndroidTestCase{
 	public void setUp() throws Exception {
 		MockConfigTranslator.getInstance().translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
-		MotionDetector mtnDet = new MotionDetector(getContext());
+		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(getContext());
 		sMng = new SensorManager();

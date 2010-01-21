@@ -64,11 +64,11 @@ public class InertialState implements State {
 	@Override
 	public State switchNextState(boolean pos, boolean mtn) {
 		if(!pos && !mtn) {
-			L.d(LOG_TAG, "Switching to Realtime state...");
+			L.sd(LOG_TAG, "Switching to Realtime state...");
 			return new RealtimeState();
 		}
 		else if(pos && !mtn) {
-			L.d(LOG_TAG, "Switching to Learning state...");
+			L.sd(LOG_TAG, "Switching to Learning state...");
 			return new LearningState();
 		}
 		//if(mtn) 

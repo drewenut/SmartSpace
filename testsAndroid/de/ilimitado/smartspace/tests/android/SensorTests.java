@@ -41,7 +41,7 @@ public class SensorTests extends AndroidTestCase{
 		AndroidConfigTranslator.getInstance(androidPreferences).translate();
 		this.config = Configuration.getInstance();
 		systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
-		MotionDetector mtnDet = new MotionDetector(androidCtx);
+		MotionDetector mtnDet = new MotionDetector();
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(getContext());
 		sMng = new SensorManager();

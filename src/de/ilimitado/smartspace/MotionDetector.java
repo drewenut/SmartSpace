@@ -26,13 +26,7 @@ public class MotionDetector implements Runnable{
 	
 	private ArrayList<MotionListener> mtnListeners = new ArrayList<MotionListener>();
 	double currentAcc = 0d;
-	private SensorManager sensorManager;
 
-
-	public MotionDetector(Context ctx) {
-		sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-	}
-	
 	public LinkedBlockingQueue<ArrayList<ScanResultIMU>> getQueue() {
 		return mtnDataQueue;
 	}
@@ -124,7 +118,7 @@ public class MotionDetector implements Runnable{
 	}
 	
 	private void notifyMotionDetected(boolean mtn){
-		L.d(LOG_TAG, "motion detected: " + Boolean.toString(mtn));
+		L.sd(LOG_TAG, "motion detected: " + Boolean.toString(mtn));
 		for(MotionListener listener : mtnListeners){
 			listener.onMotionDetected(mtn);
 		}
