@@ -2,6 +2,7 @@ package de.ilimitado.smartspace;
 
 import android.content.Context;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 
 public class Dependencies {
 

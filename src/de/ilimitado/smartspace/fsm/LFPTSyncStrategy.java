@@ -5,12 +5,12 @@ import java.util.List;
 import de.ilimitado.smartspace.DataSampleFactory;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.LFPT;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.ScanSampleList;
 import de.ilimitado.smartspace.SensorDataSample;
 import de.ilimitado.smartspace.SensorFusionator;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.utils.L;
 

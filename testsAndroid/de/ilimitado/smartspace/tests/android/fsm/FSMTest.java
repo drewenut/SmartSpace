@@ -9,7 +9,6 @@ import android.test.suitebuilder.annotation.SmallTest;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
 import de.ilimitado.smartspace.MotionDetector;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorDependencies;
 import de.ilimitado.smartspace.SensorEvent;
@@ -21,6 +20,7 @@ import de.ilimitado.smartspace.fsm.LearningState;
 import de.ilimitado.smartspace.fsm.RealtimeState;
 import de.ilimitado.smartspace.fsm.State;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.tests.junit.config.MockConfigTranslator;
 

@@ -1,11 +1,8 @@
-package de.ilimitado.smartspace;
+package de.ilimitado.smartspace.positioning;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ilimitado.smartspace.positioning.Accuracy;
-import de.ilimitado.smartspace.positioning.IGeoPoint;
-import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
 import de.ilimitado.smartspace.utils.L;
 
 public class iLocationManager {

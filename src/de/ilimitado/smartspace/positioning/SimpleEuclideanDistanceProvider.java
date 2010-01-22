@@ -10,7 +10,7 @@ import de.ilimitado.smartspace.RadioMap;
 import de.ilimitado.smartspace.utils.EuclideanDistance;
 import de.ilimitado.smartspace.utils.L;
 
-public class SimpleEuclideanDistanceProvider implements PositionProvider{
+public class SimpleEuclideanDistanceProvider implements LocationProvider{
 	
 	private static final String LOG_TAG = "SimpleEuclideanDistanceProvider";
 	

@@ -1,9 +1,7 @@
-package de.ilimitado.smartspace;
+package de.ilimitado.smartspace.positioning;
 
 import java.util.List;
 
-import de.ilimitado.smartspace.positioning.Accuracy;
-import de.ilimitado.smartspace.positioning.IGeoPoint;
 
 public interface iLocationListener {
 

@@ -42,11 +42,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.ilimitado.smartspace.iLocationListener;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
+import de.ilimitado.smartspace.positioning.iLocationListener;
 import de.ilimitado.smartspace.utils.LogListener;
 
 public class SmartSpace extends Activity {
@@ -370,7 +370,7 @@ public class SmartSpace extends Activity {
 										  Integer.parseInt(yCoord.getText().toString()),
 										  Integer.parseInt(zCoord.getText().toString()));
 				Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
-            	startScan(iGP, acc);
+            	ssfStart(iGP, acc);
             	dialog.dismiss();
             	appendConsoleText(getString(R.string.input_method_dialog_success) + iGP.toString());
             	learningActive = true;
@@ -478,6 +478,11 @@ public class SmartSpace extends Activity {
 		}
 	}
 	
+	private void ssfStart(IGeoPoint iGP, Accuracy acc) {
+		ssfStart();
+		locationMngr.setCurrentPosition(iGP, acc);
+	}
+	
 	private void ssfKill() {
 		ssf.unregisterLogListener(logL);
 		ssf.kill();
@@ -527,7 +532,7 @@ public class SmartSpace extends Activity {
                 try {
                 	IGeoPoint iGP = IGeoPoint.fromGeoUri(contents, IGeoPoint.CONVERT_TYPE_STRING);
                     Accuracy acc = new Accuracy(Accuracy.HIGH_ACCURACY);
-                	startScan(iGP, acc);
+                	ssfStart(iGP, acc);
                 	appendConsoleText(getString(R.string.zxing_success) + ": "+ iGP.toString());
         			learningActive = true;
                     appendConsoleText(R.string.start_recording);
@@ -541,11 +546,6 @@ public class SmartSpace extends Activity {
         }
     }
 
-	private void startScan(IGeoPoint iGP, Accuracy acc) {
-		ssfStart();
-//		locationMngr.setCurrentPosition(iGP, acc);
-	}
-	
 	public TextView getDebugConsole() {
 		return console;
 	}

@@ -2,6 +2,8 @@ package de.ilimitado.smartspace;
 
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.IGeoPoint;
+import de.ilimitado.smartspace.positioning.iLocationListener;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 
 
 public class SSFLocationManager {

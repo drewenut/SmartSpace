@@ -166,7 +166,7 @@ public final class L {
 	public static void sincC(String LOG_TAG, String msg) {
 		int incrementedCount = counters.get(LOG_TAG)+1;
 		counters.put(LOG_TAG, incrementedCount);
-		L.d(LOG_TAG, msg + incrementedCount);
+		L.sd(LOG_TAG, msg + incrementedCount);
 	}
 	
 	public static void registerListener(LogListener logL){

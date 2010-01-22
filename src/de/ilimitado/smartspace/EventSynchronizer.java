@@ -30,6 +30,7 @@ public class EventSynchronizer implements Runnable{
 	private void restoreInvariants() {
 		sensorsReady = new HashMap<String, Syncable>();
 		sensorData = new HashMap<String, List<List<?>>>();
+		result = null;
 	}
 	
 	@Override

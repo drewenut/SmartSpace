@@ -89,7 +89,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	
 	private ConfigSensorGSM getSensorConfig_GSM() {
 		String sensorGSMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorGSM");
-		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", false);
+		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", true);
 		ConfigScannerGSMCell scannerGSMCell = getScannerGSMCellConfig();
 		ConfigSensorGSM snsCfgGSM = new ConfigSensorGSM(sensorGSMname, sensorGSMisActive, scannerGSMCell);
 		return snsCfgGSM;
@@ -97,8 +97,8 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 
 	private ConfigScannerGSMCell getScannerGSMCellConfig() {
 		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell__scanner_name", "scannerGsmRss");
-		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_is_active", false);
-		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_synchronize", false);
+		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_is_active", true);
+		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_synchronize", true);
 		int scnGSMThreshold = androidPreferences.getInt("scanner_config_gsm_cell_threshold", 10);
 		long scnGSMTimeout = androidPreferences.getLong("scanner_config_gsm_cell__timeout", 1000);
 		int scnGSMRefreshInterval = androidPreferences.getInt("scanner_config_gsm_cell__scanner_refresh_interval", 1000);

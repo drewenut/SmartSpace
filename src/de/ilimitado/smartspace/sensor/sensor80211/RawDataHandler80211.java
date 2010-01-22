@@ -8,10 +8,10 @@ import java.util.Set;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 
 public class RawDataHandler80211 extends AbstractSensorHandler {
 	

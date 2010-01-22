@@ -13,7 +13,6 @@ import android.os.PowerManager;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SSFLocationManager;
 import de.ilimitado.smartspace.SensingReactor;
@@ -24,8 +23,10 @@ import de.ilimitado.smartspace.SensorManager;
 import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
+import de.ilimitado.smartspace.sensor.sensorGSM.SensorDeviceGSM;
 import de.ilimitado.smartspace.sensor.sensorIMU.SensorDeviceIMU;
 import de.ilimitado.smartspace.utils.L;
 import de.ilimitado.smartspace.utils.LogListener;
@@ -58,7 +59,7 @@ public final class SmartSpaceFramework extends Service{
 		return ssf;
 	}
 	
-	private void bootstrap() {
+	public void bootstrap() {
 		SharedPreferences androidPreferences = this.getSharedPreferences("smartSpace", Context.MODE_WORLD_WRITEABLE);
 		AndroidConfigTranslator.getInstance(androidPreferences).translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
@@ -76,7 +77,7 @@ public final class SmartSpaceFramework extends Service{
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
 		sensorDevices.add(new SensorDevice80211(appDep));
-//		sensorDevices.add(new SensorDeviceGSM(appDep));
+		sensorDevices.add(new SensorDeviceGSM(appDep));
 		sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();

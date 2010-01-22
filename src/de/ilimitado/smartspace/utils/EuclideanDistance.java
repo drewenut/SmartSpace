@@ -1,8 +1,8 @@
 package de.ilimitado.smartspace.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.ilimitado.smartspace.LFPT;
 import de.ilimitado.smartspace.RTFPT;
@@ -29,8 +29,8 @@ public class EuclideanDistance {
   
 	public static class ArrayLengthMatcher {
 
-		private static HashMap<String, ScanSampleList> allRtSamples;
-		private static HashMap<String, ScanSampleList> allLFPTSamples;
+		private static ConcurrentHashMap<String, ScanSampleList> allRtSamples;
+		private static ConcurrentHashMap<String, ScanSampleList> allLFPTSamples;
 		private static ScanSampleList rtSamples;
 		private static ScanSampleList LFPTSamples;
 		private static DataSet<ScanSample> rtDataSet;

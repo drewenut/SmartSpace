@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.ilimitado.smartspace.persistance.Component;
 import de.ilimitado.smartspace.persistance.Composite;
@@ -18,7 +19,7 @@ public abstract class SensorDataSample implements Composite{
 	public static final String VALUE_ID = "ID";
 	
 	protected long creationTime;
-	protected HashMap<String, ScanSampleList> dataSampleMap = new HashMap<String, ScanSampleList>();
+	protected ConcurrentHashMap<String, ScanSampleList> dataSampleMap = new ConcurrentHashMap<String, ScanSampleList>();
 
 	public SensorDataSample(long creationTime) {
 		this.creationTime = creationTime;
@@ -69,7 +70,7 @@ public abstract class SensorDataSample implements Composite{
 		return vmContainer;
 	}
 	
-	public HashMap<String, ScanSampleList> getScanSampleLists() {
+	public ConcurrentHashMap<String, ScanSampleList> getScanSampleLists() {
 		return dataSampleMap;
 	}
 

@@ -13,7 +13,6 @@ import android.test.AndroidTestCase;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorDependencies;
@@ -22,6 +21,7 @@ import de.ilimitado.smartspace.SensorManager;
 import de.ilimitado.smartspace.android.AndroidConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 import de.ilimitado.smartspace.registry.Registry;
 import de.ilimitado.smartspace.sensor.sensor80211.SensorDevice80211;
 

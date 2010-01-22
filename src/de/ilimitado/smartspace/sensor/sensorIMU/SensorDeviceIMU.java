@@ -99,10 +99,12 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 			isActive.set(true);
 			try {
 				while (isActive.get()) {
+					if(Thread.interrupted()) {
+						unregisterListener();
+						break;
+					}
 					if(!listenerRegistered)
 						registerListener();
-					if(Thread.interrupted())
-						unregisterListener();
 				}
 				Thread.sleep(1000);
 			}

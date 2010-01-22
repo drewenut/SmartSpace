@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.ilimitado.smartspace.DataSampleFactory;
 import de.ilimitado.smartspace.Dependencies;
-import de.ilimitado.smartspace.iLocationManager;
 import de.ilimitado.smartspace.RTFPT;
 import de.ilimitado.smartspace.RadioMap;
 import de.ilimitado.smartspace.ScanSampleList;
@@ -14,6 +13,7 @@ import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.positioning.Accuracy;
 import de.ilimitado.smartspace.positioning.SimpleEuclideanDistanceProvider;
 import de.ilimitado.smartspace.positioning.WeightedIGeoPoint;
+import de.ilimitado.smartspace.positioning.iLocationManager;
 import de.ilimitado.smartspace.sensing.DataProcessor;
 import de.ilimitado.smartspace.utils.L;
 
