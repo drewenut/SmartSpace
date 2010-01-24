@@ -154,7 +154,8 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			}
 			
 			private void postCellData() {
-				activeCellScan = new ScanResultGSM(cellID, provider, cellRssi);
+					activeCellScan = new ScanResultGSM(cellID, provider, cellRssi);
+					activeCellScan.timestamp = System.currentTimeMillis();
 			}
 		};
 	}
@@ -167,7 +168,6 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			for(ScanResultGSM cell : cells) {
 				cell.timestamp = commitTime;
 			}
-			activeCellScan.timestamp = commitTime;
 			cells.add(activeCellScan);
 			
 			systemRawDataQueue.put(new SensorEvent<List<ScanResultGSM>>(cells, GSM_CELL_SCAN_EVENT_ID, SENSOR_ID));
