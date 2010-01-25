@@ -13,6 +13,7 @@ public final class Configuration {
 	public final ConfigSensing sensing;
 	public final ConfigSensor80211 sensor80211;
 	public final ConfigSensorGSM sensorGSM;
+	public final ConfigSensorIMU sensorIMU;
 	private static Configuration instance = null;
 	protected static List<AbstractSensorConfig> sensorConfigs = new ArrayList<AbstractSensorConfig>(); 
 	
@@ -20,13 +21,15 @@ public final class Configuration {
 			   			  	ConfigPersistence configPersistence,
 			   			  	ConfigSensing configSensing,
 			   			  	ConfigSensor80211 config80211,
-			   			  	ConfigSensorGSM configGSM
+			   			  	ConfigSensorGSM configGSM,
+			   			  	ConfigSensorIMU configIMU
 			   			  	) {
 		this.localization = algos;
 		this.persistence = configPersistence;
 		this.sensing = configSensing;
 		this.sensor80211 = config80211;
 		this.sensorGSM = configGSM;
+		this.sensorIMU = configIMU;
 	}
 	
 	public static void createConfiguration(	ConfigLocalization algos,
@@ -34,7 +37,7 @@ public final class Configuration {
 										   	ConfigSensing fptColl,
 										   	ConfigSensor80211 snsCfg80211
 											) {
-		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, null);
+		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, null, null);
 	}
 	
 	public static void createConfiguration(	ConfigLocalization algos,
@@ -43,8 +46,18 @@ public final class Configuration {
 		   	ConfigSensor80211 snsCfg80211,
 		   	ConfigSensorGSM configGSM
 			) {
-instance = new Configuration(algos, persConf, fptColl , snsCfg80211, configGSM);
-}
+		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, configGSM, null);
+	}
+	
+	public static void createConfiguration(	ConfigLocalization algos,
+		   	ConfigPersistence persConf,
+		   	ConfigSensing fptColl,
+		   	ConfigSensor80211 snsCfg80211,
+		   	ConfigSensorGSM configGSM,
+		   	ConfigSensorIMU configIMU
+			) {
+		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, configGSM, configIMU);
+	}
 	
 	public static Configuration getInstance() {
 		if(instance != null)

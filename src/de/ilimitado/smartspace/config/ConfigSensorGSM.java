@@ -6,9 +6,12 @@ public class ConfigSensorGSM extends AbstractSensorConfig{
 	
 	public final ConfigScannerGSMCell scannerGSMCells;
 
-	public  ConfigSensorGSM(String SENSOR_NAME, boolean isActive, ConfigScannerGSMCell scannerGSMCells) {
+	public String scanSelection;
+
+	public  ConfigSensorGSM(String SENSOR_NAME, boolean isActive, ConfigScannerGSMCell scannerGSMCells, String scanSelection) {
 		super(SENSOR_ID, SENSOR_NAME, isActive);
 		this.scannerGSMCells = scannerGSMCells;
+		this.scanSelection = scanSelection;
 			if(isActive)
 				Configuration.sensorConfigs.add(this);
 	}

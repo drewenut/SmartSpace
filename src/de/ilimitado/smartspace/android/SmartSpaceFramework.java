@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.EventSynchronizer;
@@ -20,6 +21,7 @@ import de.ilimitado.smartspace.SensorDependencies;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.SensorLoader;
 import de.ilimitado.smartspace.SensorManager;
+import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.fsm.InitialState;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
@@ -60,7 +62,7 @@ public final class SmartSpaceFramework extends Service{
 	}
 	
 	public void bootstrap() {
-		SharedPreferences androidPreferences = this.getSharedPreferences("smartSpace", Context.MODE_WORLD_WRITEABLE);
+		SharedPreferences androidPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		AndroidConfigTranslator.getInstance(androidPreferences).translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		Registry reg = new Registry();
@@ -76,9 +78,12 @@ public final class SmartSpaceFramework extends Service{
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
-		sensorDevices.add(new SensorDevice80211(appDep));
-		sensorDevices.add(new SensorDeviceGSM(appDep));
-		sensorDevices.add(new SensorDeviceIMU(appDep));
+		if(Configuration.getInstance().sensor80211.isActive)
+			sensorDevices.add(new SensorDevice80211(appDep));
+		if(Configuration.getInstance().sensorGSM.isActive)
+			sensorDevices.add(new SensorDeviceGSM(appDep));
+		if(Configuration.getInstance().sensorIMU.isActive)
+			sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();

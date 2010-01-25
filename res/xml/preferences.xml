@@ -38,7 +38,6 @@ android:title="Settings"
 		<EditTextPreference
 		android:key="persistance_config_refreshInterval"
 	 	android:title="@string/persistance_config_refreshInterval"
-	 	android:summary="@string/persistance_config_refreshInterval_summary"
 		android:dialogTitle="@string/persistance_config_refreshInterval_title"
 		android:defaultValue="60000"
 		android:numeric="integer"
@@ -145,6 +144,15 @@ android:title="Settings"
 	 	android:summaryOff="@string/sensor_config_gsm_sensor_is_active_off"
 		android:defaultValue="true"
 		/>	
+		<ListPreference
+		android:key="gsm_scan_selection"
+	 	android:title="@string/sensor_config_gsm_sensor_scan_selection_title"
+	 	android:summary="@string/sensor_config_gsm_sensor_scan_selection_summary"
+		android:dialogTitle="@string/sensor_config_gsm_sensor_scan_selection_title"
+		android:entries="@array/gsm_scan_selection"
+		android:entryValues="@array/gsm_scan_selection_codes"
+		android:defaultValue="@string/sensor_config_gsm_sensor_scan_selection_default_value"
+		/>
 		<PreferenceScreen
 		android:title="@string/scanner_config_gsm_cell">
 			<PreferenceCategory
@@ -205,6 +213,43 @@ android:title="Settings"
 				android:defaultValue="true"
 				/>
 			</PreferenceCategory>
+		</PreferenceScreen>
+	</PreferenceScreen>
+	
+	<PreferenceScreen
+	android:title="@string/sensor_config_imu">
+		<EditTextPreference
+	 	android:key="sensor_config_gsm_sensor_name"
+	 	android:title="@string/sensor_config_imu_sensor_name"
+		android:dialogTitle="@string/sensor_config_imu_sensor_name_title"
+		android:defaultValue="sensorGSM"
+		/>
+		<CheckBoxPreference
+		android:key="sensor_config_gsm_sensor_is_active"
+	 	android:title="@string/sensor_config_gsm_sensor_is_active"
+	 	android:summaryOn="@string/sensor_config_gsm_sensor_is_active_on"
+	 	android:summaryOff="@string/sensor_config_gsm_sensor_is_active_off"
+		android:defaultValue="true"
+		/>	
+		<PreferenceScreen
+		android:title="@string/scanner_config_imu_motion">
+			<PreferenceCategory
+			android:title="@string/scanner_config_imu_motion_settings">
+				<EditTextPreference
+			 	android:key="scanner_config_imu_motion_name"
+			 	android:title="@string/scanner_config_imu_motion_name"
+			 	android:summary="@string/scanner_config_imu_motion_name_summary"
+				android:dialogTitle="@string/scanner_config_imu_motion_name_title"
+				android:defaultValue="scannerGSMActiveCell"
+				/>
+				<CheckBoxPreference
+				android:key="scanner_config_imu_motion_is_active"
+			 	android:title="@string/scanner_config_imu_motion_is_active"
+			 	android:summaryOn="@string/scanner_config_imu_motion_is_active_on"
+			 	android:summaryOff="@string/scanner_config_imu_motion_is_active_off"
+				android:defaultValue="true"
+				/>
+			</PreferenceCategory>			
 		</PreferenceScreen>
 	</PreferenceScreen>
 </PreferenceScreen>

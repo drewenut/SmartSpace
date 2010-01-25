@@ -160,16 +160,8 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		};
 	}
 	
-	private synchronized void postSensorData() {
+	private synchronized void postSensorData(ArrayList<ScanResultGSM> cells) {
 		try {
-			long commitTime = System.currentTimeMillis();
-			ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
-			
-			for(ScanResultGSM cell : cells) {
-				cell.timestamp = commitTime;
-			}
-			cells.add(activeCellScan);
-			
 			systemRawDataQueue.put(new SensorEvent<List<ScanResultGSM>>(cells, GSM_CELL_SCAN_EVENT_ID, SENSOR_ID));
 			L.d(LOG_TAG, "SensorEvent<ScanResultGSM> added, current systemRawDataQueue Size " + systemRawDataQueue.size());
 		} catch (InterruptedException e) {
@@ -180,6 +172,10 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 
 	class ScannerGSM implements Runnable {
 
+		private static final String ACTIVE_CELL_SCAN = "activeCell";
+		private static final String NEIGHBOR_CELL_SCAN = "neighborCell";
+		private static final String ACTIVE_NEIGHBOR_CELL_SCAN = "activeNeighborCell";
+		
 		public AtomicBoolean isActive = new AtomicBoolean(false);
 		private AtomicBoolean activeCellisActive = new AtomicBoolean(false);
 		private AtomicBoolean neighborCellisActive = new AtomicBoolean(false);
@@ -187,29 +183,66 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		@Override
 		public void run() {
 			isActive.set(true);
-			activeCellisActive.set(true);
-			neighborCellisActive.set(true);
-			
+			ArrayList<ScanResultGSM> cells = new ArrayList<ScanResultGSM>();
+			String scanSelection = Configuration.getInstance().sensorGSM.scanSelection;
+			L.sd(LOG_TAG, scanSelection);
 			try {
-				(new NeigbhorCellsScan("GSM-neighbour-cells")).start();
-				Thread.sleep(1000);
-				(new ActiveCellScan("GSM-active-cell")).start();
-			
+				if(scanSelection.equals(ACTIVE_CELL_SCAN)) {
+					activeCellisActive.set(true);
+					(new ActiveCellScan("GSM-active-cell")).start();
+				}
+				else if(scanSelection.equals(NEIGHBOR_CELL_SCAN)) {
+					neighborCellisActive.set(true);
+					(new NeigbhorCellsScan("GSM-neighbour-cells")).start();
+				}
+				else if (scanSelection.equals(ACTIVE_NEIGHBOR_CELL_SCAN)){
+					activeCellisActive.set(true);
+					neighborCellisActive.set(true);
+					(new NeigbhorCellsScan("GSM-neighbour-cells")).start();
+					Thread.sleep(1000);
+					(new ActiveCellScan("GSM-active-cell")).start();
+				}
+				
+				//TODO Refactor Template Method...
 				while (isActive.get()) {
 					if (Thread.currentThread().isInterrupted()) {
-						isActive.set(false);
-						break;
+						throw new InterruptedException();
 					}
-					if(syncedNeighborCellList.size() > 0 && activeCellScan != null)
-						postSensorData();
+					if(scanSelection.equals(ACTIVE_CELL_SCAN) && activeCellScan != null) {
+						cells.add(selectActiveCell());
+					}
+					else if(scanSelection.equals(NEIGHBOR_CELL_SCAN) && syncedNeighborCellList.size() > 0) {
+						cells = selectNeighborCells();
+					}
+					else if(scanSelection.equals(ACTIVE_NEIGHBOR_CELL_SCAN) && syncedNeighborCellList.size() > 0 && activeCellScan != null) {
+						cells = selectNeighborCells();
+						cells.add(selectActiveCell());
+					}
+					postSensorData(cells);
 					Thread.sleep(500);
-					} 
-				}	
-			catch (InterruptedException e) {
-					isActive.set(false);
-					activeCellisActive.set(false);
-					neighborCellisActive.set(false);
+					cells = new ArrayList<ScanResultGSM>();
+				}
 			}
+			catch (InterruptedException e) {
+				isActive.set(false);
+				activeCellisActive.set(false);
+				neighborCellisActive.set(false);
+			}
+		}
+
+		private ArrayList<ScanResultGSM> selectNeighborCells() {
+			ArrayList<ScanResultGSM> cells = (ArrayList<ScanResultGSM>) neighborCellScan.clone();
+			long commitTime = System.currentTimeMillis();
+			for(ScanResultGSM cell : cells) {
+				cell.timestamp = commitTime;
+			}
+			return cells;
+		}
+
+		private ScanResultGSM selectActiveCell() {
+			ScanResultGSM activeCell = activeCellScan;
+			activeCell.timestamp = System.currentTimeMillis();
+			return activeCell;
 		}
 		
 		public String getEventID(){

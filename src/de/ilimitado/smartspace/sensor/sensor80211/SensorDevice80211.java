@@ -183,7 +183,7 @@ public class SensorDevice80211 extends AbstractSensorDevice {
 			}
 			L.d(LOG_TAG, "SensorEvent<ScanResult80211> added, current systemRawDataQueue Size "+systemRawDataQueue.size());
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				unregisterReceiver();
 			}

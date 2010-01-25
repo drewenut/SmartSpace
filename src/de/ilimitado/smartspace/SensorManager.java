@@ -60,7 +60,9 @@ public class SensorManager {
 			for (ThreadGroup runningSensor : runningSensorsList) {
 				runningSensor.interrupt();
 			}
-		} catch (SecurityException e) {
+			Thread.sleep(1000);
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 			L.e(LOG_TAG, "Ups ... an exception happend while trying to release WakeLock - Here is what I know: " + e.getMessage());
 		}

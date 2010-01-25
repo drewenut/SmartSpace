@@ -19,7 +19,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	//TODO put in Configuration Object...
 	//just take every 20th value from sensor data stream...
-	private static final int VALUE_COUNT_THRESHOLD = 20; 
+	private static final int VALUE_COUNT_THRESHOLD = 5; 
 	
 	private final PersistanceManager persistanceMgr;
 	private int valueCount = 0;

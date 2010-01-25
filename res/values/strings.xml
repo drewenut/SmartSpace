@@ -79,7 +79,6 @@
 	
 	
 	<string name="persistance_config_refreshInterval">RM refresh interval</string>
-	<string name="persistance_config_refreshInterval_summary"></string>
 	<string name="persistance_config_refreshInterval_title">Choose RM refresh interval</string>
 	
 	
@@ -123,6 +122,10 @@
 	<string name="sensor_config_gsm_sensor_is_active">Is Active</string>
 	<string name="sensor_config_gsm_sensor_is_active_on">GSM Sensor is ON</string>
 	<string name="sensor_config_gsm_sensor_is_active_off">GSM Sensor is OFF</string>
+	<string name="sensor_config_gsm_sensor_scan_selection">Scan Selection</string>
+	<string name="sensor_config_gsm_sensor_scan_selection_title">Select Scan method</string>
+	<string name="sensor_config_gsm_sensor_scan_selection_summary">Choose a GSM scan method</string>
+	<string name="sensor_config_gsm_sensor_scan_selection_default_value">activeCell</string>
 	
 	<string name="scanner_config_gsm_cell">Scanner Config GSM Active Cell</string>
 	<string name="scanner_config_gsm_cell_settings">Scanner Config GSM Settings</string>
@@ -149,6 +152,22 @@
 	<string name="scanner_config_gsm_cell_commands_mean_command">Mean Command</string>
 	<string name="scanner_config_gsm_cell_commands_mean_command_on">MC is ON</string>
 	<string name="scanner_config_gsm_cell_commands_mean_command_off">MC is OFF</string>
+	
+	<string name="sensor_config_imu">Sensor Config IMU</string>
+	<string name="sensor_config_imu_sensor_name">Sensor Name</string>
+	<string name="sensor_config_imu_sensor_name_title">Enter the sensor's name</string>
+	<string name="sensor_config_imu_sensor_is_active">Is Active</string>
+	<string name="sensor_config_imu_sensor_is_active_on">imu Sensor is ON</string>
+	<string name="sensor_config_imu_sensor_is_active_off">imu Sensor is OFF</string>
+	
+	<string name="scanner_config_imu_motion">Scanner Config IMU Motion</string>
+	<string name="scanner_config_imu_motion_settings">Scanner Config IMU Settings</string>
+	<string name="scanner_config_imu_motion_name">Scanner Name</string>
+	<string name="scanner_config_imu_motion_name_summary"></string>
+	<string name="scanner_config_imu_motion_name_title">Enter the scanner's name</string>
+	<string name="scanner_config_imu_motion_is_active">Is Active</string>
+	<string name="scanner_config_imu_motion_is_active_on">Scanner is ON</string>
+	<string name="scanner_config_imu_motion_is_active_off">Scanner is OFF</string>
 
     <string-array name="persistance_config_modes">
     	<item>Science mode</item>
@@ -167,5 +186,17 @@
     <string-array name="input_method_selection_codes">
     	<item>0x0000</item>
     	<item>0x0001</item>
+    </string-array>
+    
+    <string-array name="gsm_scan_selection">
+    	<item>Active Cell</item>
+    	<item>Neighbor Cells</item>
+    	<item>Active + Neighbor Cells</item>
+    </string-array>
+    
+    <string-array name="gsm_scan_selection_codes">
+    	<item>activeCell</item>
+    	<item>neighborCell</item>
+    	<item>activeNeighborCell</item>
     </string-array>
 </resources>
