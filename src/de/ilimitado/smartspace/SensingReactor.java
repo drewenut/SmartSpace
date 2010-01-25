@@ -28,15 +28,6 @@ public class SensingReactor implements Runnable{
 		sensorHandlerRegistry.addSensorHandler(eventID, handlers);
 	}
 
-//	public List<AbstractSensorHandler> getActiveSyncableEventHandlers(){
-//		List<AbstractSensorHandler> sensorHandlers = new ArrayList<AbstractSensorHandler>();
-//		for(AbstractSensorHandler handler : sensorHandlerRegistry.values()){
-//			if(handler.isSyncable())
-//				sensorHandlers.add(handler);
-//		}
-//		return sensorHandlers;
-//	}
-
 	@SuppressWarnings("unchecked")
 	public void handleEvents() {
 		while (isAlive.get()) {

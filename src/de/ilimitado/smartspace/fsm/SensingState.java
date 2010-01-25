@@ -43,7 +43,6 @@ public abstract class SensingState implements State {
 		evtSync = dep.sensorDependencies.eventSnychronizer;
 		sReactor = dep.sensorDependencies.reactor;
 		sHdlProv = (SensorHandlerProvider) dep.sensorDependencies.registry.get(Registry.SENSOR_HANDLER_PROVIDER);
-		//TODO Refactored, but now Methods on sReactor.getActiveEventHandlers() needs to be removed
 		registeredEventHandlers = sHdlProv.getValues();
 		syncSet = Configuration.getInstance().getSyncList();
 		dCP= (DataCommandProvider) dep.sensorDependencies.registry.get(Registry.SENSOR_DATA_CMD_PROVIDER);

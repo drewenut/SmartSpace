@@ -120,7 +120,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 	
 	private ConfigSensorIMU getSensorConfig_IMU() {
-		String sensorIMUMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorIMU");
+		String sensorIMUMname = androidPreferences.getString("sensor_config_imu_sensor_name", "sensorIMU");
 		boolean sensorIMUisActive = androidPreferences.getBoolean("sensor_config_imu_sensor_is_active", true);
 		ConfigScannerIMUMotion scannerIMUMotion = getScannerIMUMotionConfig();
 		ConfigSensorIMU snsCfgIMU = new ConfigSensorIMU(sensorIMUMname, sensorIMUisActive, scannerIMUMotion);
