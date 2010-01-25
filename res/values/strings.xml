@@ -81,6 +81,9 @@
 	<string name="persistance_config_refreshInterval">RM refresh interval</string>
 	<string name="persistance_config_refreshInterval_title">Choose RM refresh interval</string>
 	
+	<string name="persistance_config_buffer_size">Buffer size</string>
+	<string name="persistance_config_buffer_size_title">Choose adequate buffer size</string>
+	
 	
 	<string name="fpt_collection">FPT Collection Config</string>
 	<string name="fpt_collection_orientation_quant_count">Orientation Quantization Count</string>

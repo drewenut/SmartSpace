@@ -54,7 +54,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		int persistanceMode = Integer.parseInt(androidPreferences.getString("persistance_config_mode", "0"));
 		int refreshInterval = Integer.parseInt(androidPreferences.getString("persistance_config_refreshInterval", "60000"));
 		String lfptPersistanceDBName = androidPreferences.getString("persistance_config_lfptPersistanceDBName", "RadioMap");
-		int lfptPersistanceBufferSize = Integer.parseInt(androidPreferences.getString("persistance_config_lfptPersistanceBufferSize", "10"));
+		int lfptPersistanceBufferSize = Integer.parseInt(androidPreferences.getString("persistance_config_buffer_size", "5"));
 		ConfigPersistence persConf = new ConfigPersistence(lfptPersistanceDBName, persistanceMode, lfptPersistanceBufferSize, refreshInterval);
 		return persConf;
 	}
@@ -105,7 +105,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell_scanner_name", "scannerGsmRss");
 		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_is_active", true);
 		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_synchronize", true);
-		int scnGSMThreshold = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_threshold", "10"));
+		int scnGSMThreshold = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_threshold", "5"));
 		long scnGSMTimeout = Long.parseLong(androidPreferences.getString("scanner_config_gsm_cell_timeout", "1000"));
 		int scnGSMRefreshInterval = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_scanner_refresh_interval", "1000"));
 		ConfigDataCommands scnGSMCommands = getGSM_DataProcessCommands();
