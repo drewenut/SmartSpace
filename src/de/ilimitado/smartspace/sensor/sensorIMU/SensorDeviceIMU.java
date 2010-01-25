@@ -11,6 +11,7 @@ import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.AbstractSensorHandler;
 import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.SensorEvent;
+import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.persistance.ScanSampleDBPersistanceProvider;
 import de.ilimitado.smartspace.registry.DataCommandProvider;
 import de.ilimitado.smartspace.registry.ScanSampleProvider;
@@ -27,9 +28,8 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 	public SensorDeviceIMU(Dependencies appDeps) {
 		super(appDeps);
 		
-		//TODO add to Configuration Object
-		IMU_SCAN_EVENT_MOTION_ID = "IMU_Motion_ID";
-		IMU_SCAN_EVENT_MOTION_NAME = "IMU_Motion";
+		IMU_SCAN_EVENT_MOTION_ID = Configuration.getInstance().sensorIMU.scannerMotion.ID;
+		IMU_SCAN_EVENT_MOTION_NAME = Configuration.getInstance().sensorIMU.scannerMotion.NAME;
 		
 		this.sensorManager = (SensorManager) androidCtx.getSystemService(Context.SENSOR_SERVICE);
 	}
@@ -55,14 +55,12 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 	
 	@Override
 	public void initSensorID() {
-		//TODO add to Configuration Object, when add update!!! reference in InertialState.enterState()...
-		SENSOR_ID = "IMU";
+		SENSOR_ID = Configuration.getInstance().sensorIMU.ID;
 	}
 
 	@Override
 	public void initSensorName() {
-		//TODO add to Configuration Object
-		SENSOR_NAME = "IMUSensor";
+		SENSOR_NAME = Configuration.getInstance().sensorIMU.NAME;
 	}
 	
 	@Override
@@ -81,8 +79,7 @@ public class SensorDeviceIMU extends AbstractSensorDevice {
 	public void registerDBPersistance(ScanSampleDBPersistanceProvider sSplDBPers) {	}
 	
 	private boolean isActive() {
-		//TODO add to Configuration Object
-		return true;
+		return Configuration.getInstance().sensorIMU.scannerMotion.isActive;
 	}
 
 	public String toString(){

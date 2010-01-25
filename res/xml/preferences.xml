@@ -249,6 +249,19 @@ android:title="Settings"
 			 	android:summaryOff="@string/scanner_config_imu_motion_is_active_off"
 				android:defaultValue="true"
 				/>
+				<EditTextPreference
+			 	android:key="scanner_config_imu_motion_sensitivity"
+			 	android:title="@string/scanner_config_imu_motion_sensitivity"
+			 	android:summary="@string/scanner_config_imu_motion_sensitivity_summary"
+				android:dialogTitle="@string/scanner_config_imu_motion_sensitivity_title"
+				android:defaultValue="0.4"
+				/>
+				<EditTextPreference
+			 	android:key="scanner_config_imu_motion_queue_capacity"
+			 	android:title="@string/scanner_config_imu_motion_queue_capacity"
+				android:dialogTitle="@string/scanner_config_imu_motion_queue_capacity_title"
+				android:defaultValue="4"
+				/>
 			</PreferenceCategory>			
 		</PreferenceScreen>
 	</PreferenceScreen>

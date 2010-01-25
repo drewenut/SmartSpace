@@ -128,9 +128,11 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 
 	private ConfigScannerIMUMotion getScannerIMUMotionConfig() {
-		String scnGSMName = androidPreferences.getString("scanner_config_imu_motion_name", "scannerGsmRss");
+		String scnGSMName = androidPreferences.getString("scanner_config_imu_motion_name", "SCN_IMU_Motion");
+		double sensitivity = Double.parseDouble(androidPreferences.getString("scanner_config_imu_motion_sensitivity", "0.4"));
+		int queueCapacity = Integer.parseInt(androidPreferences.getString("scanner_config_imu_motion_queue_capacity", "4"));
 		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_imu_motion_active", true);
-		ConfigScannerIMUMotion scnGSM = new ConfigScannerIMUMotion(scnGSMName, scnGSMisActive);
+		ConfigScannerIMUMotion scnGSM = new ConfigScannerIMUMotion(scnGSMName, scnGSMisActive, sensitivity, queueCapacity);
 		return scnGSM;
 	}
 }

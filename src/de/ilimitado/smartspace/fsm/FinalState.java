@@ -20,9 +20,7 @@ public class FinalState implements State {
 	}
 
 	@Override
-	public void exitState() {
-		// TODO implement
-	}
+	public void exitState() { }
 
 	@Override
 	public State switchNextState(boolean pos, boolean mtn) {

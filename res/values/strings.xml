@@ -162,12 +162,17 @@
 	
 	<string name="scanner_config_imu_motion">Scanner Config IMU Motion</string>
 	<string name="scanner_config_imu_motion_settings">Scanner Config IMU Settings</string>
-	<string name="scanner_config_imu_motion_name">Scanner Name</string>
+	<string name="scanner_config_imu_motion_name">SCN_IMU_Motion</string>
 	<string name="scanner_config_imu_motion_name_summary"></string>
 	<string name="scanner_config_imu_motion_name_title">Enter the scanner's name</string>
 	<string name="scanner_config_imu_motion_is_active">Is Active</string>
 	<string name="scanner_config_imu_motion_is_active_on">Scanner is ON</string>
 	<string name="scanner_config_imu_motion_is_active_off">Scanner is OFF</string>
+	<string name="scanner_config_imu_motion_sensitivity">Motion sensitivity</string>
+	<string name="scanner_config_imu_motion_sensitivity_summary">Adjust sensitivity for motion detection</string>
+	<string name="scanner_config_imu_motion_sensitivity_title">Set motion sensitivity</string>
+	<string name="scanner_config_imu_motion_queue_capacity">Queue Capacity</string>
+	<string name="scanner_config_imu_motion_queue_capacity_title">Set queue capacity</string>
 
     <string-array name="persistance_config_modes">
     	<item>Science mode</item>

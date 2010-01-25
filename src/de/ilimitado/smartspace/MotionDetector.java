@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Looper;
+import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.sensor.sensorIMU.ScanResultIMU;
 import de.ilimitado.smartspace.utils.L;
 
@@ -15,9 +16,8 @@ public class MotionDetector implements Runnable{
 	
 	private static final String LOG_TAG = "MotionDetector";
 
-	//TODO add to configurations
-	private static final double MTN_SENSITIVITY = 0.4d;
-	private static final int QUEUE_CAPACITY = 4;
+	private static final double MTN_SENSITIVITY = Configuration.getInstance().sensorIMU.scannerMotion.MTN_SENSITIVITY;
+	private static final int QUEUE_CAPACITY = Configuration.getInstance().sensorIMU.scannerMotion.QUEUE_CAPACITY;
 	
 	private AtomicBoolean isAlive = new AtomicBoolean(false);
 	private final LinkedBlockingQueue<ArrayList<ScanResultIMU>> mtnDataQueue = new LinkedBlockingQueue<ArrayList<ScanResultIMU>>();

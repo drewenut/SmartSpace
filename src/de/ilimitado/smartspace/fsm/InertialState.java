@@ -4,6 +4,7 @@ import de.ilimitado.smartspace.Dependencies;
 import de.ilimitado.smartspace.MotionDetector;
 import de.ilimitado.smartspace.SensingReactor;
 import de.ilimitado.smartspace.SensorManager;
+import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.utils.L;
 
 public class InertialState implements State {
@@ -38,7 +39,7 @@ public class InertialState implements State {
 		sReactorWorker.start();
 		
 		if(!sMngr.sensorsStarted()){
-			sMngr.startSensor("IMU");
+			sMngr.startSensor(Configuration.getInstance().sensorIMU.ID);
 		}
 	}
 
