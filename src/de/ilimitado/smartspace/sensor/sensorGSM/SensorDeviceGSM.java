@@ -155,7 +155,6 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 			
 			private void postCellData() {
 					activeCellScan = new ScanResultGSM(cellID, provider, cellRssi);
-					activeCellScan.timestamp = System.currentTimeMillis();
 			}
 		};
 	}
@@ -202,6 +201,10 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 					Thread.sleep(1000);
 					(new ActiveCellScan("GSM-active-cell")).start();
 				}
+				else {
+					L.sd(LOG_TAG, "SensorDeviceGSM exiting due to non existing scan method: " + scanSelection);
+					return;
+				}
 				
 				//TODO Refactor Template Method...
 				while (isActive.get()) {
@@ -240,7 +243,7 @@ public class SensorDeviceGSM extends AbstractSensorDevice {
 		}
 
 		private ScanResultGSM selectActiveCell() {
-			ScanResultGSM activeCell = activeCellScan;
+			ScanResultGSM activeCell = new ScanResultGSM(Integer.valueOf(activeCellScan.CID), activeCellScan.PROVIDER, activeCellScan.level);
 			activeCell.timestamp = System.currentTimeMillis();
 			return activeCell;
 		}

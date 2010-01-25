@@ -62,8 +62,7 @@ public final class SmartSpaceFramework extends Service{
 	}
 	
 	public void bootstrap() {
-		SharedPreferences androidPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		AndroidConfigTranslator.getInstance(androidPreferences).translate();
+		AndroidConfigTranslator.getInstance(this).translate();
 		LinkedBlockingQueue<SensorEvent<?>> systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		Registry reg = new Registry();
 		PersistanceManager persMngr = new PersistanceManager(this);
@@ -78,12 +77,13 @@ public final class SmartSpaceFramework extends Service{
 		SensorDependencies sDep = new SensorDependencies(sReact, evtSync, sMng, systemRawDataQueue, reg);
 		appDep = new Dependencies(this, sDep, mtnDet, persMngr, indrLocMngr);
 		ArrayList<AbstractSensorDevice> sensorDevices = new ArrayList<AbstractSensorDevice>();
+		//TODO if no sensors are selected in the config object SmartSpace has to be shut down or at least user must be notified...
 		if(Configuration.getInstance().sensor80211.isActive)
 			sensorDevices.add(new SensorDevice80211(appDep));
-		if(Configuration.getInstance().sensorGSM.isActive)
-			sensorDevices.add(new SensorDeviceGSM(appDep));
-		if(Configuration.getInstance().sensorIMU.isActive)
-			sensorDevices.add(new SensorDeviceIMU(appDep));
+//		if(Configuration.getInstance().sensorGSM.isActive)
+//			sensorDevices.add(new SensorDeviceGSM(appDep));
+//		if(Configuration.getInstance().sensorIMU.isActive)
+//			sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();

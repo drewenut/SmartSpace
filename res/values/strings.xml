@@ -125,7 +125,7 @@
 	<string name="sensor_config_gsm_sensor_scan_selection">Scan Selection</string>
 	<string name="sensor_config_gsm_sensor_scan_selection_title">Select Scan method</string>
 	<string name="sensor_config_gsm_sensor_scan_selection_summary">Choose a GSM scan method</string>
-	<string name="sensor_config_gsm_sensor_scan_selection_default_value">activeCell</string>
+	<string name="sensor_config_gsm_sensor_scan_selection_default_value">activeNeighborCell</string>
 	
 	<string name="scanner_config_gsm_cell">Scanner Config GSM Active Cell</string>
 	<string name="scanner_config_gsm_cell_settings">Scanner Config GSM Settings</string>

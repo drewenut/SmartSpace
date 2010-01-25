@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 import de.ilimitado.smartspace.AbstractSensorDevice;
 import de.ilimitado.smartspace.Dependencies;
@@ -37,8 +35,7 @@ public class SensorTests extends AndroidTestCase{
 	protected void setUp() throws Exception {
 		super.setUp();
 		Context androidCtx = getContext();
-		SharedPreferences androidPreferences = PreferenceManager.getDefaultSharedPreferences(androidCtx);
-		AndroidConfigTranslator.getInstance(androidPreferences).translate();
+		AndroidConfigTranslator.getInstance(getContext()).translate();
 		this.config = Configuration.getInstance();
 		systemRawDataQueue = new LinkedBlockingQueue<SensorEvent<?>>();
 		MotionDetector mtnDet = new MotionDetector();

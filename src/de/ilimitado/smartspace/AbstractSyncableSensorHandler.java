@@ -53,7 +53,7 @@ public abstract class AbstractSyncableSensorHandler extends AbstractSensorHandle
 	public void handleEvent(SensorEvent evt) {
 		sensorEventThresholdQueue.add(evt);
 		int size = sensorEventThresholdQueue.size();
-		if(size == SENSOR_EVENT_CONSTRAINT_THRESHOLD){
+		if(size >= SENSOR_EVENT_CONSTRAINT_THRESHOLD){
 			L.d(LOG_TAG, "Sensor handler ready: " + getAssociatedEventID());
 			eventSynchronizer.isReady(associatedEventID, this);
 		}

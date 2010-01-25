@@ -2,7 +2,9 @@ package de.ilimitado.smartspace.android;
 
 import java.util.HashMap;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import de.ilimitado.smartspace.config.ConfigDataCommands;
 import de.ilimitado.smartspace.config.ConfigLocalization;
 import de.ilimitado.smartspace.config.ConfigPersistence;
@@ -21,13 +23,13 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	private static AndroidConfigTranslator instance;
 	private SharedPreferences androidPreferences;
 
-	protected AndroidConfigTranslator(SharedPreferences preferences) {
-		this.androidPreferences = preferences;
+	protected AndroidConfigTranslator(Context ctx) {
+		this.androidPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 	}
 	
-	public static AndroidConfigTranslator getInstance(SharedPreferences preferences) {
+	public static AndroidConfigTranslator getInstance(Context ctx) {
 		return instance == null 
-				? instance = new AndroidConfigTranslator(preferences)
+				? instance = new AndroidConfigTranslator(ctx)
 				: instance;
 	}
 	
@@ -94,18 +96,18 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 		String sensorGSMname = androidPreferences.getString("sensor_config_gsm_sensor_name", "sensorGSM");
 		boolean sensorGSMisActive = androidPreferences.getBoolean("sensor_config_gsm_sensor_is_active", true);
 		ConfigScannerGSMCell scannerGSMCell = getScannerGSMCellConfig();
-		String scanSelection = androidPreferences.getString("gsm_scan_selection", "active123NeighborCell");
+		String scanSelection = androidPreferences.getString("gsm_scan_selection", "activeCell");
 		ConfigSensorGSM snsCfgGSM = new ConfigSensorGSM(sensorGSMname, sensorGSMisActive, scannerGSMCell, scanSelection);
 		return snsCfgGSM;
 	}
 
 	private ConfigScannerGSMCell getScannerGSMCellConfig() {
-		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell__scanner_name", "scannerGsmRss");
-		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_is_active", true);
-		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell__scanner_synchronize", true);
+		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell_scanner_name", "scannerGsmRss");
+		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_is_active", true);
+		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_synchronize", true);
 		int scnGSMThreshold = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_threshold", "10"));
-		long scnGSMTimeout = Long.parseLong(androidPreferences.getString("scanner_config_gsm_cell__timeout", "1000"));
-		int scnGSMRefreshInterval = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell__scanner_refresh_interval", "1000"));
+		long scnGSMTimeout = Long.parseLong(androidPreferences.getString("scanner_config_gsm_cell_timeout", "1000"));
+		int scnGSMRefreshInterval = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_scanner_refresh_interval", "1000"));
 		ConfigDataCommands scnGSMCommands = getGSM_DataProcessCommands();
 		ConfigScannerGSMCell scnGSM = new ConfigScannerGSMCell(scnGSMName, scnGSMisActive, scnGSMSynchronize, scnGSMThreshold, scnGSMTimeout, scnGSMCommands, scnGSMRefreshInterval);
 		return scnGSM;

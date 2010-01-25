@@ -18,8 +18,8 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	private HashMap<String, ArrayList<ScanResultGSM>> gsmEventBuffer = new HashMap<String, ArrayList<ScanResultGSM>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	//TODO put in Configuration Object...
-	//just take every 10th value from sensor data stream...
-	private static final int VALUE_COUNT_THRESHOLD = 10; 
+	//just take every 5th value from sensor data stream...
+	private static final int VALUE_COUNT_THRESHOLD = 2; 
 	
 	private final PersistanceManager persMgr;
 	private iLocationManager locMngr;
@@ -36,7 +36,7 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	public void handleEvent(SensorEvent<Collection> evt) {
 		List<ScanResultGSM> cellList =  (List<ScanResultGSM>) evt.getEventHandle();
 		if(cellList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
-			Log.d(LOG_TAG, "Adding 80211 scan result to wifi event cache...");
+			Log.d(LOG_TAG, "Adding GSM scan result to gsm event cache...");
 			for(ScanResultGSM scnRes : cellList) {
 				String cellID = scnRes.CID;
 				if(!gsmEventBuffer.containsKey(cellID)) {
@@ -53,7 +53,6 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	 * Any Data that you Cache in handlers must be saved here!
 	 */
 
-	@Override
 	public void onShutdown() {
 		postProcessWifiData();
 	}

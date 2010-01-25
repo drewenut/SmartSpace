@@ -69,7 +69,8 @@ public final class Configuration {
 	public ConstraintsMap<String, List<Number>> getConstraints() {
 		ConstraintsMap<String, List<Number>> cMap = new ConstraintsMap<String, List<Number>>();
 		for(AbstractSensorConfig config : sensorConfigs){
-			config.getSensorConstraints(cMap);
+			if(config.isActive)
+				config.getSensorConstraints(cMap);
 		}
 		return cMap;
 	}
@@ -77,7 +78,8 @@ public final class Configuration {
 	public DataProcessorsMap<String,HashMap<String, Boolean>> getDataProcessors() {
 		DataProcessorsMap<String,HashMap<String, Boolean>> dPMap = new DataProcessorsMap<String,HashMap<String, Boolean>>();
 		for(AbstractSensorConfig config : sensorConfigs){
-			dPMap = config.getSensorDataProcessors(dPMap);
+			if(config.isActive)
+				dPMap = config.getSensorDataProcessors(dPMap);
 		}
 		return dPMap;
 	}
@@ -85,7 +87,8 @@ public final class Configuration {
 	public ArrayList<String> getSyncList(){
 		ArrayList<String> syncList = new ArrayList<String>();
 		for(AbstractSensorConfig config : sensorConfigs){
-			config.getSensorSyncList(syncList);
+			if(config.isActive)
+				config.getSensorSyncList(syncList);
 		}
 		return syncList; 
 	}
