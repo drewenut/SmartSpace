@@ -27,15 +27,14 @@ public abstract class AbstractSensorConfig{
 
 	DataProcessorsMap<String, HashMap<String, Boolean>> getSensorDataProcessors(DataProcessorsMap<String, HashMap<String, Boolean>> dPmap) {
 		for(AbstractScannerConfig scanner : scanners){
-			if(scanner.isActive)
-				dPmap.put(scanner.ID, scanner.getDataProcessors());
+			dPmap.put(scanner.ID, scanner.getDataProcessors());
 		}
 		return dPmap;
 	}
 	
 	ArrayList<String> getSensorSyncList(ArrayList<String> syncList){
 		for(AbstractScannerConfig scanner : scanners){
-			if(scanner.isActive && scanner.isSynchronized())
+			if(scanner.isActive && scanner.isSynchronized() && !syncList.contains(scanner.ID))
 				syncList.add(scanner.ID);
 		}
 		return syncList;

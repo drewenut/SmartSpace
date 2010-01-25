@@ -2,9 +2,9 @@ package de.ilimitado.smartspace.sensor.sensorGSM;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
@@ -15,11 +15,11 @@ import de.ilimitado.smartspace.positioning.iLocationManager;
 
 public class RawDataHandlerGSM extends AbstractSensorHandler {
 	
-	private HashMap<String, ArrayList<ScanResultGSM>> gsmEventBuffer = new HashMap<String, ArrayList<ScanResultGSM>>();
+	private ConcurrentHashMap<String, ArrayList<ScanResultGSM>> gsmEventBuffer = new ConcurrentHashMap<String, ArrayList<ScanResultGSM>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	//TODO put in Configuration Object...
 	//just take every 5th value from sensor data stream...
-	private static final int VALUE_COUNT_THRESHOLD = 2; 
+	private static final int VALUE_COUNT_THRESHOLD = 5; 
 	
 	private final PersistanceManager persMgr;
 	private iLocationManager locMngr;
@@ -53,6 +53,7 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 	 * Any Data that you Cache in handlers must be saved here!
 	 */
 
+	@Override
 	public void onShutdown() {
 		postProcessWifiData();
 	}
@@ -73,7 +74,7 @@ public class RawDataHandlerGSM extends AbstractSensorHandler {
 				for(ScanResultGSM scnRes : cellsList) {
 					if (lasttime == 0)
 						lasttime = scnRes.timestamp;
-					double deltaTime = ((scnRes.timestamp - lasttime) * MS_SEC_TO_SEC);
+					double deltaTime = ((scnRes.timestamp - lasttime)) * MS_SEC_TO_SEC;
 					time  += deltaTime;
 					lasttime = scnRes.timestamp;
 					

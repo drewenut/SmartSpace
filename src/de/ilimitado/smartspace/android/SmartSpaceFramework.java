@@ -80,10 +80,10 @@ public final class SmartSpaceFramework extends Service{
 		//TODO if no sensors are selected in the config object SmartSpace has to be shut down or at least user must be notified...
 		if(Configuration.getInstance().sensor80211.isActive)
 			sensorDevices.add(new SensorDevice80211(appDep));
-//		if(Configuration.getInstance().sensorGSM.isActive)
-//			sensorDevices.add(new SensorDeviceGSM(appDep));
-//		if(Configuration.getInstance().sensorIMU.isActive)
-//			sensorDevices.add(new SensorDeviceIMU(appDep));
+		if(Configuration.getInstance().sensorGSM.isActive)
+			sensorDevices.add(new SensorDeviceGSM(appDep));
+		if(Configuration.getInstance().sensorIMU.isActive)
+			sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();
@@ -91,6 +91,7 @@ public final class SmartSpaceFramework extends Service{
 	
 	public void kill(){
 		appStateMachine.killFSM();
+		Configuration.destroyConfiguration();
 	}
 	
 	public SSFLocationManager getLocationManager(int service) {

@@ -2,9 +2,9 @@ package de.ilimitado.smartspace.sensor.sensor80211;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.util.Log;
 import de.ilimitado.smartspace.AbstractSensorHandler;
@@ -15,10 +15,10 @@ import de.ilimitado.smartspace.positioning.iLocationManager;
 
 public class RawDataHandler80211 extends AbstractSensorHandler {
 	
-	private HashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new HashMap<String, ArrayList<ScanResult80211>>();
+	private ConcurrentHashMap<String, ArrayList<ScanResult80211>> wifiEventCache = new ConcurrentHashMap<String, ArrayList<ScanResult80211>>();
 	private static final double MS_SEC_TO_SEC = 1e-3;
 	//TODO put in Configuration Object...
-	//just take every 20th value from sensor data stream...
+	//just take every 5th value from sensor data stream...
 	private static final int VALUE_COUNT_THRESHOLD = 5; 
 	
 	private final PersistanceManager persistanceMgr;

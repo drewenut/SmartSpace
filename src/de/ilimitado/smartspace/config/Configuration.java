@@ -59,6 +59,10 @@ public final class Configuration {
 		instance = new Configuration(algos, persConf, fptColl , snsCfg80211, configGSM, configIMU);
 	}
 	
+	public static void destroyConfiguration() {
+		instance = null;
+	}
+	
 	public static Configuration getInstance() {
 		if(instance != null)
 			return instance;
