@@ -12,6 +12,7 @@ import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.persistance.FileGateway;
 import de.ilimitado.smartspace.persistance.PersistanceManager;
 import de.ilimitado.smartspace.positioning.iLocationManager;
+import de.ilimitado.smartspace.utils.L;
 
 public class RawDataHandler80211 extends AbstractSensorHandler {
 	
@@ -38,11 +39,16 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 		if(wifiList != null && valueCount++ >= VALUE_COUNT_THRESHOLD) {
 			Log.d(LOG_TAG, "Adding 80211 scan result to wifi event cache...");
 			for(ScanResult80211 scnRes : wifiList) {
-				String ap = scnRes.SSID;
-				if(!wifiEventCache.containsKey(ap)) {
-					wifiEventCache.put(ap, new ArrayList<ScanResult80211>());
+				String apID = getID(scnRes.SSID + scnRes.BSSID);
+				if(apID != null) {
+					if(!wifiEventCache.containsKey(apID)) {
+						wifiEventCache.put(apID, new ArrayList<ScanResult80211>());
+					}
+					wifiEventCache.get(apID).add(scnRes);
 				}
-				wifiEventCache.get(ap).add(scnRes);
+				else {
+					L.se(LOG_TAG, "ID for AP: " + apID + " could not be created...");
+				}
 			}
 			valueCount = 0;
 		}
@@ -59,17 +65,17 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 	
 	private void postProcessWifiData() {
 		Set<String> activeAPs = wifiEventCache.keySet();
-		for(String ap : activeAPs) {
+		for(String apID : activeAPs) {
 			StringBuffer eventDatabuffer = new StringBuffer();
 			long lasttime = 0;
 			double time = 0;
 			
 			eventDatabuffer.append("time;");
-			eventDatabuffer.append("802.11"+ ap + ";");
+			eventDatabuffer.append("802.11"+ apID + ";");
 //				wifiBuffer.append("802.11;");
 			eventDatabuffer.append("\n");
 			
-			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(ap);
+			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(apID);
 			for(ScanResult80211 scnRes : wifiAps) {
 				if (lasttime == 0)
 					lasttime = scnRes.timestamp;
@@ -81,9 +87,27 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 				eventDatabuffer.append(Integer.toString(scnRes.level) + ";");
 				eventDatabuffer.append("\n");
 			}
-			
 			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
-			fileGW.save((locMngr.getCurrentPosition()).name + "-wifi-"+ ap, eventDatabuffer);
+			fileGW.save((locMngr.getCurrentPosition()).name + "-wifi-"+ apID, eventDatabuffer);
 		}
 	}
+	
+	private String getID(String str) {
+	    
+	    if (str == null) {
+	        return null;
+	    }
+
+	    StringBuffer strBuff = new StringBuffer();
+	    char c;
+	    
+	    for (int i = 0; i < str.length() ; i++) {
+	        c = str.charAt(i);
+	        
+	        if (Character.isLetterOrDigit(c)) {
+	            strBuff.append(c);
+	        }
+	    }
+	    return strBuff.toString();
+	} 
 }
