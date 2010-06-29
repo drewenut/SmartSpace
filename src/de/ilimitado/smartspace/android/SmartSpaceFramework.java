@@ -21,6 +21,7 @@ import de.ilimitado.smartspace.SensorDependencies;
 import de.ilimitado.smartspace.SensorEvent;
 import de.ilimitado.smartspace.SensorLoader;
 import de.ilimitado.smartspace.SensorManager;
+import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 import de.ilimitado.smartspace.fsm.FSM;
 import de.ilimitado.smartspace.fsm.InitialState;
@@ -38,6 +39,7 @@ public final class SmartSpaceFramework extends Service{
 	public final static int INDOOR_POSITION_PROVIDER = 0;
 	public final static int SCIENCE_MODE = 0;
 	public final static int PROLIFERATION_MODE = 1;
+	public final static String GEO_URI_STRING = "URI_STRING";
 	
 	private SSFLocationManager locationManager;
 	private FSM appStateMachine;
@@ -80,10 +82,10 @@ public final class SmartSpaceFramework extends Service{
 		//TODO if no sensors are selected in the config object SmartSpace has to be shut down or at least user must be notified...
 		if(Configuration.getInstance().sensor80211.isActive)
 			sensorDevices.add(new SensorDevice80211(appDep));
-		if(Configuration.getInstance().sensorGSM.isActive)
-			sensorDevices.add(new SensorDeviceGSM(appDep));
-		if(Configuration.getInstance().sensorIMU.isActive)
-			sensorDevices.add(new SensorDeviceIMU(appDep));
+//		if(Configuration.getInstance().sensorGSM.isActive)
+//			sensorDevices.add(new SensorDeviceGSM(appDep));
+      if(Configuration.getInstance().sensorIMU.isActive)
+      	sensorDevices.add(new SensorDeviceIMU(appDep));
 		SensorLoader sensorLoader = new SensorLoader(appDep, sensorDevices);
 		sensorLoader.loadSensors();
 		appDep.sensorDependencies.sensorManager.initSensors();
@@ -110,7 +112,10 @@ public final class SmartSpaceFramework extends Service{
 	public void unregisterLogListener(LogListener logL) {
 		L.unregisterListener(logL);
 	}
-
+	
+	public void setConfigTranslator(ConfigTranslator logL) {
+	}
+	
 	public void start() {
 		bootstrap();
 		appStateMachine = new FSM(new InitialState(), appDep);

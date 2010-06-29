@@ -73,7 +73,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 			eventDatabuffer.append("time;");
 			eventDatabuffer.append("802.11"+ apID + ";");
 //				wifiBuffer.append("802.11;");
-			eventDatabuffer.append("\n");
+			//eventDatabuffer.append("\n");
 			
 			ArrayList<ScanResult80211> wifiAps = wifiEventCache.get(apID);
 			for(ScanResult80211 scnRes : wifiAps) {
@@ -89,6 +89,7 @@ public class RawDataHandler80211 extends AbstractSensorHandler {
 			}
 			FileGateway fileGW = (FileGateway) persistanceMgr.get(PersistanceManager.GATEWAY_FILE_SYSTEM);
 			fileGW.save((locMngr.getCurrentPosition()).name + "-wifi-"+ apID, eventDatabuffer);
+			eventDatabuffer.delete(0, eventDatabuffer.length());
 		}
 	}
 	

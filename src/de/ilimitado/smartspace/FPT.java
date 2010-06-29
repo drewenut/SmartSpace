@@ -50,12 +50,11 @@ public class FPT extends SensorDataSample{
 
 	@Override
 	public String getID() {
-		return getQuantizedOrientation() + super.getID();
+		return Integer.toString(getQuantizedOrientation());
 	}
 	
 	@Override
 	public String toString() {
 		return super.toString();
 	}
-	
 }

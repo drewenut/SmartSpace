@@ -9,7 +9,7 @@ import de.ilimitado.smartspace.positioning.IGeoPoint;
 import de.ilimitado.smartspace.positioning.iLocationListener;
 import de.ilimitado.smartspace.utils.L;
 
-public class FSM implements iLocationListener, MotionListener{
+public class FSM implements iLocationListener, MotionListener, StateMachine{
 	
 	private static final String LOG_TAG = "FSM";
 	
@@ -90,12 +90,12 @@ public class FSM implements iLocationListener, MotionListener{
 		doTransition();
 	}
 	
-	private boolean checkForTransition(){
+	public boolean checkForTransition(){
 		nextState = currentState.switchNextState(fPos, mtn);
 		return (nextState.getClass() == currentState.getClass()) ? false : true;
 	}
 	
-	private void doTransition(){
+	public void doTransition(){
 		exitState();
 		nextState.enterState(dependencies);
 		currentState = nextState;

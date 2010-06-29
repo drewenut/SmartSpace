@@ -18,7 +18,7 @@ import de.ilimitado.smartspace.config.ConfigSensorIMU;
 import de.ilimitado.smartspace.config.ConfigTranslator;
 import de.ilimitado.smartspace.config.Configuration;
 
-public class AndroidConfigTranslator implements ConfigTranslator{
+public class AndroidConfigTranslator extends ConfigTranslator{
 	
 	private static AndroidConfigTranslator instance;
 	private SharedPreferences androidPreferences;
@@ -34,14 +34,14 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 	
 	public void translate() {
-		ConfigLocalization algos = getPositionAlgorithms();
-		ConfigPersistence persConf = getPersistanceConfig();
-		ConfigSensing sensingConf = getFPTCollection();
-		ConfigSensor80211 snsCfg80211 = getSensorConfig80211();
-		ConfigSensorGSM snsCfgGSM = getSensorConfig_GSM();
-		ConfigSensorIMU snsCfgIMU = getSensorConfig_IMU();
+		algos = getPositionAlgorithms();
+		persConf = getPersistanceConfig();
+		sensingConf = getFPTCollection();
+		snsCfg80211 = getSensorConfig80211();
+		snsCfgGSM = getSensorConfig_GSM();
+		snsCfgIMU = getSensorConfig_IMU();
 
-		Configuration.createConfiguration(algos, persConf, sensingConf, snsCfg80211, snsCfgGSM, snsCfgIMU);
+		super.create();
 	}
 
 	private ConfigLocalization getPositionAlgorithms() {
@@ -103,8 +103,8 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 
 	private ConfigScannerGSMCell getScannerGSMCellConfig() {
 		String scnGSMName = androidPreferences.getString("scanner_config_gsm_cell_scanner_name", "scannerGsmRss");
-		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_is_active", true);
-		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_synchronize", true);
+		boolean scnGSMisActive = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_is_active", false);
+		boolean scnGSMSynchronize = androidPreferences.getBoolean("scanner_config_gsm_cell_scanner_synchronize", false);
 		int scnGSMThreshold = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_threshold", "5"));
 		long scnGSMTimeout = Long.parseLong(androidPreferences.getString("scanner_config_gsm_cell_timeout", "1000"));
 		int scnGSMRefreshInterval = Integer.parseInt(androidPreferences.getString("scanner_config_gsm_cell_scanner_refresh_interval", "1000"));
@@ -114,7 +114,7 @@ public class AndroidConfigTranslator implements ConfigTranslator{
 	}
 
 	private ConfigDataCommands getGSM_DataProcessCommands() {
-		boolean gsm_RSS_MeanCommand = androidPreferences.getBoolean("scanner_config_gsm_cell_commands_mean_command", true);
+		boolean gsm_RSS_MeanCommand = androidPreferences.getBoolean("scanner_config_gsm_cell_commands_mean_command", false);
 		HashMap<String, Boolean> dataCommands = new HashMap<String, Boolean>();
 		dataCommands.put("MeanCommandGSM", gsm_RSS_MeanCommand);
 		ConfigDataCommands gsmRSSdPCommands = new ConfigDataCommands(dataCommands);
